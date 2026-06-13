@@ -513,7 +513,7 @@
             apiKey: "AIzaSyA791i8R8Bmrn3toFxFltZ40TU7PUavev8",
             authDomain: "starlight-max.firebaseapp.com",
             projectId: "starlight-max",
-            storageBucket: "starlight-max.appspot.com", // Atualizado para parear com o Admin perfeitamente
+            storageBucket: "starlight-max.appspot.com",
             messagingSenderId: "120477177511",
             appId: "1:120477177511:web:5a75a2dd6d8089c829ed82"
         };
@@ -605,10 +605,26 @@
         }
 
         function updateFeaturedHero() {
-            if (window.featuredItemIds.length > 0 && Object.keys(window.moviesMap).length > 0) {
-                const firstFeatured = window.moviesMap[window.featuredItemIds[0]];
-                if (firstFeatured) {
-                    updateHeroSection(firstFeatured);
+            if (Object.keys(window.moviesMap).length === 0) return;
+            
+            let featuredMovie = null;
+            if (window.featuredItemIds && window.featuredItemIds.length > 0) {
+                // Tenta achar o destaque principal na memória local
+                featuredMovie = window.moviesMap[window.featuredItemIds[0]];
+            }
+            
+            if (featuredMovie) {
+                updateHeroSection(featuredMovie);
+            } else {
+                // Caso não tenha destaque ou o ID foi deletado, usa os mais recentes
+                const recentContent = [...window.firestoreContent].sort((a,b) => {
+                    const timeA = a.updatedAt?.seconds || 0;
+                    const timeB = b.updatedAt?.seconds || 0;
+                    return timeB - timeA;
+                });
+                
+                if (recentContent.length > 0) {
+                    updateHeroSection(recentContent[0]);
                 }
             }
         }
@@ -1377,7 +1393,17 @@
             }
         };
 
-        window.addEventListener('scroll', () => { const navbar = document.getElementById('navbar'); if (window.scrollY > 50) navbar.classList.add('bg-[#050505]', 'shadow-lg'); else navbar.classList.remove('bg-[#050505]', 'shadow-lg'); });
+        window.addEventListener('scroll', () => { 
+            const navbar = document.getElementById('navbar'); 
+            if (window.scrollY > 50) navbar.classList.add('bg-[#050505]', 'shadow-lg'); 
+            else navbar.classList.remove('bg-[#050505]', 'shadow-lg'); 
+            
+            // Oculta o pop-up instantaneamente ao rolar a página para baixo/cima
+            if (!document.getElementById('hover-card').classList.contains('opacity-0')) {
+                window.hideHoverCard(true);
+            }
+        }, { passive: true });
+
         window.scrollCarousel = (id, direction) => { const carousel = document.getElementById(id); carousel.scrollBy({ left: direction * (carousel.clientWidth * 0.7), behavior: 'smooth' }); };
         
         window.openDetails = async (id, pushHistory = true) => {
@@ -1591,12 +1617,8 @@
                     return timeB - timeA;
                 });
 
-                // Destaques: Se não houver destaque, joga o primeiro como fallback
-                if (window.featuredItemIds.length > 0) {
-                    updateFeaturedHero();
-                } else if (recentContent.length > 0) { 
-                    updateHeroSection(recentContent[0]); 
-                }
+                // Destaques: Se não houver destaque, joga o primeiro como fallback com mais segurança
+                updateFeaturedHero();
                 
                 // Buscar Carrosséis do Admin do Banco
                 const carouselsContainer = document.getElementById('home-carousels-container');
@@ -1661,8 +1683,21 @@
 
         function updateHeroSection(item) {
             if(!item) return;
-            document.getElementById('hero-bg').src = item.backdrop || item.poster || 'https://placehold.co/1280x720/050505/333333?text=Cover'; 
-            document.getElementById('hero-bg').onload = () => { document.getElementById('hero-bg').classList.remove('skeleton', 'opacity-0'); document.getElementById('hero-content').style.opacity = '1'; };
+            const heroBg = document.getElementById('hero-bg');
+            
+            // Adicionado OnError para caso a imagem esteja falhando ou não exista, forçar a tela a não ficar preta
+            heroBg.onerror = function() {
+                this.onerror = null;
+                this.src = 'https://placehold.co/1280x720/050505/333333?text=StarlightMax';
+                this.classList.remove('skeleton', 'opacity-0'); 
+                document.getElementById('hero-content').style.opacity = '1';
+            };
+
+            heroBg.src = item.backdrop || item.poster || 'https://placehold.co/1280x720/050505/333333?text=Cover'; 
+            heroBg.onload = () => { 
+                heroBg.classList.remove('skeleton', 'opacity-0'); 
+                document.getElementById('hero-content').style.opacity = '1'; 
+            };
             
             if (item.logo) { document.getElementById('hero-logo').src = item.logo; document.getElementById('hero-logo').classList.remove('hidden'); document.getElementById('hero-title').classList.add('hidden'); } 
             else { document.getElementById('hero-title').innerHTML = `"${item.title}"`; document.getElementById('hero-title').classList.remove('hidden'); document.getElementById('hero-logo').classList.add('hidden'); }
