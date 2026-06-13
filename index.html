@@ -872,6 +872,9 @@
             document.getElementById('main-app-container').classList.add('hidden');
             document.getElementById('player-view').classList.remove('hidden');
             
+            // Adiciona o player no histórico para o botão voltar do Android/Browser funcionar
+            history.pushState({ view: 'player' }, "", "#/player");
+            
             loadVideoSource(playerState.currentUrl);
             wakeUpPlayerControls();
         };
@@ -905,6 +908,11 @@
             if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
             document.getElementById('player-view').classList.add('hidden');
             document.getElementById('main-app-container').classList.remove('hidden');
+            
+            // Voltar no histórico caso estejamos na rota do player
+            if (window.location.hash === '#/player') {
+                history.back();
+            }
         };
 
         window.togglePlayerPlay = () => {
@@ -1508,9 +1516,18 @@
         }
 
         window.addEventListener('popstate', (event) => {
+            // Garantir que o player seja fechado/pausado caso o usuário aperte o botão nativo de voltar
+            if (!document.getElementById('player-view').classList.contains('hidden') && window.location.hash !== '#/player') {
+                videoEl.pause();
+                if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
+                document.getElementById('player-view').classList.add('hidden');
+                document.getElementById('main-app-container').classList.remove('hidden');
+            }
+
             if (event.state) {
                 if (event.state.view === 'details') window.openDetails(event.state.params.id, false);
                 else if (event.state.view === 'search') { document.getElementById('search-input').value = event.state.query || ''; performSearch(event.state.query || '', false); }
+                else if (event.state.view === 'player') { /* Impede reações indesejadas se for para o player */ }
                 else window.showView(event.state.view, false);
             } else window.handleInitialRoute();
         });
