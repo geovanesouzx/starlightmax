@@ -50,7 +50,7 @@
 
         .search-input-expanding:not(:focus)::placeholder { color: transparent; }
         
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #1a1a1a; border-radius: 8px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #333; border-radius: 8px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #555; }
@@ -113,7 +113,8 @@
             <h2 id="cp-title" class="text-3xl font-bold text-white mb-8">Criar Novo Perfil</h2>
             
             <div class="bg-[#141414] p-8 rounded-2xl border border-white/10 w-full max-w-lg shadow-2xl relative mt-16">
-                <div class="h-32 w-full bg-gray-800 rounded-xl mb-16 relative overflow-hidden group cursor-pointer border border-white/10" onclick="triggerBannerUpload()">
+                <!-- Banner Edit -->
+                <div class="h-32 w-full bg-gray-800 rounded-xl mb-16 relative overflow-hidden group cursor-pointer border border-white/10" onclick="openBannerSelectionModal()">
                     <img id="cp-banner-preview" src="https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2094&auto=format&fit=crop" class="w-full h-full object-cover opacity-60">
                     <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/60 transition duration-300">
                         <div class="flex flex-col items-center gap-1">
@@ -122,13 +123,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="absolute top-20 left-1/2 -translate-x-1/2 w-28 h-28 rounded-2xl border-4 border-[#141414] bg-teal-600 overflow-hidden group cursor-pointer shadow-xl z-10" onclick="triggerAvatarUpload()">
+                <!-- Avatar Edit -->
+                <div class="absolute top-20 left-1/2 -translate-x-1/2 w-28 h-28 rounded-2xl border-4 border-[#141414] bg-teal-600 overflow-hidden group cursor-pointer shadow-xl z-10" onclick="openAvatarSelectionModal()">
                     <img id="cp-avatar-preview" src="https://api.dicebear.com/7.x/bottts/svg?seed=Novo&backgroundColor=059669" class="w-full h-full object-cover">
                     <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/60 transition duration-300">
                         <i class="fa-solid fa-camera text-white text-xl"></i>
                     </div>
                 </div>
 
+                <!-- Hidden Files inputs for manual uploads -->
                 <input type="file" id="cp-avatar" accept="image/*" class="hidden" onchange="previewAvatar(event)">
                 <input type="file" id="cp-banner" accept="image/*" class="hidden" onchange="previewBanner(event)">
 
@@ -156,6 +159,38 @@
                         <i class="fa-solid fa-trash-can mr-2"></i> Excluir Perfil Definitivamente
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE SELEÇÃO DE AVATAR -->
+    <div id="avatar-selection-modal" class="hidden fixed inset-0 z-[250] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-[#141414] border border-white/10 rounded-2xl w-full max-w-4xl max-h-[85vh] flex flex-col overflow-hidden">
+            <div class="p-6 border-b border-white/10 flex justify-between items-center bg-[#0a0a0a] flex-wrap gap-4">
+                <h3 class="text-xl md:text-2xl font-bold text-white">Escolha um Avatar</h3>
+                <div class="flex items-center gap-4">
+                    <button onclick="triggerAvatarUpload()" class="text-xs md:text-sm bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-white font-bold transition whitespace-nowrap"><i class="fa-solid fa-upload mr-2"></i> Enviar Arquivo</button>
+                    <button onclick="closeAvatarSelectionModal()" class="text-gray-400 hover:text-white text-2xl px-2"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+            <div id="avatar-groups-container" class="p-6 overflow-y-auto custom-scrollbar flex-1 space-y-8">
+                <!-- Injetado via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE SELEÇÃO DE BANNER -->
+    <div id="banner-selection-modal" class="hidden fixed inset-0 z-[250] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-[#141414] border border-white/10 rounded-2xl w-full max-w-4xl max-h-[85vh] flex flex-col overflow-hidden">
+            <div class="p-6 border-b border-white/10 flex justify-between items-center bg-[#0a0a0a] flex-wrap gap-4">
+                <h3 class="text-xl md:text-2xl font-bold text-white">Escolha um Fundo de Perfil</h3>
+                <div class="flex items-center gap-4">
+                    <button onclick="triggerBannerUpload()" class="text-xs md:text-sm bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-white font-bold transition whitespace-nowrap"><i class="fa-solid fa-upload mr-2"></i> Enviar Arquivo</button>
+                    <button onclick="closeBannerSelectionModal()" class="text-gray-400 hover:text-white text-2xl px-2"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+            <div id="banner-groups-container" class="p-6 overflow-y-auto custom-scrollbar flex-1 space-y-8">
+                <!-- Injetado via JS -->
             </div>
         </div>
     </div>
@@ -228,7 +263,6 @@
                         <i class="fa-solid fa-search absolute left-3 text-gray-400 transition-colors group-focus-within:text-white pointer-events-none z-10"></i>
                         <input type="text" id="search-input" onkeyup="handleSearch(event)" placeholder="Filmes, séries..." class="search-input-expanding bg-transparent text-white w-10 focus:w-48 lg:focus:w-64 transition-all duration-300 outline-none pl-9 py-2 rounded-full text-sm focus:bg-white/10 cursor-pointer focus:cursor-text">
                     </div>
-                    <!-- Resolvido: Mudado para buttons em vez de <a> para corrigir navegação e não resetar hash -->
                     <button id="nav-home" onclick="showView('home')" class="px-6 py-2.5 rounded-full bg-white text-black font-semibold text-sm transition shadow-[0_0_10px_rgba(255,255,255,0.2)]">Início</button>
                     <button id="nav-catalog" onclick="showView('catalog')" class="px-6 py-2.5 rounded-full text-gray-300 hover:text-white font-medium text-sm transition">Catálogo</button>
                     <button id="nav-list" onclick="showView('list')" class="px-6 py-2.5 rounded-full text-gray-300 hover:text-white font-medium text-sm transition">Minha Lista</button>
@@ -474,12 +508,12 @@
         import { getFirestore, collection, doc, setDoc, getDoc, getDocs, query, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 
-        // Configuração original do Firebase StarlightMax
+        // Configuração do Firebase StarlightMax
         const firebaseConfig = {
             apiKey: "AIzaSyA791i8R8Bmrn3toFxFltZ40TU7PUavev8",
             authDomain: "starlight-max.firebaseapp.com",
             projectId: "starlight-max",
-            storageBucket: "starlight-max.firebasestorage.app",
+            storageBucket: "starlight-max.appspot.com", // Atualizado para parear com o Admin perfeitamente
             messagingSenderId: "120477177511",
             appId: "1:120477177511:web:5a75a2dd6d8089c829ed82"
         };
@@ -508,6 +542,12 @@
         let isManageMode = false; 
         let editingProfileId = null; 
         let editingOldUsername = null;
+        let tempSelectedAvatar = null;
+        let tempSelectedBanner = null;
+
+        // Assets do Admin
+        let starlightAvatars = [];
+        let starlightBanners = [];
 
         window.loginWithGoogle = async () => {
             try { await signInWithPopup(auth, new GoogleAuthProvider()); } 
@@ -524,9 +564,8 @@
                 currentUser = user; 
                 document.getElementById('login-view').classList.add('hidden'); 
                 
-                // Ativar o listener de destaques quando logar
                 listenForFeaturedItems();
-                
+                await loadStarlightAssets();
                 await loadUserProfiles(); 
             } else { 
                 currentUser = null; 
@@ -542,21 +581,31 @@
         });
 
         // ------------------------------------------
-        // SISTEMA DE DESTAQUES (FEATURED)
+        // SISTEMA DE DESTAQUES (FEATURED) E ASSETS
         // ------------------------------------------
         function listenForFeaturedItems() {
             onSnapshot(doc(db, 'config', 'featured'), (docSnap) => {
                 window.featuredItemIds = docSnap.exists() ? (docSnap.data()?.items || []) : [];
-                // Tenta atualizar se o BD de filmes já estiver carregado na memória
                 if (Object.keys(window.moviesMap).length > 0) {
                     updateFeaturedHero();
                 }
             });
         }
 
+        async function loadStarlightAssets() {
+            try {
+                const avSnap = await getDocs(collection(db, 'avatar_groups'));
+                starlightAvatars = [];
+                avSnap.forEach(d => starlightAvatars.push(d.data()));
+
+                const bgSnap = await getDocs(collection(db, 'background_groups'));
+                starlightBanners = [];
+                bgSnap.forEach(d => starlightBanners.push(d.data()));
+            } catch(e) { console.error("Erro ao carregar assets customizados:", e); }
+        }
+
         function updateFeaturedHero() {
             if (window.featuredItemIds.length > 0 && Object.keys(window.moviesMap).length > 0) {
-                // Pega o primeiro filme de destaque disponível na memória
                 const firstFeatured = window.moviesMap[window.featuredItemIds[0]];
                 if (firstFeatured) {
                     updateHeroSection(firstFeatured);
@@ -564,6 +613,9 @@
             }
         }
 
+        // ------------------------------------------
+        // PERFIS E AVATARES
+        // ------------------------------------------
         async function loadUserProfiles() {
             document.getElementById('splash-screen').classList.remove('hidden');
             try {
@@ -647,6 +699,8 @@
 
         window.showCreateProfile = () => {
             editingProfileId = null; editingOldUsername = null;
+            tempSelectedAvatar = null; tempSelectedBanner = null;
+
             document.getElementById('profiles-selection-view').classList.add('hidden'); 
             document.getElementById('create-profile-view').classList.remove('hidden');
             document.getElementById('cp-title').textContent = "Criar Novo Perfil"; 
@@ -669,6 +723,9 @@
             const prof = localProfiles.find(p => p.id === profileId); 
             editingOldUsername = prof.username;
             
+            tempSelectedAvatar = prof.avatarUrl;
+            tempSelectedBanner = prof.bannerUrl;
+
             document.getElementById('profiles-selection-view').classList.add('hidden'); 
             document.getElementById('create-profile-view').classList.remove('hidden');
             document.getElementById('cp-title').textContent = "Editar Perfil"; 
@@ -698,10 +755,95 @@
             }
         };
 
+        // Modal de Seleção de Avatares da Nuvem
+        window.openAvatarSelectionModal = () => {
+            document.getElementById('avatar-selection-modal').classList.remove('hidden');
+            const container = document.getElementById('avatar-groups-container');
+            container.innerHTML = '';
+            
+            if (starlightAvatars.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500">Nenhum avatar cadastrado.</p>';
+                return;
+            }
+
+            starlightAvatars.forEach(group => {
+                const section = document.createElement('div');
+                section.innerHTML = `
+                    <h4 class="text-lg font-bold text-white mb-4 border-b border-white/10 pb-2">${escapeHTML(group.title)}</h4>
+                    <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-4">
+                        ${(group.avatars || []).map(url => `
+                            <img src="${escapeHTML(url)}" class="w-full aspect-square object-cover rounded-full border-2 border-transparent hover:border-blue-500 cursor-pointer transition-all hover:scale-110" onclick="selectAvatar('${escapeHTML(url)}')">
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(section);
+            });
+        };
+
+        window.selectAvatar = (url) => {
+            tempSelectedAvatar = url;
+            document.getElementById('cp-avatar-preview').src = url;
+            closeAvatarSelectionModal();
+        };
+
+        window.closeAvatarSelectionModal = () => {
+            document.getElementById('avatar-selection-modal').classList.add('hidden');
+        };
+
         window.triggerAvatarUpload = () => document.getElementById('cp-avatar').click();
+        window.previewAvatar = (e) => { 
+            if(e.target.files && e.target.files[0]) {
+                const url = URL.createObjectURL(e.target.files[0]);
+                document.getElementById('cp-avatar-preview').src = url;
+                tempSelectedAvatar = null; // reseta para fazer upload
+                closeAvatarSelectionModal();
+            }
+        };
+
+        // Modal de Seleção de Fundos da Nuvem
+        window.openBannerSelectionModal = () => {
+            document.getElementById('banner-selection-modal').classList.remove('hidden');
+            const container = document.getElementById('banner-groups-container');
+            container.innerHTML = '';
+            
+            if (starlightBanners.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500">Nenhum fundo cadastrado.</p>';
+                return;
+            }
+
+            starlightBanners.forEach(group => {
+                const section = document.createElement('div');
+                section.innerHTML = `
+                    <h4 class="text-lg font-bold text-white mb-4 border-b border-white/10 pb-2">${escapeHTML(group.title)}</h4>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                        ${(group.backgrounds || []).map(url => `
+                            <img src="${escapeHTML(url)}" class="w-full aspect-video object-cover rounded-xl border-2 border-transparent hover:border-blue-500 cursor-pointer transition-all hover:scale-105" onclick="selectBanner('${escapeHTML(url)}')">
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(section);
+            });
+        };
+
+        window.selectBanner = (url) => {
+            tempSelectedBanner = url;
+            document.getElementById('cp-banner-preview').src = url;
+            closeBannerSelectionModal();
+        };
+
+        window.closeBannerSelectionModal = () => {
+            document.getElementById('banner-selection-modal').classList.add('hidden');
+        };
+
         window.triggerBannerUpload = () => document.getElementById('cp-banner').click();
-        window.previewAvatar = (e) => { if(e.target.files && e.target.files[0]) document.getElementById('cp-avatar-preview').src = URL.createObjectURL(e.target.files[0]); };
-        window.previewBanner = (e) => { if(e.target.files && e.target.files[0]) document.getElementById('cp-banner-preview').src = URL.createObjectURL(e.target.files[0]); };
+        window.previewBanner = (e) => { 
+            if(e.target.files && e.target.files[0]) {
+                const url = URL.createObjectURL(e.target.files[0]);
+                document.getElementById('cp-banner-preview').src = url; 
+                tempSelectedBanner = null; // reseta para fazer upload
+                closeBannerSelectionModal();
+            }
+        };
 
         window.saveProfile = async () => {
             const name = document.getElementById('cp-name').value.trim(); 
@@ -728,8 +870,8 @@
                     }
                 }
 
-                let avatarUrl = editingProfileId ? localProfiles.find(p=>p.id===editingProfileId).avatarUrl : `https://api.dicebear.com/7.x/bottts/svg?seed=${username}&backgroundColor=059669`;
-                let bannerUrl = editingProfileId ? localProfiles.find(p=>p.id===editingProfileId).bannerUrl : "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2094&auto=format&fit=crop";
+                let avatarUrl = tempSelectedAvatar || (editingProfileId ? localProfiles.find(p=>p.id===editingProfileId).avatarUrl : `https://api.dicebear.com/7.x/bottts/svg?seed=${username}&backgroundColor=059669`);
+                let bannerUrl = tempSelectedBanner || (editingProfileId ? localProfiles.find(p=>p.id===editingProfileId).bannerUrl : "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2094&auto=format&fit=crop");
 
                 const avatarFile = document.getElementById('cp-avatar').files[0]; 
                 const bannerFile = document.getElementById('cp-banner').files[0];
@@ -1184,10 +1326,10 @@
 
         let searchTimeoutIdLocal;
         window.handleSearch = (event) => { 
-            const query = event.target.value.trim(); 
+            const queryStr = event.target.value.trim(); 
             clearTimeout(searchTimeoutIdLocal); 
-            if (query.length >= 2) searchTimeoutIdLocal = setTimeout(() => performSearch(query), 300); 
-            else if (query.length === 0) window.showView('home'); 
+            if (queryStr.length >= 2) searchTimeoutIdLocal = setTimeout(() => performSearch(queryStr), 300); 
+            else if (queryStr.length === 0) window.showView('home'); 
         };
 
         function performSearch(queryStr, pushHistory = true) {
@@ -1456,36 +1598,52 @@
                     updateHeroSection(recentContent[0]); 
                 }
                 
-                // Gerar Carrosséis Dinâmicos Baseados nos Gêneros
+                // Buscar Carrosséis do Admin do Banco
                 const carouselsContainer = document.getElementById('home-carousels-container');
                 carouselsContainer.innerHTML = '';
 
                 // 1. O Carrossel de "Adicionados Recentemente" sempre vem primeiro
                 window.addCarouselSection(carouselsContainer, 'Adicionados Recentemente', recentContent.slice(0, 15), 'recent-carousel');
 
-                // 2. Extrair gêneros e agrupar
-                const genreMap = {};
-                recentContent.forEach(item => {
-                    if (item.genres && Array.isArray(item.genres)) {
-                        item.genres.forEach(g => {
-                            if (!genreMap[g]) genreMap[g] = [];
-                            genreMap[g].push(item);
-                        });
+                // 2. Traz Carrosséis Oficiais Starlight
+                const carouselsSnap = await getDocs(collection(db, 'carousels'));
+                const customCarousels = [];
+                carouselsSnap.forEach(doc => customCarousels.push({ id: doc.id, ...doc.data() }));
+
+                // Ordena por data de criação localmente para não dar problema de Index
+                customCarousels.sort((a, b) => (a.createdAt?.seconds || 0) - (b.createdAt?.seconds || 0));
+
+                let customCarouselsAdded = 0;
+                customCarousels.forEach(cData => {
+                    const itemsData = (cData.items || []).map(id => window.moviesMap[id]).filter(Boolean);
+                    if (itemsData.length > 0) {
+                        window.addCarouselSection(carouselsContainer, cData.title, itemsData, `custom-carousel-${cData.id}`);
+                        customCarouselsAdded++;
                     }
                 });
 
-                // 3. Ordenar gêneros (os que têm mais conteúdos aparecem primeiro)
-                const sortedGenres = Object.keys(genreMap).sort((a, b) => genreMap[b].length - genreMap[a].length);
-                
-                // 4. Exibir as 10 maiores categorias que tenham no mínimo 3 itens
-                let carouselsAdded = 0;
-                sortedGenres.forEach(genre => {
-                    if (carouselsAdded < 10 && genreMap[genre].length >= 3) {
-                        const sectionId = `genre-carousel-${carouselsAdded}`;
-                        window.addCarouselSection(carouselsContainer, genre, genreMap[genre].slice(0, 15), sectionId);
-                        carouselsAdded++;
-                    }
-                });
+                // Fallback: Gerar pelos Gêneros se você ainda não criou nenhum carrossel no Admin
+                if (customCarouselsAdded === 0) {
+                    const genreMap = {};
+                    recentContent.forEach(item => {
+                        if (item.genres && Array.isArray(item.genres)) {
+                            item.genres.forEach(g => {
+                                if (!genreMap[g]) genreMap[g] = [];
+                                genreMap[g].push(item);
+                            });
+                        }
+                    });
+
+                    const sortedGenres = Object.keys(genreMap).sort((a, b) => genreMap[b].length - genreMap[a].length);
+                    let carouselsAdded = 0;
+                    sortedGenres.forEach(genre => {
+                        if (carouselsAdded < 10 && genreMap[genre].length >= 3) {
+                            const sectionId = `genre-carousel-${carouselsAdded}`;
+                            window.addCarouselSection(carouselsContainer, genre, genreMap[genre].slice(0, 15), sectionId);
+                            carouselsAdded++;
+                        }
+                    });
+                }
                 
                 window.handleInitialRoute();
 
