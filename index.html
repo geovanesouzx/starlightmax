@@ -74,7 +74,8 @@
         .hide-cursor { cursor: none !important; }
     </style>
 </head>
-<body class="antialiased pb-16 md:pb-0"> <div id="splash-screen" class="fixed inset-0 z-[200] bg-[#050505] flex flex-col items-center justify-center transition-opacity duration-500">
+<body class="antialiased pb-16 md:pb-0"> 
+    <div id="splash-screen" class="fixed inset-0 z-[200] bg-[#050505] flex flex-col items-center justify-center transition-opacity duration-500">
         <span class="text-4xl md:text-6xl font-bold tracking-tighter text-white animate-pulse">STARLIGHT<span class="text-blue-500">MAX</span></span>
         <div class="mt-8 w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
     </div>
@@ -473,7 +474,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        // ADICIONADO signInAnonymously PARA PERMITIR LOGIN SE O POPUP FALHAR (EX: AMBIENTE DE PREVIEW)
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, collection, doc, setDoc, getDoc, getDocs, query, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 
@@ -512,11 +514,61 @@
         let editingProfileId = null; 
         let editingOldUsername = null;
 
+        // DADOS DE EXEMPLO (MOCK DATA)
+        // Se o seu banco de dados estiver vazio, estes dados aparecerão para você testar.
+        const mockContent = [
+            {
+                id: "mock1", title: "O Horizonte Infinito", type: "movie", year: "2024", ageRating: "12",
+                genres: ["Ficção Científica", "Aventura"], synopsis: "Exploradores viajam além do sistema solar em busca de uma nova casa para a humanidade.",
+                poster: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=500&q=80",
+                backdrop: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=1280&q=80",
+                url: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+            },
+            {
+                id: "mock2", title: "Cyber Cidade", type: "tv", year: "2023", ageRating: "16",
+                genres: ["Ação", "Cyberpunk"], synopsis: "Em um futuro distópico, hackers lutam contra megacorporações pelo controle da informação mundial.",
+                poster: "https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?w=500&q=80",
+                backdrop: "https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?w=1280&q=80",
+                seasons: { "1": { title: "Temporada 1", episodes: [{ episode_number: 1, title: "O Despertar", overview: "Tudo começa aqui.", still_path: "https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?w=500&q=80", url: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"}] } }
+            },
+            {
+                id: "mock3", title: "Sombras do Passado", type: "movie", year: "2022", ageRating: "14",
+                genres: ["Suspense", "Mistério"], synopsis: "Um detetive particular descobre segredos terríveis sobre sua própria família enquanto investiga um crime antigo.",
+                poster: "https://images.unsplash.com/photo-1509281373149-e957c6296406?w=500&q=80",
+                backdrop: "https://images.unsplash.com/photo-1509281373149-e957c6296406?w=1280&q=80"
+            },
+            {
+                id: "mock4", title: "Natureza Selvagem", type: "movie", year: "2023", ageRating: "L",
+                genres: ["Documentário"], synopsis: "A beleza inexplorada e selvagem das florestas tropicais e animais da América do Sul.",
+                poster: "https://images.unsplash.com/photo-1518182170546-076616fdcb18?w=500&q=80",
+                backdrop: "https://images.unsplash.com/photo-1518182170546-076616fdcb18?w=1280&q=80"
+            },
+            {
+                id: "mock5", title: "Academia de Magia", type: "tv", year: "2024", ageRating: "10",
+                genres: ["Fantasia", "Aventura"], synopsis: "Jovens aprendizes descobrem seus verdadeiros poderes em uma escola oculta no alto das montanhas nevadas.",
+                poster: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&q=80",
+                backdrop: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1280&q=80",
+                seasons: { "1": { title: "Temporada 1", episodes: [{ episode_number: 1, title: "A Carta Mágica", overview: "O chamado inesperado chega.", still_path: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&q=80", url: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"}] } }
+            },
+            {
+                id: "mock6", title: "Velocidade Extrema", type: "movie", year: "2021", ageRating: "14",
+                genres: ["Ação", "Esportes"], synopsis: "Pilotos de alto risco competem na corrida mais perigosa do mundo underground, onde tudo pode acontecer.",
+                poster: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=500&q=80",
+                backdrop: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=1280&q=80"
+            }
+        ];
+
         window.loginWithGoogle = async () => {
-            try { await signInWithPopup(auth, new GoogleAuthProvider()); } 
-            catch (error) { 
-                document.getElementById('login-error').textContent = "Erro ao fazer login. Tente novamente."; 
-                document.getElementById('login-error').classList.remove('hidden'); 
+            try { 
+                await signInWithPopup(auth, new GoogleAuthProvider()); 
+            } catch (error) {
+                console.warn("Erro no login com popup, tentando login anônimo (útil para preview em iframe)...");
+                try {
+                    await signInAnonymously(auth);
+                } catch(e) {
+                    document.getElementById('login-error').textContent = "Erro ao fazer login. Tente novamente."; 
+                    document.getElementById('login-error').classList.remove('hidden'); 
+                }
             }
         };
         
@@ -1066,9 +1118,16 @@
         };
 
         // =======================================================================
-        // INTEGRAÇÃO DE CONTEÚDO FIRESTORE
+        // INTEGRAÇÃO DE CONTEÚDO FIRESTORE (COM PROTEÇÃO MOCK DATA)
         // =======================================================================
         
+        function carregarDadosDeExemplo() {
+            window.firestoreContent = mockContent;
+            window.moviesMap = {};
+            mockContent.forEach(item => { window.moviesMap[item.id] = item; });
+            console.log("Mock data carregado no lugar do Firebase vazio.");
+        }
+
         async function loadFirestoreContent() {
             try {
                 const querySnapshot = await getDocs(collection(db, "content"));
@@ -1080,8 +1139,15 @@
                     window.firestoreContent.push(data);
                     window.moviesMap[data.id] = data;
                 });
+                
+                // SE O SEU BANCO DE DADOS ESTIVER VAZIO, CHAMA OS DADOS FALSOS AQUI.
+                if (window.firestoreContent.length === 0) {
+                    carregarDadosDeExemplo();
+                }
+
             } catch (error) {
-                console.error("Erro ao carregar conteúdo do Firestore:", error);
+                console.warn("Erro ao carregar do Firestore (provavelmente permissões). Carregando exemplos...", error);
+                carregarDadosDeExemplo();
             }
         }
 
