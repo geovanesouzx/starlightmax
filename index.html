@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StarlightMax - Início</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Biblioteca HLS.js para suportar reprodução de listas .m3u8 -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -20,26 +21,44 @@
             overflow-x: hidden;
         }
 
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
 
-        .hero-gradient { background: linear-gradient(to top, #050505 0%, rgba(5, 5, 5, 0.5) 50%, rgba(5, 5, 5, 0) 100%); }
-        .hero-gradient-side { background: linear-gradient(to right, #050505 0%, rgba(5, 5, 5, 0.8) 40%, rgba(5, 5, 5, 0) 100%); }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .hero-gradient {
+            background: linear-gradient(to top, #050505 0%, rgba(5, 5, 5, 0.5) 50%, rgba(5, 5, 5, 0) 100%);
+        }
+
+        .hero-gradient-side {
+            background: linear-gradient(to right, #050505 0%, rgba(5, 5, 5, 0.8) 40%, rgba(5, 5, 5, 0) 100%);
+        }
 
         .carousel-item-img {
             transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
             border: 2px solid transparent;
         }
+
         .carousel-item:hover .carousel-item-img {
             transform: scale(1.05);
             border-color: rgba(255, 255, 255, 0.4);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
         }
 
         @keyframes shimmer {
-            0% { background-position: -1000px 0; }
-            100% { background-position: 1000px 0; }
+            0% {
+                background-position: -1000px 0;
+            }
+
+            100% {
+                background-position: 1000px 0;
+            }
         }
+
         .skeleton {
             background: #1a1a1a;
             background-image: linear-gradient(to right, #1a1a1a 0%, #2a2a2a 20%, #1a1a1a 40%, #1a1a1a 100%);
@@ -48,12 +67,28 @@
             animation: shimmer 2s infinite linear forwards;
         }
 
-        .search-input-expanding:not(:focus)::placeholder { color: transparent; }
-        
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #1a1a1a; border-radius: 8px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #333; border-radius: 8px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #555; }
+        .search-input-expanding:not(:focus)::placeholder {
+            color: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1a1a1a;
+            border-radius: 8px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 8px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
 
         /* Estilos específicos do Player (Liquid Glass e Premium Scrubber) */
         .player-glass-btn {
@@ -63,44 +98,60 @@
             border: 1px solid rgba(255, 255, 255, 0.15);
             transition: all 0.2s ease;
         }
+
         .player-glass-btn:hover {
             background: rgba(255, 255, 255, 0.2);
             border-color: rgba(255, 255, 255, 0.3);
         }
+
         .player-glass-btn.active {
             background: rgba(255, 255, 255, 1);
             color: black;
             border-color: transparent;
         }
-        .hide-cursor { cursor: none !important; }
+
+        .hide-cursor {
+            cursor: none !important;
+        }
     </style>
 </head>
+
 <body class="antialiased">
 
     <!-- 1. SPLASH SCREEN (Carregamento) -->
-    <div id="splash-screen" class="fixed inset-0 z-[200] bg-[#050505] flex flex-col items-center justify-center transition-opacity duration-500">
-        <span class="text-4xl md:text-6xl font-bold tracking-tighter text-white animate-pulse">STARLIGHT<span class="text-blue-500">MAX</span></span>
+    <div id="splash-screen"
+        class="fixed inset-0 z-[200] bg-[#050505] flex flex-col items-center justify-center transition-opacity duration-500">
+        <span class="text-4xl md:text-6xl font-bold tracking-tighter text-white animate-pulse">STARLIGHT<span
+                class="text-blue-500">MAX</span></span>
         <div class="mt-8 w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
     </div>
 
     <!-- 2. LOGIN VIEW -->
-    <div id="login-view" class="hidden fixed inset-0 z-[150] bg-[#050505] flex flex-col items-center justify-center bg-[url('https://images.unsplash.com/photo-1616530940355-351fabd9524b?q=80&w=2000')] bg-cover bg-center">
+    <div id="login-view"
+        class="hidden fixed inset-0 z-[150] bg-[#050505] flex flex-col items-center justify-center bg-[url('https://images.unsplash.com/photo-1616530940355-351fabd9524b?q=80&w=2000')] bg-cover bg-center">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
-        <div class="relative z-10 flex flex-col items-center bg-[#141414]/90 p-10 rounded-2xl border border-white/10 shadow-2xl max-w-md w-full mx-4 text-center">
-            <span class="text-4xl font-bold tracking-tighter text-white mb-2">STARLIGHT<span class="text-blue-500">MAX</span></span>
-            <p class="text-gray-400 mb-8 text-sm">Faça login para acessar seus perfis e salvar seu progresso na nuvem.</p>
-            <button onclick="loginWithGoogle()" class="w-full bg-white text-black font-bold py-3.5 rounded-lg flex items-center justify-center gap-3 hover:bg-gray-200 transition shadow-lg">
+        <div
+            class="relative z-10 flex flex-col items-center bg-[#141414]/90 p-10 rounded-2xl border border-white/10 shadow-2xl max-w-md w-full mx-4 text-center">
+            <span class="text-4xl font-bold tracking-tighter text-white mb-2">STARLIGHT<span
+                    class="text-blue-500">MAX</span></span>
+            <p class="text-gray-400 mb-8 text-sm">Faça login para acessar seus perfis e salvar seu progresso na nuvem.
+            </p>
+            <button onclick="loginWithGoogle()"
+                class="w-full bg-white text-black font-bold py-3.5 rounded-lg flex items-center justify-center gap-3 hover:bg-gray-200 transition shadow-lg">
                 <i class="fa-brands fa-google text-red-500"></i> Continuar com o Google
             </button>
-            <p id="login-error" class="text-red-400 text-xs mt-4 hidden bg-red-900/30 p-3 rounded-lg border border-red-500/30"></p>
+            <p id="login-error"
+                class="text-red-400 text-xs mt-4 hidden bg-red-900/30 p-3 rounded-lg border border-red-500/30"></p>
         </div>
     </div>
 
     <!-- 3. QUEM ESTÁ ASSISTINDO (Seleção de Perfil) -->
-    <div id="profiles-selection-view" class="hidden fixed inset-0 z-[140] bg-[#050505] flex flex-col items-center justify-center">
+    <div id="profiles-selection-view"
+        class="hidden fixed inset-0 z-[140] bg-[#050505] flex flex-col items-center justify-center">
         <div class="flex flex-col items-center mb-10">
             <h1 class="text-3xl md:text-5xl font-bold text-white tracking-wide text-center">Quem está assistindo?</h1>
-            <button id="btn-manage-profiles" onclick="toggleManageMode()" class="mt-4 text-gray-400 hover:text-white border border-gray-600 hover:border-white px-5 py-2 rounded-full transition text-sm font-semibold">
+            <button id="btn-manage-profiles" onclick="toggleManageMode()"
+                class="mt-4 text-gray-400 hover:text-white border border-gray-600 hover:border-white px-5 py-2 rounded-full transition text-sm font-semibold">
                 Gerenciar Perfis
             </button>
         </div>
@@ -111,12 +162,16 @@
     <div id="create-profile-view" class="hidden fixed inset-0 z-[160] bg-[#050505] overflow-y-auto">
         <div class="min-h-screen flex flex-col items-center justify-center py-12 px-4">
             <h2 id="cp-title" class="text-3xl font-bold text-white mb-8">Criar Novo Perfil</h2>
-            
+
             <div class="bg-[#141414] p-8 rounded-2xl border border-white/10 w-full max-w-lg shadow-2xl relative mt-16">
                 <!-- Banner Edit -->
-                <div class="h-32 w-full bg-gray-800 rounded-xl mb-16 relative overflow-hidden group cursor-pointer border border-white/10" onclick="openBannerSelectionModal()">
-                    <img id="cp-banner-preview" src="https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2094&auto=format&fit=crop" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/60 transition duration-300">
+                <div class="h-32 w-full bg-gray-800 rounded-xl mb-16 relative overflow-hidden group cursor-pointer border border-white/10"
+                    onclick="openBannerSelectionModal()">
+                    <img id="cp-banner-preview"
+                        src="https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2094&auto=format&fit=crop"
+                        class="w-full h-full object-cover opacity-60">
+                    <div
+                        class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/60 transition duration-300">
                         <div class="flex flex-col items-center gap-1">
                             <i class="fa-solid fa-camera text-white text-2xl"></i>
                             <span class="text-xs text-white font-semibold">Alterar Fundo</span>
@@ -124,9 +179,13 @@
                     </div>
                 </div>
                 <!-- Avatar Edit -->
-                <div class="absolute top-20 left-1/2 -translate-x-1/2 w-28 h-28 rounded-2xl border-4 border-[#141414] bg-teal-600 overflow-hidden group cursor-pointer shadow-xl z-10" onclick="openAvatarSelectionModal()">
-                    <img id="cp-avatar-preview" src="https://api.dicebear.com/7.x/bottts/svg?seed=Novo&backgroundColor=059669" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/60 transition duration-300">
+                <div class="absolute top-20 left-1/2 -translate-x-1/2 w-28 h-28 rounded-2xl border-4 border-[#141414] bg-teal-600 overflow-hidden group cursor-pointer shadow-xl z-10"
+                    onclick="openAvatarSelectionModal()">
+                    <img id="cp-avatar-preview"
+                        src="https://api.dicebear.com/7.x/bottts/svg?seed=Novo&backgroundColor=059669"
+                        class="w-full h-full object-cover">
+                    <div
+                        class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/60 transition duration-300">
                         <i class="fa-solid fa-camera text-white text-xl"></i>
                     </div>
                 </div>
@@ -137,14 +196,20 @@
 
                 <div class="space-y-4 mt-4">
                     <div>
-                        <label class="text-xs text-gray-400 font-bold mb-1 block uppercase tracking-wider">Nome de Exibição</label>
-                        <input type="text" id="cp-name" class="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-4 py-3 text-white focus:border-blue-500 outline-none transition" placeholder="Ex: Jeovane">
+                        <label class="text-xs text-gray-400 font-bold mb-1 block uppercase tracking-wider">Nome de
+                            Exibição</label>
+                        <input type="text" id="cp-name"
+                            class="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-4 py-3 text-white focus:border-blue-500 outline-none transition"
+                            placeholder="Ex: Jeovane">
                     </div>
                     <div>
-                        <label class="text-xs text-gray-400 font-bold mb-1 block uppercase tracking-wider">Nome de Usuário (@ Único)</label>
+                        <label class="text-xs text-gray-400 font-bold mb-1 block uppercase tracking-wider">Nome de
+                            Usuário (@ Único)</label>
                         <div class="relative">
                             <span class="absolute left-4 top-3 text-gray-500 font-bold">@</span>
-                            <input type="text" id="cp-username" class="w-full bg-[#0a0a0a] border border-white/10 rounded-lg pl-9 pr-4 py-3 text-white focus:border-blue-500 outline-none transition" placeholder="Ex: jeovane_123">
+                            <input type="text" id="cp-username"
+                                class="w-full bg-[#0a0a0a] border border-white/10 rounded-lg pl-9 pr-4 py-3 text-white focus:border-blue-500 outline-none transition"
+                                placeholder="Ex: jeovane_123">
                         </div>
                         <p id="cp-error" class="text-red-400 text-xs mt-2 hidden"></p>
                     </div>
@@ -152,10 +217,14 @@
 
                 <div class="flex flex-col gap-3 mt-8">
                     <div class="flex gap-3">
-                        <button id="cp-btn-cancel" onclick="cancelCreateProfile()" class="flex-1 bg-transparent border border-white/20 text-white py-3 rounded-lg font-bold hover:bg-white/5 transition">Cancelar</button>
-                        <button id="cp-btn-save" onclick="saveProfile()" class="flex-1 bg-white text-black py-3 rounded-lg font-bold hover:bg-gray-200 transition flex items-center justify-center gap-2">Salvar Perfil</button>
+                        <button id="cp-btn-cancel" onclick="cancelCreateProfile()"
+                            class="flex-1 bg-transparent border border-white/20 text-white py-3 rounded-lg font-bold hover:bg-white/5 transition">Cancelar</button>
+                        <button id="cp-btn-save" onclick="saveProfile()"
+                            class="flex-1 bg-white text-black py-3 rounded-lg font-bold hover:bg-gray-200 transition flex items-center justify-center gap-2">Salvar
+                            Perfil</button>
                     </div>
-                    <button id="cp-btn-delete" onclick="deleteProfile()" class="hidden text-red-500 hover:text-red-400 hover:bg-red-500/10 py-3 rounded-lg text-sm font-semibold transition mt-2 border border-transparent hover:border-red-500/20">
+                    <button id="cp-btn-delete" onclick="deleteProfile()"
+                        class="hidden text-red-500 hover:text-red-400 hover:bg-red-500/10 py-3 rounded-lg text-sm font-semibold transition mt-2 border border-transparent hover:border-red-500/20">
                         <i class="fa-solid fa-trash-can mr-2"></i> Excluir Perfil Definitivamente
                     </button>
                 </div>
@@ -164,13 +233,18 @@
     </div>
 
     <!-- MODAL DE SELEÇÃO DE AVATAR -->
-    <div id="avatar-selection-modal" class="hidden fixed inset-0 z-[250] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-[#141414] border border-white/10 rounded-2xl w-full max-w-4xl max-h-[85vh] flex flex-col overflow-hidden">
+    <div id="avatar-selection-modal"
+        class="hidden fixed inset-0 z-[250] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4">
+        <div
+            class="bg-[#141414] border border-white/10 rounded-2xl w-full max-w-4xl max-h-[85vh] flex flex-col overflow-hidden">
             <div class="p-6 border-b border-white/10 flex justify-between items-center bg-[#0a0a0a] flex-wrap gap-4">
                 <h3 class="text-xl md:text-2xl font-bold text-white">Escolha um Avatar</h3>
                 <div class="flex items-center gap-4">
-                    <button onclick="triggerAvatarUpload()" class="text-xs md:text-sm bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-white font-bold transition whitespace-nowrap"><i class="fa-solid fa-upload mr-2"></i> Enviar Arquivo</button>
-                    <button onclick="closeAvatarSelectionModal()" class="text-gray-400 hover:text-white text-2xl px-2"><i class="fa-solid fa-xmark"></i></button>
+                    <button onclick="triggerAvatarUpload()"
+                        class="text-xs md:text-sm bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-white font-bold transition whitespace-nowrap"><i
+                            class="fa-solid fa-upload mr-2"></i> Enviar Arquivo</button>
+                    <button onclick="closeAvatarSelectionModal()"
+                        class="text-gray-400 hover:text-white text-2xl px-2"><i class="fa-solid fa-xmark"></i></button>
                 </div>
             </div>
             <div id="avatar-groups-container" class="p-6 overflow-y-auto custom-scrollbar flex-1 space-y-8">
@@ -180,13 +254,18 @@
     </div>
 
     <!-- MODAL DE SELEÇÃO DE BANNER -->
-    <div id="banner-selection-modal" class="hidden fixed inset-0 z-[250] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-[#141414] border border-white/10 rounded-2xl w-full max-w-4xl max-h-[85vh] flex flex-col overflow-hidden">
+    <div id="banner-selection-modal"
+        class="hidden fixed inset-0 z-[250] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4">
+        <div
+            class="bg-[#141414] border border-white/10 rounded-2xl w-full max-w-4xl max-h-[85vh] flex flex-col overflow-hidden">
             <div class="p-6 border-b border-white/10 flex justify-between items-center bg-[#0a0a0a] flex-wrap gap-4">
                 <h3 class="text-xl md:text-2xl font-bold text-white">Escolha um Fundo de Perfil</h3>
                 <div class="flex items-center gap-4">
-                    <button onclick="triggerBannerUpload()" class="text-xs md:text-sm bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-white font-bold transition whitespace-nowrap"><i class="fa-solid fa-upload mr-2"></i> Enviar Arquivo</button>
-                    <button onclick="closeBannerSelectionModal()" class="text-gray-400 hover:text-white text-2xl px-2"><i class="fa-solid fa-xmark"></i></button>
+                    <button onclick="triggerBannerUpload()"
+                        class="text-xs md:text-sm bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-white font-bold transition whitespace-nowrap"><i
+                            class="fa-solid fa-upload mr-2"></i> Enviar Arquivo</button>
+                    <button onclick="closeBannerSelectionModal()"
+                        class="text-gray-400 hover:text-white text-2xl px-2"><i class="fa-solid fa-xmark"></i></button>
                 </div>
             </div>
             <div id="banner-groups-container" class="p-6 overflow-y-auto custom-scrollbar flex-1 space-y-8">
@@ -196,54 +275,85 @@
     </div>
 
     <!-- 5. PLAYER DE VÍDEO PERSONALIZADO -->
-    <div id="player-view" class="hidden fixed inset-0 z-[300] bg-black" onmousemove="wakeUpPlayerControls()" onclick="wakeUpPlayerControls()">
+    <div id="player-view" class="hidden fixed inset-0 z-[300] bg-black" onmousemove="wakeUpPlayerControls()"
+        onclick="wakeUpPlayerControls()">
         <video id="starlight-video-player" class="w-full h-full object-contain" playsinline preload="auto"></video>
-        
+
         <div class="absolute inset-0 flex">
             <div class="w-1/2 h-full z-10" ondblclick="skipPlayer(-10)"></div>
             <div class="w-1/2 h-full z-10" ondblclick="skipPlayer(10)"></div>
         </div>
 
-        <div id="player-ui-controls" class="absolute inset-0 flex flex-col justify-between bg-gradient-to-b from-black/80 via-transparent to-black/80 transition-opacity duration-300 z-20">
+        <div id="player-ui-controls"
+            class="absolute inset-0 flex flex-col justify-between bg-gradient-to-b from-black/80 via-transparent to-black/80 transition-opacity duration-300 z-20">
             <div class="p-6 md:p-10 flex items-center gap-6 w-full bg-gradient-to-b from-black/60 to-transparent">
-                <button onclick="closePlayer()" class="text-white hover:text-gray-300 transition w-12 h-12 flex items-center justify-center bg-black/40 rounded-full backdrop-blur-md">
+                <button onclick="closePlayer()"
+                    class="text-white hover:text-gray-300 transition w-12 h-12 flex items-center justify-center bg-black/40 rounded-full backdrop-blur-md">
                     <i class="fa-solid fa-arrow-left text-xl"></i>
                 </button>
-                <h2 id="player-title-display" class="text-white text-lg md:text-xl font-bold truncate drop-shadow-md">Carregando...</h2>
+                <h2 id="player-title-display" class="text-white text-lg md:text-xl font-bold truncate drop-shadow-md">
+                    Carregando...</h2>
             </div>
 
             <div class="flex items-center justify-center gap-12 md:gap-24 absolute inset-0 pointer-events-none">
-                <button onclick="skipPlayer(-10)" class="pointer-events-auto w-14 h-14 md:w-16 md:h-16 rounded-full bg-black/40 flex items-center justify-center text-white hover:bg-white/20 transition backdrop-blur-md border border-white/10"><i class="fa-solid fa-rotate-left text-2xl"></i></button>
-                <button onclick="togglePlayerPlay()" id="player-play-btn" class="pointer-events-auto w-20 h-20 md:w-24 md:h-24 rounded-full bg-black/40 flex items-center justify-center text-white hover:bg-white/20 transition backdrop-blur-md border border-white/10 shadow-2xl"><i id="player-play-icon" class="fa-solid fa-play text-3xl md:text-4xl ml-2"></i></button>
-                <button onclick="skipPlayer(10)" class="pointer-events-auto w-14 h-14 md:w-16 md:h-16 rounded-full bg-black/40 flex items-center justify-center text-white hover:bg-white/20 transition backdrop-blur-md border border-white/10"><i class="fa-solid fa-rotate-right text-2xl"></i></button>
+                <button onclick="skipPlayer(-10)"
+                    class="pointer-events-auto w-14 h-14 md:w-16 md:h-16 rounded-full bg-black/40 flex items-center justify-center text-white hover:bg-white/20 transition backdrop-blur-md border border-white/10"><i
+                        class="fa-solid fa-rotate-left text-2xl"></i></button>
+                <button onclick="togglePlayerPlay()" id="player-play-btn"
+                    class="pointer-events-auto w-20 h-20 md:w-24 md:h-24 rounded-full bg-black/40 flex items-center justify-center text-white hover:bg-white/20 transition backdrop-blur-md border border-white/10 shadow-2xl"><i
+                        id="player-play-icon" class="fa-solid fa-play text-3xl md:text-4xl ml-2"></i></button>
+                <button onclick="skipPlayer(10)"
+                    class="pointer-events-auto w-14 h-14 md:w-16 md:h-16 rounded-full bg-black/40 flex items-center justify-center text-white hover:bg-white/20 transition backdrop-blur-md border border-white/10"><i
+                        class="fa-solid fa-rotate-right text-2xl"></i></button>
             </div>
 
-            <div class="p-6 md:px-12 pb-8 md:pb-12 flex flex-col gap-4 w-full bg-gradient-to-t from-black/80 to-transparent pointer-events-auto">
-                <div class="relative w-full h-8 flex items-center group cursor-pointer" onmousedown="startScrubbing(event)" onmousemove="scrub(event)" onmouseup="stopScrubbing(event)" onmouseleave="stopScrubbing(event)" id="scrubber-container">
-                    <div class="w-full h-1.5 group-hover:h-2.5 transition-all bg-white/30 rounded-full relative overflow-hidden pointer-events-none">
-                        <div id="player-buffer-bar" class="absolute top-0 left-0 h-full bg-white/40 rounded-full w-0"></div>
-                        <div id="player-progress-bar" class="absolute top-0 left-0 h-full bg-orange-500 rounded-full w-0 shadow-[0_0_10px_rgba(249,115,22,0.8)]"></div>
+            <div
+                class="p-6 md:px-12 pb-8 md:pb-12 flex flex-col gap-4 w-full bg-gradient-to-t from-black/80 to-transparent pointer-events-auto">
+                <div class="relative w-full h-8 flex items-center group cursor-pointer"
+                    onmousedown="startScrubbing(event)" onmousemove="scrub(event)" onmouseup="stopScrubbing(event)"
+                    onmouseleave="stopScrubbing(event)" id="scrubber-container">
+                    <div
+                        class="w-full h-1.5 group-hover:h-2.5 transition-all bg-white/30 rounded-full relative overflow-hidden pointer-events-none">
+                        <div id="player-buffer-bar" class="absolute top-0 left-0 h-full bg-white/40 rounded-full w-0">
+                        </div>
+                        <div id="player-progress-bar"
+                            class="absolute top-0 left-0 h-full bg-orange-500 rounded-full w-0 shadow-[0_0_10px_rgba(249,115,22,0.8)]">
+                        </div>
                     </div>
-                    <div id="player-thumb" class="absolute w-4 h-4 group-hover:w-5 group-hover:h-5 bg-orange-500 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all pointer-events-none transform -translate-x-1/2" style="left: 0%;">
+                    <div id="player-thumb"
+                        class="absolute w-4 h-4 group-hover:w-5 group-hover:h-5 bg-orange-500 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all pointer-events-none transform -translate-x-1/2"
+                        style="left: 0%;">
                         <div class="absolute inset-1 bg-white rounded-full"></div>
                     </div>
                 </div>
-                
+
                 <div class="flex flex-col md:flex-row items-center justify-between mt-2 gap-4">
                     <div class="text-white font-semibold text-sm md:text-base drop-shadow-md tracking-wide">
-                        <span id="player-current-time">00:00</span> <span class="text-gray-400 mx-1">/</span> <span id="player-total-time">00:00</span>
+                        <span id="player-current-time">00:00</span> <span class="text-gray-400 mx-1">/</span> <span
+                            id="player-total-time">00:00</span>
                     </div>
                     <div class="flex flex-wrap justify-center gap-3">
-                        <button onclick="openPlayerMenuOverlay('audio')" class="player-glass-btn px-4 md:px-5 py-2.5 rounded-xl text-white text-xs md:text-sm font-bold flex items-center gap-2"><i class="fa-solid fa-language text-lg"></i> Áudio e Legendas</button>
-                        <button onclick="openPlayerMenuOverlay('ratio')" class="player-glass-btn px-4 md:px-5 py-2.5 rounded-xl text-white text-xs md:text-sm font-bold flex items-center gap-2"><i class="fa-solid fa-expand text-lg"></i> Ajuste de Tela</button>
-                        <button onclick="openPlayerMenuOverlay('speed')" class="player-glass-btn px-4 md:px-5 py-2.5 rounded-xl text-white text-xs md:text-sm font-bold flex items-center gap-2"><i class="fa-solid fa-gauge-high text-lg"></i> <span id="player-speed-display">1x</span></button>
+                        <button onclick="openPlayerMenuOverlay('audio')"
+                            class="player-glass-btn px-4 md:px-5 py-2.5 rounded-xl text-white text-xs md:text-sm font-bold flex items-center gap-2"><i
+                                class="fa-solid fa-language text-lg"></i> Áudio e Legendas</button>
+                        <button onclick="openPlayerMenuOverlay('ratio')"
+                            class="player-glass-btn px-4 md:px-5 py-2.5 rounded-xl text-white text-xs md:text-sm font-bold flex items-center gap-2"><i
+                                class="fa-solid fa-expand text-lg"></i> Ajuste de Tela</button>
+                        <button onclick="openPlayerMenuOverlay('speed')"
+                            class="player-glass-btn px-4 md:px-5 py-2.5 rounded-xl text-white text-xs md:text-sm font-bold flex items-center gap-2"><i
+                                class="fa-solid fa-gauge-high text-lg"></i> <span
+                                id="player-speed-display">1x</span></button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="player-menu-overlay" class="hidden absolute inset-0 bg-black/60 z-[310] flex items-center justify-center backdrop-blur-sm" onclick="closePlayerMenuOverlay()">
-            <div id="player-menu-box" class="bg-[#141414]/95 border border-white/10 rounded-3xl p-8 w-[360px] shadow-[0_20px_50px_rgba(0,0,0,0.8)] flex flex-col gap-4 transform transition-all scale-95 opacity-0" onclick="event.stopPropagation()">
+        <div id="player-menu-overlay"
+            class="hidden absolute inset-0 bg-black/60 z-[310] flex items-center justify-center backdrop-blur-sm"
+            onclick="closePlayerMenuOverlay()">
+            <div id="player-menu-box"
+                class="bg-[#141414]/95 border border-white/10 rounded-3xl p-8 w-[360px] shadow-[0_20px_50px_rgba(0,0,0,0.8)] flex flex-col gap-4 transform transition-all scale-95 opacity-0"
+                onclick="event.stopPropagation()">
                 <h3 id="player-menu-title" class="text-white text-xl font-black mb-2">Menu</h3>
                 <div id="player-menu-options" class="flex flex-col gap-2"></div>
             </div>
@@ -255,32 +365,45 @@
         <nav class="fixed w-full z-50 top-0 transition-all duration-300 pt-4 pb-4" id="navbar">
             <div class="flex items-center justify-between px-6 md:px-12">
                 <div class="flex-1">
-                    <span class="text-2xl font-bold tracking-tighter text-white cursor-pointer" onclick="showView('home')">STARLIGHT<span class="text-blue-500">MAX</span></span>
+                    <span class="text-2xl font-bold tracking-tighter text-white cursor-pointer"
+                        onclick="showView('home')">STARLIGHT<span class="text-blue-500">MAX</span></span>
                 </div>
 
-                <div class="hidden md:flex items-center gap-1 bg-[#1a1a1a]/70 backdrop-blur-md rounded-full p-1.5 border border-white/10">
+                <div
+                    class="hidden md:flex items-center gap-1 bg-[#1a1a1a]/70 backdrop-blur-md rounded-full p-1.5 border border-white/10">
                     <div class="relative flex items-center group ml-1">
-                        <i class="fa-solid fa-search absolute left-3 text-gray-400 transition-colors group-focus-within:text-white pointer-events-none z-10"></i>
-                        <input type="text" id="search-input" onkeyup="handleSearch(event)" placeholder="Filmes, séries..." class="search-input-expanding bg-transparent text-white w-10 focus:w-48 lg:focus:w-64 transition-all duration-300 outline-none pl-9 py-2 rounded-full text-sm focus:bg-white/10 cursor-pointer focus:cursor-text">
+                        <i
+                            class="fa-solid fa-search absolute left-3 text-gray-400 transition-colors group-focus-within:text-white pointer-events-none z-10"></i>
+                        <input type="text" id="search-input" onkeyup="handleSearch(event)"
+                            placeholder="Filmes, séries..."
+                            class="search-input-expanding bg-transparent text-white w-10 focus:w-48 lg:focus:w-64 transition-all duration-300 outline-none pl-9 py-2 rounded-full text-sm focus:bg-white/10 cursor-pointer focus:cursor-text">
                     </div>
-                    <button id="nav-home" onclick="showView('home')" class="px-6 py-2.5 rounded-full bg-white text-black font-semibold text-sm transition shadow-[0_0_10px_rgba(255,255,255,0.2)]">Início</button>
-                    <button id="nav-catalog" onclick="showView('catalog')" class="px-6 py-2.5 rounded-full text-gray-300 hover:text-white font-medium text-sm transition">Catálogo</button>
-                    <button id="nav-list" onclick="showView('list')" class="px-6 py-2.5 rounded-full text-gray-300 hover:text-white font-medium text-sm transition">Minha Lista</button>
+                    <button id="nav-home" onclick="showView('home')"
+                        class="px-6 py-2.5 rounded-full bg-white text-black font-semibold text-sm transition shadow-[0_0_10px_rgba(255,255,255,0.2)]">Início</button>
+                    <button id="nav-catalog" onclick="showView('catalog')"
+                        class="px-6 py-2.5 rounded-full text-gray-300 hover:text-white font-medium text-sm transition">Catálogo</button>
+                    <button id="nav-list" onclick="showView('list')"
+                        class="px-6 py-2.5 rounded-full text-gray-300 hover:text-white font-medium text-sm transition">Minha
+                        Lista</button>
                 </div>
 
                 <div class="flex-1 flex justify-end items-center gap-4">
-                    <button class="relative text-gray-300 hover:text-white transition w-11 h-11 flex items-center justify-center bg-[#1a1a1a]/70 backdrop-blur-md rounded-full border border-white/10">
+                    <button
+                        class="relative text-gray-300 hover:text-white transition w-11 h-11 flex items-center justify-center bg-[#1a1a1a]/70 backdrop-blur-md rounded-full border border-white/10">
                         <i class="fa-regular fa-bell text-lg"></i>
                         <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full"></span>
                     </button>
-                    
+
                     <div class="relative">
-                        <button id="btn-profile" onclick="toggleProfileMenu(event)" class="w-11 h-11 rounded-full overflow-hidden border-2 border-transparent hover:border-blue-500 transition-all cursor-pointer bg-teal-500 flex items-center justify-center relative z-50">
+                        <button id="btn-profile" onclick="toggleProfileMenu(event)"
+                            class="w-11 h-11 rounded-full overflow-hidden border-2 border-transparent hover:border-blue-500 transition-all cursor-pointer bg-teal-500 flex items-center justify-center relative z-50">
                             <img id="nav-avatar" src="" alt="Perfil" class="w-full h-full object-cover">
                         </button>
-                        
-                        <div id="profile-dropdown" class="hidden absolute right-0 mt-3 w-[260px] bg-[#0a0a0a] border border-white/10 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] z-50 overflow-hidden transform origin-top-right transition-all duration-200">
-                            <div class="p-4 flex items-center gap-3 border-b border-white/5 hover:bg-white/5 cursor-pointer transition" onclick="showView('profile')">
+
+                        <div id="profile-dropdown"
+                            class="hidden absolute right-0 mt-3 w-[260px] bg-[#0a0a0a] border border-white/10 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] z-50 overflow-hidden transform origin-top-right transition-all duration-200">
+                            <div class="p-4 flex items-center gap-3 border-b border-white/5 hover:bg-white/5 cursor-pointer transition"
+                                onclick="showView('profile')">
                                 <div class="w-12 h-12 rounded-lg bg-teal-500 overflow-hidden">
                                     <img id="drop-avatar" src="" alt="Avatar" class="w-full h-full object-cover">
                                 </div>
@@ -289,16 +412,22 @@
                                     <span class="text-gray-400 text-xs">Acessar perfil</span>
                                 </div>
                             </div>
-                            
+
                             <div class="py-2 flex flex-col">
-                                <button onclick="window.location.reload()" class="flex items-center gap-4 px-5 py-3 text-gray-300 hover:bg-white/5 hover:text-white transition w-full text-left">
-                                    <i class="fa-solid fa-users text-lg w-5 text-center"></i> <span class="font-medium text-sm">Trocar de Perfil</span>
+                                <button onclick="window.location.reload()"
+                                    class="flex items-center gap-4 px-5 py-3 text-gray-300 hover:bg-white/5 hover:text-white transition w-full text-left">
+                                    <i class="fa-solid fa-users text-lg w-5 text-center"></i> <span
+                                        class="font-medium text-sm">Trocar de Perfil</span>
                                 </button>
-                                <button onclick="editProfileFromApp()" class="flex items-center gap-4 px-5 py-3 text-gray-300 hover:bg-white/5 hover:text-white transition w-full text-left border-b border-white/5">
-                                    <i class="fa-solid fa-pen text-lg w-5 text-center"></i> <span class="font-medium text-sm">Editar Perfil</span>
+                                <button onclick="editProfileFromApp()"
+                                    class="flex items-center gap-4 px-5 py-3 text-gray-300 hover:bg-white/5 hover:text-white transition w-full text-left border-b border-white/5">
+                                    <i class="fa-solid fa-pen text-lg w-5 text-center"></i> <span
+                                        class="font-medium text-sm">Editar Perfil</span>
                                 </button>
-                                <button onclick="logoutFirebase()" class="flex items-center gap-4 px-5 py-4 text-[#ff7575] hover:bg-[#ff7575]/10 transition w-full text-left mt-1">
-                                    <i class="fa-solid fa-arrow-right-from-bracket text-lg w-5 text-center"></i> <span class="font-medium text-sm">Sair da conta</span>
+                                <button onclick="logoutFirebase()"
+                                    class="flex items-center gap-4 px-5 py-4 text-[#ff7575] hover:bg-[#ff7575]/10 transition w-full text-left mt-1">
+                                    <i class="fa-solid fa-arrow-right-from-bracket text-lg w-5 text-center"></i> <span
+                                        class="font-medium text-sm">Sair da conta</span>
                                 </button>
                             </div>
                         </div>
@@ -312,24 +441,33 @@
             <div id="home-view" class="block">
                 <div class="relative w-full h-screen flex items-center px-6 md:px-16" id="hero-section">
                     <div class="absolute inset-0 w-full h-full">
-                        <img id="hero-bg" src="" alt="Filme em Destaque" class="w-full h-full object-cover object-top opacity-0 transition-opacity duration-1000 skeleton">
+                        <img id="hero-bg" src="" alt="Filme em Destaque"
+                            class="w-full h-full object-cover object-top opacity-0 transition-opacity duration-1000 skeleton">
                         <div class="absolute inset-0 hero-gradient"></div>
                         <div class="absolute inset-0 hero-gradient-side"></div>
                     </div>
 
-                    <div class="relative z-10 w-full max-w-3xl mt-16" id="hero-content" style="opacity: 0; transition: opacity 1s ease;">
+                    <div class="relative z-10 w-full max-w-3xl mt-16" id="hero-content"
+                        style="opacity: 0; transition: opacity 1s ease;">
                         <div id="hero-title-container" class="mb-4 min-h-[100px] flex items-end">
-                            <h1 id="hero-title" class="text-6xl md:text-8xl font-black text-white uppercase tracking-tighter drop-shadow-lg" style="font-family: 'Times New Roman', serif; font-style: italic;"></h1>
-                            <img id="hero-logo" src="" alt="Logo" class="hidden max-w-[400px] max-h-[150px] object-contain drop-shadow-2xl filter drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
+                            <h1 id="hero-title"
+                                class="text-6xl md:text-8xl font-black text-white uppercase tracking-tighter drop-shadow-lg"
+                                style="font-family: 'Times New Roman', serif; font-style: italic;"></h1>
+                            <img id="hero-logo" src="" alt="Logo"
+                                class="hidden max-w-[400px] max-h-[150px] object-contain drop-shadow-2xl filter drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
                         </div>
-                        
+
                         <div class="flex items-center gap-2 mb-4" id="hero-badge">
-                           <span class="text-xs text-gray-400 font-medium">ASSISTA EM MODO</span>
-                           <span class="text-xs font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-red-500 to-yellow-500 uppercase">True-Hue Cores Vivas</span>
+                            <span class="text-xs text-gray-400 font-medium">ASSISTA EM MODO</span>
+                            <span
+                                class="text-xs font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-red-500 to-yellow-500 uppercase">True-Hue
+                                Cores Vivas</span>
                         </div>
 
                         <div class="flex flex-wrap items-center gap-3 text-sm text-gray-300 mb-6" id="hero-meta"></div>
-                        <div id="hero-overview" class="text-base md:text-lg text-gray-200 mb-8 max-w-2xl line-clamp-3 drop-shadow-md leading-relaxed"></div>
+                        <div id="hero-overview"
+                            class="text-base md:text-lg text-gray-200 mb-8 max-w-2xl line-clamp-3 drop-shadow-md leading-relaxed">
+                        </div>
 
                         <div class="flex items-center gap-4" id="hero-actions"></div>
                     </div>
@@ -344,11 +482,15 @@
             <!-- TELA 2: CATÁLOGO -->
             <div id="catalog-view" class="hidden pt-28 px-6 md:px-12 min-h-screen">
                 <div class="flex flex-wrap items-center gap-3 mb-8">
-                    <button id="filter-all" onclick="setCatalogFilter('all')" class="px-5 py-2 rounded-full bg-white text-black font-semibold text-sm transition">Todos</button>
-                    <button id="filter-movies" onclick="setCatalogFilter('movie')" class="px-5 py-2 rounded-full bg-[#1a1a1a] text-white hover:bg-gray-800 font-medium text-sm transition border border-white/10">Filmes</button>
-                    <button id="filter-series" onclick="setCatalogFilter('tv')" class="px-5 py-2 rounded-full bg-[#1a1a1a] text-white hover:bg-gray-800 font-medium text-sm transition border border-white/10">Séries</button>
+                    <button id="filter-all" onclick="setCatalogFilter('all')"
+                        class="px-5 py-2 rounded-full bg-white text-black font-semibold text-sm transition">Todos</button>
+                    <button id="filter-movies" onclick="setCatalogFilter('movie')"
+                        class="px-5 py-2 rounded-full bg-[#1a1a1a] text-white hover:bg-gray-800 font-medium text-sm transition border border-white/10">Filmes</button>
+                    <button id="filter-series" onclick="setCatalogFilter('tv')"
+                        class="px-5 py-2 rounded-full bg-[#1a1a1a] text-white hover:bg-gray-800 font-medium text-sm transition border border-white/10">Séries</button>
                 </div>
-                <div id="catalog-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5 pb-10"></div>
+                <div id="catalog-grid"
+                    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5 pb-10"></div>
                 <div id="catalog-empty" class="hidden col-span-full flex-col items-center py-20 text-gray-400">
                     <i class="fa-solid fa-film text-5xl mb-4 opacity-30"></i>
                     <p>Nenhum conteúdo encontrado para este filtro.</p>
@@ -358,18 +500,23 @@
             <!-- TELA 3: MINHA LISTA -->
             <div id="mylist-view" class="hidden pt-28 px-6 md:px-12 min-h-screen">
                 <h2 class="text-2xl md:text-3xl font-bold text-white mb-8 tracking-wide">Minha Lista</h2>
-                <div id="mylist-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5 pb-20"></div>
+                <div id="mylist-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5 pb-20">
+                </div>
                 <div id="mylist-empty" class="hidden flex-col items-center justify-center text-gray-400 mt-20 gap-4">
                     <i class="fa-solid fa-film text-5xl mb-2 opacity-30"></i>
                     <p class="text-lg">A sua lista está vazia.</p>
-                    <button onclick="showView('catalog')" class="mt-4 px-6 py-2.5 bg-white text-black font-bold hover:bg-gray-200 rounded-lg transition shadow-lg">Explorar títulos</button>
+                    <button onclick="showView('catalog')"
+                        class="mt-4 px-6 py-2.5 bg-white text-black font-bold hover:bg-gray-200 rounded-lg transition shadow-lg">Explorar
+                        títulos</button>
                 </div>
             </div>
 
             <!-- TELA 4: RESULTADOS DA BUSCA -->
             <div id="search-view" class="hidden pt-28 px-6 md:px-12 min-h-screen">
-                <h2 class="text-2xl md:text-3xl font-bold text-white mb-8 tracking-wide">Resultados para "<span id="search-query-display" class="text-blue-400"></span>"</h2>
-                <div id="search-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5 pb-20"></div>
+                <h2 class="text-2xl md:text-3xl font-bold text-white mb-8 tracking-wide">Resultados para "<span
+                        id="search-query-display" class="text-blue-400"></span>"</h2>
+                <div id="search-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5 pb-20">
+                </div>
                 <div id="search-empty" class="hidden flex-col items-center justify-center text-gray-400 mt-20 gap-4">
                     <i class="fa-solid fa-magnifying-glass text-5xl mb-2 opacity-30"></i>
                     <p class="text-lg text-center max-w-md">Não encontramos nada correspondente à sua busca.</p>
@@ -380,16 +527,28 @@
             <div id="details-view" class="hidden min-h-screen pb-20">
                 <div class="relative w-full h-[85vh] md:h-screen flex items-center px-6 md:px-16 pt-20 md:pt-0">
                     <div class="absolute inset-0 w-full h-full bg-[#050505]">
-                        <img id="det-bg" src="" class="w-full h-full object-cover object-top opacity-0 transition-opacity duration-1000">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/80 md:via-transparent to-transparent"></div>
-                        <div class="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/90 to-transparent w-full md:w-2/3"></div>
+                        <img id="det-bg" src=""
+                            class="w-full h-full object-cover object-top opacity-0 transition-opacity duration-1000">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/80 md:via-transparent to-transparent">
+                        </div>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/90 to-transparent w-full md:w-2/3">
+                        </div>
                     </div>
-                    
-                    <div class="relative z-10 w-full max-w-3xl mt-10 md:mt-20 transition-opacity duration-500" id="det-content">
-                        <img id="det-logo" class="hidden max-w-[250px] md:max-w-[400px] max-h-[100px] md:max-h-[150px] mb-6 object-contain drop-shadow-2xl">
-                        <h1 id="det-title" class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-6 hidden font-serif italic"></h1>
-                        <div class="flex flex-wrap items-center gap-3 text-xs md:text-sm text-gray-300 font-medium mb-5" id="det-meta"></div>
-                        <p id="det-desc" class="text-gray-300 text-sm md:text-base leading-relaxed max-w-2xl mb-6 line-clamp-4 md:line-clamp-none drop-shadow-md"></p>
+
+                    <div class="relative z-10 w-full max-w-3xl mt-10 md:mt-20 transition-opacity duration-500"
+                        id="det-content">
+                        <img id="det-logo"
+                            class="hidden max-w-[250px] md:max-w-[400px] max-h-[100px] md:max-h-[150px] mb-6 object-contain drop-shadow-2xl">
+                        <h1 id="det-title"
+                            class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-6 hidden font-serif italic">
+                        </h1>
+                        <div class="flex flex-wrap items-center gap-3 text-xs md:text-sm text-gray-300 font-medium mb-5"
+                            id="det-meta"></div>
+                        <p id="det-desc"
+                            class="text-gray-300 text-sm md:text-base leading-relaxed max-w-2xl mb-6 line-clamp-4 md:line-clamp-none drop-shadow-md">
+                        </p>
                         <div id="det-genres" class="flex flex-wrap gap-2 mb-8 text-xs text-gray-400 font-medium"></div>
 
                         <div class="flex flex-wrap items-center gap-3" id="det-action-buttons"></div>
@@ -401,11 +560,14 @@
                     <div class="flex items-center gap-4 mb-6 relative">
                         <h2 class="text-2xl font-bold text-white tracking-wide">Episódios</h2>
                         <div class="relative inline-block text-left" id="season-selector-wrapper">
-                            <button onclick="toggleSeasonDropdown()" id="btn-season-select" type="button" class="inline-flex justify-between items-center w-[160px] rounded-lg border border-white/10 bg-[#141414] px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-[#1a1a1a] focus:outline-none transition-all">
+                            <button onclick="toggleSeasonDropdown()" id="btn-season-select" type="button"
+                                class="inline-flex justify-between items-center w-[160px] rounded-lg border border-white/10 bg-[#141414] px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-[#1a1a1a] focus:outline-none transition-all">
                                 <span id="current-season-text">Temporada 1</span>
-                                <i class="fa-solid fa-chevron-down text-xs ml-2 transition-transform duration-200" id="season-chevron"></i>
+                                <i class="fa-solid fa-chevron-down text-xs ml-2 transition-transform duration-200"
+                                    id="season-chevron"></i>
                             </button>
-                            <div id="season-dropdown-menu" class="hidden absolute left-0 z-50 mt-1 w-[160px] rounded-lg bg-[#141414] border border-white/10 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden origin-top transform scale-95 transition-all duration-100 opacity-0 custom-scrollbar max-h-[250px] overflow-y-auto">
+                            <div id="season-dropdown-menu"
+                                class="hidden absolute left-0 z-50 mt-1 w-[160px] rounded-lg bg-[#141414] border border-white/10 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden origin-top transform scale-95 transition-all duration-100 opacity-0 custom-scrollbar max-h-[250px] overflow-y-auto">
                                 <div class="py-1" role="none" id="season-options-container"></div>
                             </div>
                         </div>
@@ -421,23 +583,30 @@
                     <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent"></div>
                 </div>
 
-                <div class="px-6 md:px-16 relative -mt-16 md:-mt-24 flex flex-col md:flex-row items-center md:items-end gap-6 md:gap-8 z-10">
-                    <div class="w-32 h-32 md:w-44 md:h-44 rounded-2xl border-4 border-[#050505] overflow-hidden bg-teal-500 shadow-2xl relative group cursor-pointer" onclick="editProfileFromApp()">
-                        <img id="pv-avatar" src="" class="w-full h-full object-cover group-hover:opacity-60 transition-opacity">
-                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <div
+                    class="px-6 md:px-16 relative -mt-16 md:-mt-24 flex flex-col md:flex-row items-center md:items-end gap-6 md:gap-8 z-10">
+                    <div class="w-32 h-32 md:w-44 md:h-44 rounded-2xl border-4 border-[#050505] overflow-hidden bg-teal-500 shadow-2xl relative group cursor-pointer"
+                        onclick="editProfileFromApp()">
+                        <img id="pv-avatar" src=""
+                            class="w-full h-full object-cover group-hover:opacity-60 transition-opacity">
+                        <div
+                            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                             <i class="fa-solid fa-camera text-white text-2xl"></i>
                         </div>
                     </div>
                     <div class="text-center md:text-left mb-2 md:mb-6">
-                        <h1 id="pv-name" class="text-3xl md:text-5xl font-black text-white tracking-tight uppercase">...</h1>
-                        <div class="flex items-center justify-center md:justify-start gap-3 mt-2 text-gray-400 font-medium">
+                        <h1 id="pv-name" class="text-3xl md:text-5xl font-black text-white tracking-tight uppercase">...
+                        </h1>
+                        <div
+                            class="flex items-center justify-center md:justify-start gap-3 mt-2 text-gray-400 font-medium">
                             <span id="pv-username">@...</span>
                             <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
                             <span class="text-blue-400 text-sm uppercase tracking-wider font-bold">Assinante Max</span>
                         </div>
                     </div>
                     <div class="md:ml-auto mb-2 md:mb-6 flex gap-3">
-                        <button onclick="editProfileFromApp()" class="bg-white/10 hover:bg-white/20 border border-white/10 text-white px-5 py-2.5 rounded-lg font-semibold text-sm transition flex items-center gap-2">
+                        <button onclick="editProfileFromApp()"
+                            class="bg-white/10 hover:bg-white/20 border border-white/10 text-white px-5 py-2.5 rounded-lg font-semibold text-sm transition flex items-center gap-2">
                             <i class="fa-solid fa-pen"></i> Editar Perfil
                         </button>
                     </div>
@@ -449,8 +618,10 @@
                             <i class="fa-solid fa-clock-rotate-left text-xl text-blue-500"></i>
                             <h2 class="text-2xl font-bold text-white tracking-wide">Assistidos Recentemente</h2>
                         </div>
-                        <div id="profile-recent-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5"></div>
-                        <div id="profile-recent-empty" class="hidden flex-col items-center justify-center py-10 bg-[#1a1a1a]/30 border border-white/5 rounded-xl">
+                        <div id="profile-recent-grid"
+                            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5"></div>
+                        <div id="profile-recent-empty"
+                            class="hidden flex-col items-center justify-center py-10 bg-[#1a1a1a]/30 border border-white/5 rounded-xl">
                             <p class="text-gray-500 text-sm">Você ainda não assistiu a nenhum título.</p>
                         </div>
                     </section>
@@ -460,8 +631,10 @@
                             <i class="fa-solid fa-heart text-xl text-red-500"></i>
                             <h2 class="text-2xl font-bold text-white tracking-wide">Favoritos (Minha Lista)</h2>
                         </div>
-                        <div id="profile-favorites-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5"></div>
-                        <div id="profile-favorites-empty" class="hidden flex-col items-center justify-center py-10 bg-[#1a1a1a]/30 border border-white/5 rounded-xl">
+                        <div id="profile-favorites-grid"
+                            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5"></div>
+                        <div id="profile-favorites-empty"
+                            class="hidden flex-col items-center justify-center py-10 bg-[#1a1a1a]/30 border border-white/5 rounded-xl">
                             <p class="text-gray-500 text-sm">Sua lista de favoritos está vazia.</p>
                         </div>
                     </section>
@@ -470,18 +643,23 @@
         </main>
 
         <!-- Pop-up de Hover -->
-        <div id="hover-card" class="fixed z-[100] w-[320px] bg-[#141414] rounded-xl shadow-[0_20px_40px_rgba(0,0,0,0.9)] border border-white/10 opacity-0 pointer-events-none scale-95 transition-all duration-200 flex flex-col overflow-hidden" onmouseenter="handleCardEnter()" onmouseleave="handleCardLeave()">
+        <div id="hover-card"
+            class="fixed z-[100] w-[320px] bg-[#141414] rounded-xl shadow-[0_20px_40px_rgba(0,0,0,0.9)] border border-white/10 opacity-0 pointer-events-none scale-95 transition-all duration-200 flex flex-col overflow-hidden"
+            onmouseenter="handleCardEnter()" onmouseleave="handleCardLeave()">
             <div class="relative w-full h-44 bg-gray-900">
                 <img id="hc-img" src="" alt="Capa" class="w-full h-full object-cover">
                 <div class="absolute inset-0 bg-gradient-to-t from-[#141414] via-[#141414]/20 to-transparent"></div>
                 <div class="absolute bottom-3 left-4 w-3/4">
-                     <h3 id="hc-title" class="text-xl font-bold text-white drop-shadow-md truncate font-serif italic hidden"></h3>
-                     <img id="hc-logo" src="" alt="Logo" class="hidden max-w-[140px] max-h-[50px] object-contain drop-shadow-lg filter drop-shadow-[0_0_8px_rgba(0,0,0,0.8)]">
+                    <h3 id="hc-title"
+                        class="text-xl font-bold text-white drop-shadow-md truncate font-serif italic hidden"></h3>
+                    <img id="hc-logo" src="" alt="Logo"
+                        class="hidden max-w-[140px] max-h-[50px] object-contain drop-shadow-lg filter drop-shadow-[0_0_8px_rgba(0,0,0,0.8)]">
                 </div>
             </div>
             <div class="p-5 pt-2 flex flex-col gap-3">
                 <div class="flex items-center gap-2 text-xs font-semibold text-gray-300">
-                    <span id="hc-rating-badge" class="bg-yellow-500 text-black px-1.5 py-0.5 rounded text-[10px] hidden"></span>
+                    <span id="hc-rating-badge"
+                        class="bg-yellow-500 text-black px-1.5 py-0.5 rounded text-[10px] hidden"></span>
                     <span id="hc-rating" class="text-white font-bold flex items-center gap-1"></span>
                     <span class="w-1 h-1 bg-gray-500 rounded-full"></span>
                     <span id="hc-year"></span>
@@ -489,10 +667,12 @@
                 <div id="hc-genres" class="flex flex-wrap gap-1.5 text-[10px] text-gray-400 font-medium"></div>
                 <p id="hc-desc" class="text-xs text-gray-300 line-clamp-3 leading-relaxed mt-1"></p>
                 <div class="flex gap-2 mt-2">
-                    <button id="hc-btn-add-list" onclick="toggleMyList()" class="flex-1 bg-[#2a2a2a] hover:bg-[#3a3a3a] text-white py-2.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-2 border border-white/5">
+                    <button id="hc-btn-add-list" onclick="toggleMyList()"
+                        class="flex-1 bg-[#2a2a2a] hover:bg-[#3a3a3a] text-white py-2.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-2 border border-white/5">
                         <i id="hc-icon-list" class="fa-solid fa-plus text-sm"></i> <span id="hc-text-list">Salvar</span>
                     </button>
-                    <button onclick="openDetailsFromHover()" class="flex-1 bg-white hover:bg-gray-200 text-black py-2.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-2 shadow-lg">
+                    <button onclick="openDetailsFromHover()"
+                        class="flex-1 bg-white hover:bg-gray-200 text-black py-2.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-2 shadow-lg">
                         <i class="fa-solid fa-play text-sm"></i> Detalhes
                     </button>
                 </div>
@@ -527,20 +707,20 @@
         // VARIÁVEIS GLOBAIS
         // ==========================================
         window.firestoreContent = []; // Todo conteúdo do BD cacheado localmente
-        window.moviesMap = {}; 
-        window.currentHoveredItem = { id: null, type: null }; 
+        window.moviesMap = {};
+        window.currentHoveredItem = { id: null, type: null };
         window.currentDetailsItem = { id: null, type: null, data: null };
-        window.myList = []; 
+        window.myList = [];
         window.recentHistory = [];
-        window.currentCatalogFilter = 'all'; 
+        window.currentCatalogFilter = 'all';
         window.featuredItemIds = []; // Variável para os Destaques
 
         // Autenticação e Perfis
-        let currentUser = null; 
-        let currentProfile = null; 
+        let currentUser = null;
+        let currentProfile = null;
         let localProfiles = [];
-        let isManageMode = false; 
-        let editingProfileId = null; 
+        let isManageMode = false;
+        let editingProfileId = null;
         let editingOldUsername = null;
         let tempSelectedAvatar = null;
         let tempSelectedBanner = null;
@@ -550,33 +730,33 @@
         let starlightBanners = [];
 
         window.loginWithGoogle = async () => {
-            try { await signInWithPopup(auth, new GoogleAuthProvider()); } 
-            catch (error) { 
-                document.getElementById('login-error').textContent = "Erro ao fazer login. Tente novamente."; 
-                document.getElementById('login-error').classList.remove('hidden'); 
+            try { await signInWithPopup(auth, new GoogleAuthProvider()); }
+            catch (error) {
+                document.getElementById('login-error').textContent = "Erro ao fazer login. Tente novamente.";
+                document.getElementById('login-error').classList.remove('hidden');
             }
         };
-        
+
         window.logoutFirebase = () => { signOut(auth); };
 
         onAuthStateChanged(auth, async (user) => {
-            if (user) { 
-                currentUser = user; 
-                document.getElementById('login-view').classList.add('hidden'); 
-                
+            if (user) {
+                currentUser = user;
+                document.getElementById('login-view').classList.add('hidden');
+
                 listenForFeaturedItems();
                 await loadStarlightAssets();
-                await loadUserProfiles(); 
-            } else { 
-                currentUser = null; 
-                currentProfile = null; 
-                isManageMode = false; 
-                document.getElementById('splash-screen').classList.add('hidden'); 
-                document.getElementById('main-app-container').classList.add('hidden'); 
-                document.getElementById('profiles-selection-view').classList.add('hidden'); 
-                document.getElementById('create-profile-view').classList.add('hidden'); 
+                await loadUserProfiles();
+            } else {
+                currentUser = null;
+                currentProfile = null;
+                isManageMode = false;
+                document.getElementById('splash-screen').classList.add('hidden');
+                document.getElementById('main-app-container').classList.add('hidden');
+                document.getElementById('profiles-selection-view').classList.add('hidden');
+                document.getElementById('create-profile-view').classList.add('hidden');
                 document.getElementById('player-view').classList.add('hidden');
-                document.getElementById('login-view').classList.remove('hidden'); 
+                document.getElementById('login-view').classList.remove('hidden');
             }
         });
 
@@ -601,28 +781,36 @@
                 const bgSnap = await getDocs(collection(db, 'background_groups'));
                 starlightBanners = [];
                 bgSnap.forEach(d => starlightBanners.push(d.data()));
-            } catch(e) { console.error("Erro ao carregar assets customizados:", e); }
+            } catch (e) { console.error("Erro ao carregar assets customizados:", e); }
         }
 
         function updateFeaturedHero() {
             if (Object.keys(window.moviesMap).length === 0) return;
-            
+
             let featuredMovie = null;
             if (window.featuredItemIds && window.featuredItemIds.length > 0) {
-                // Tenta achar o destaque principal na memória local
-                featuredMovie = window.moviesMap[window.featuredItemIds[0]];
+                // Itera de trás para frente (do mais recente adicionado para o mais antigo)
+                // Isso garante que pega o último destaque que você marcou no painel
+                // e ignora IDs "fantasmas" de filmes que foram deletados do banco.
+                for (let i = window.featuredItemIds.length - 1; i >= 0; i--) {
+                    const id = window.featuredItemIds[i];
+                    if (window.moviesMap[id]) {
+                        featuredMovie = window.moviesMap[id];
+                        break; // Achou um filme válido, para a busca
+                    }
+                }
             }
-            
+
             if (featuredMovie) {
                 updateHeroSection(featuredMovie);
             } else {
-                // Caso não tenha destaque ou o ID foi deletado, usa os mais recentes
-                const recentContent = [...window.firestoreContent].sort((a,b) => {
+                // Caso não tenha destaque ou todos os IDs salvos tenham sido deletados, usa os mais recentes
+                const recentContent = [...window.firestoreContent].sort((a, b) => {
                     const timeA = a.updatedAt?.seconds || 0;
                     const timeB = b.updatedAt?.seconds || 0;
                     return timeB - timeA;
                 });
-                
+
                 if (recentContent.length > 0) {
                     updateHeroSection(recentContent[0]);
                 }
@@ -636,37 +824,37 @@
             document.getElementById('splash-screen').classList.remove('hidden');
             try {
                 const snapshot = await getDocs(query(collection(db, "artifacts", "starlight-max", "users", currentUser.uid, "profiles")));
-                localProfiles = []; 
+                localProfiles = [];
                 snapshot.forEach(doc => { localProfiles.push({ id: doc.id, ...doc.data() }); });
                 document.getElementById('splash-screen').classList.add('hidden');
                 if (localProfiles.length === 0) showCreateProfile(); else renderProfilesSelectionScreen();
-            } catch(e) { 
-                document.getElementById('splash-screen').classList.add('hidden'); 
-                showCreateProfile(); 
+            } catch (e) {
+                document.getElementById('splash-screen').classList.add('hidden');
+                showCreateProfile();
             }
         }
 
         window.toggleManageMode = () => {
-            isManageMode = !isManageMode; 
+            isManageMode = !isManageMode;
             const btn = document.getElementById('btn-manage-profiles');
-            if (btn) { 
-                btn.innerHTML = isManageMode ? 'Concluído' : 'Gerenciar Perfis'; 
-                if(isManageMode) { 
-                    btn.classList.replace('text-gray-400', 'text-white'); 
-                    btn.classList.replace('border-gray-600', 'border-white'); 
-                    btn.classList.add('bg-white/10'); 
-                } else { 
-                    btn.classList.replace('text-white', 'text-gray-400'); 
-                    btn.classList.replace('border-white', 'border-gray-600'); 
-                    btn.classList.remove('bg-white/10'); 
-                } 
+            if (btn) {
+                btn.innerHTML = isManageMode ? 'Concluído' : 'Gerenciar Perfis';
+                if (isManageMode) {
+                    btn.classList.replace('text-gray-400', 'text-white');
+                    btn.classList.replace('border-gray-600', 'border-white');
+                    btn.classList.add('bg-white/10');
+                } else {
+                    btn.classList.replace('text-white', 'text-gray-400');
+                    btn.classList.replace('border-white', 'border-gray-600');
+                    btn.classList.remove('bg-white/10');
+                }
             }
             renderProfilesSelectionScreen();
         }
 
         function renderProfilesSelectionScreen() {
             document.getElementById('profiles-selection-view').classList.remove('hidden');
-            const grid = document.getElementById('profiles-grid-list'); 
+            const grid = document.getElementById('profiles-grid-list');
             grid.innerHTML = '';
             localProfiles.forEach(prof => {
                 const clickAction = isManageMode ? `editProfile('${prof.id}')` : `selectProfile('${prof.id}')`;
@@ -693,23 +881,23 @@
         }
 
         window.selectProfile = (profileId) => {
-            if(isManageMode) return;
+            if (isManageMode) return;
             currentProfile = localProfiles.find(p => p.id === profileId);
-            window.myList = currentProfile.myList || []; 
+            window.myList = currentProfile.myList || [];
             window.recentHistory = currentProfile.recentHistory || [];
-            
-            document.getElementById('nav-avatar').src = currentProfile.avatarUrl; 
-            document.getElementById('drop-avatar').src = currentProfile.avatarUrl; 
+
+            document.getElementById('nav-avatar').src = currentProfile.avatarUrl;
+            document.getElementById('drop-avatar').src = currentProfile.avatarUrl;
             document.getElementById('drop-name').textContent = currentProfile.name;
-            document.getElementById('pv-name').textContent = currentProfile.name; 
-            document.getElementById('pv-username').textContent = "@" + currentProfile.username; 
-            document.getElementById('pv-avatar').src = currentProfile.avatarUrl; 
+            document.getElementById('pv-name').textContent = currentProfile.name;
+            document.getElementById('pv-username').textContent = "@" + currentProfile.username;
+            document.getElementById('pv-avatar').src = currentProfile.avatarUrl;
             document.getElementById('pv-banner').src = currentProfile.bannerUrl;
-            
-            document.getElementById('profiles-selection-view').classList.add('hidden'); 
-            document.getElementById('create-profile-view').classList.add('hidden'); 
+
+            document.getElementById('profiles-selection-view').classList.add('hidden');
+            document.getElementById('create-profile-view').classList.add('hidden');
             document.getElementById('main-app-container').classList.remove('hidden');
-            
+
             initAppWithProfile();
         };
 
@@ -717,57 +905,57 @@
             editingProfileId = null; editingOldUsername = null;
             tempSelectedAvatar = null; tempSelectedBanner = null;
 
-            document.getElementById('profiles-selection-view').classList.add('hidden'); 
+            document.getElementById('profiles-selection-view').classList.add('hidden');
             document.getElementById('create-profile-view').classList.remove('hidden');
-            document.getElementById('cp-title').textContent = "Criar Novo Perfil"; 
-            document.getElementById('cp-name').value = ''; 
-            document.getElementById('cp-username').value = ''; 
-            document.getElementById('cp-avatar-preview').src = 'https://api.dicebear.com/7.x/bottts/svg?seed=Novo&backgroundColor=059669'; 
-            document.getElementById('cp-banner-preview').src = 'https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2094&auto=format&fit=crop'; 
+            document.getElementById('cp-title').textContent = "Criar Novo Perfil";
+            document.getElementById('cp-name').value = '';
+            document.getElementById('cp-username').value = '';
+            document.getElementById('cp-avatar-preview').src = 'https://api.dicebear.com/7.x/bottts/svg?seed=Novo&backgroundColor=059669';
+            document.getElementById('cp-banner-preview').src = 'https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2094&auto=format&fit=crop';
             document.getElementById('cp-error').classList.add('hidden');
-            document.getElementById('cp-btn-delete').classList.add('hidden'); 
-            document.getElementById('cp-btn-save').innerHTML = 'Salvar Perfil'; 
-            document.getElementById('cp-avatar').value = ''; 
+            document.getElementById('cp-btn-delete').classList.add('hidden');
+            document.getElementById('cp-btn-save').innerHTML = 'Salvar Perfil';
+            document.getElementById('cp-avatar').value = '';
             document.getElementById('cp-banner').value = '';
-            
-            if (localProfiles.length > 0) document.getElementById('cp-btn-cancel').classList.remove('hidden'); 
+
+            if (localProfiles.length > 0) document.getElementById('cp-btn-cancel').classList.remove('hidden');
             else document.getElementById('cp-btn-cancel').classList.add('hidden');
         };
 
         window.editProfile = (profileId) => {
-            editingProfileId = profileId; 
-            const prof = localProfiles.find(p => p.id === profileId); 
+            editingProfileId = profileId;
+            const prof = localProfiles.find(p => p.id === profileId);
             editingOldUsername = prof.username;
-            
+
             tempSelectedAvatar = prof.avatarUrl;
             tempSelectedBanner = prof.bannerUrl;
 
-            document.getElementById('profiles-selection-view').classList.add('hidden'); 
+            document.getElementById('profiles-selection-view').classList.add('hidden');
             document.getElementById('create-profile-view').classList.remove('hidden');
-            document.getElementById('cp-title').textContent = "Editar Perfil"; 
-            document.getElementById('cp-name').value = prof.name; 
-            document.getElementById('cp-username').value = prof.username; 
-            document.getElementById('cp-avatar-preview').src = prof.avatarUrl; 
-            document.getElementById('cp-banner-preview').src = prof.bannerUrl; 
+            document.getElementById('cp-title').textContent = "Editar Perfil";
+            document.getElementById('cp-name').value = prof.name;
+            document.getElementById('cp-username').value = prof.username;
+            document.getElementById('cp-avatar-preview').src = prof.avatarUrl;
+            document.getElementById('cp-banner-preview').src = prof.bannerUrl;
             document.getElementById('cp-error').classList.add('hidden');
-            document.getElementById('cp-btn-delete').classList.remove('hidden'); 
-            document.getElementById('cp-btn-save').innerHTML = 'Salvar Alterações'; 
-            document.getElementById('cp-avatar').value = ''; 
+            document.getElementById('cp-btn-delete').classList.remove('hidden');
+            document.getElementById('cp-btn-save').innerHTML = 'Salvar Alterações';
+            document.getElementById('cp-avatar').value = '';
             document.getElementById('cp-banner').value = '';
         };
 
-        window.editProfileFromApp = () => { 
-            document.getElementById('main-app-container').classList.add('hidden'); 
-            window.editProfile(currentProfile.id); 
+        window.editProfileFromApp = () => {
+            document.getElementById('main-app-container').classList.add('hidden');
+            window.editProfile(currentProfile.id);
         }
 
         window.cancelCreateProfile = () => {
             document.getElementById('create-profile-view').classList.add('hidden');
             if (currentUser && currentProfile && !isManageMode && document.getElementById('profiles-selection-view').classList.contains('hidden')) {
                 document.getElementById('main-app-container').classList.remove('hidden');
-            } else { 
-                document.getElementById('profiles-selection-view').classList.remove('hidden'); 
-                renderProfilesSelectionScreen(); 
+            } else {
+                document.getElementById('profiles-selection-view').classList.remove('hidden');
+                renderProfilesSelectionScreen();
             }
         };
 
@@ -776,7 +964,7 @@
             document.getElementById('avatar-selection-modal').classList.remove('hidden');
             const container = document.getElementById('avatar-groups-container');
             container.innerHTML = '';
-            
+
             if (starlightAvatars.length === 0) {
                 container.innerHTML = '<p class="text-center text-gray-500">Nenhum avatar cadastrado.</p>';
                 return;
@@ -807,8 +995,8 @@
         };
 
         window.triggerAvatarUpload = () => document.getElementById('cp-avatar').click();
-        window.previewAvatar = (e) => { 
-            if(e.target.files && e.target.files[0]) {
+        window.previewAvatar = (e) => {
+            if (e.target.files && e.target.files[0]) {
                 const url = URL.createObjectURL(e.target.files[0]);
                 document.getElementById('cp-avatar-preview').src = url;
                 tempSelectedAvatar = null; // reseta para fazer upload
@@ -821,7 +1009,7 @@
             document.getElementById('banner-selection-modal').classList.remove('hidden');
             const container = document.getElementById('banner-groups-container');
             container.innerHTML = '';
-            
+
             if (starlightBanners.length === 0) {
                 container.innerHTML = '<p class="text-center text-gray-500">Nenhum fundo cadastrado.</p>';
                 return;
@@ -852,137 +1040,137 @@
         };
 
         window.triggerBannerUpload = () => document.getElementById('cp-banner').click();
-        window.previewBanner = (e) => { 
-            if(e.target.files && e.target.files[0]) {
+        window.previewBanner = (e) => {
+            if (e.target.files && e.target.files[0]) {
                 const url = URL.createObjectURL(e.target.files[0]);
-                document.getElementById('cp-banner-preview').src = url; 
+                document.getElementById('cp-banner-preview').src = url;
                 tempSelectedBanner = null; // reseta para fazer upload
                 closeBannerSelectionModal();
             }
         };
 
         window.saveProfile = async () => {
-            const name = document.getElementById('cp-name').value.trim(); 
+            const name = document.getElementById('cp-name').value.trim();
             const username = document.getElementById('cp-username').value.trim().toLowerCase();
-            const errorEl = document.getElementById('cp-error'); 
+            const errorEl = document.getElementById('cp-error');
             const btnSave = document.getElementById('cp-btn-save');
-            
-            if (!name || !username) { 
-                errorEl.textContent = "Preencha o nome e nome de usuário."; 
-                errorEl.classList.remove('hidden'); return; 
+
+            if (!name || !username) {
+                errorEl.textContent = "Preencha o nome e nome de usuário.";
+                errorEl.classList.remove('hidden'); return;
             }
-            btnSave.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...'; 
+            btnSave.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
             btnSave.disabled = true;
 
             try {
                 const usernameRef = doc(db, "artifacts", "starlight-max", "public", "data", "usernames", username);
                 if (!editingProfileId || username !== editingOldUsername) {
                     const usernameDoc = await getDoc(usernameRef);
-                    if (usernameDoc.exists()) { 
-                        errorEl.textContent = "Este nome de usuário já está em uso."; 
-                        errorEl.classList.remove('hidden'); 
-                        btnSave.innerHTML = editingProfileId ? 'Salvar Alterações' : 'Salvar Perfil'; 
-                        btnSave.disabled = false; return; 
+                    if (usernameDoc.exists()) {
+                        errorEl.textContent = "Este nome de usuário já está em uso.";
+                        errorEl.classList.remove('hidden');
+                        btnSave.innerHTML = editingProfileId ? 'Salvar Alterações' : 'Salvar Perfil';
+                        btnSave.disabled = false; return;
                     }
                 }
 
-                let avatarUrl = tempSelectedAvatar || (editingProfileId ? localProfiles.find(p=>p.id===editingProfileId).avatarUrl : `https://api.dicebear.com/7.x/bottts/svg?seed=${username}&backgroundColor=059669`);
-                let bannerUrl = tempSelectedBanner || (editingProfileId ? localProfiles.find(p=>p.id===editingProfileId).bannerUrl : "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2094&auto=format&fit=crop");
+                let avatarUrl = tempSelectedAvatar || (editingProfileId ? localProfiles.find(p => p.id === editingProfileId).avatarUrl : `https://api.dicebear.com/7.x/bottts/svg?seed=${username}&backgroundColor=059669`);
+                let bannerUrl = tempSelectedBanner || (editingProfileId ? localProfiles.find(p => p.id === editingProfileId).bannerUrl : "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2094&auto=format&fit=crop");
 
-                const avatarFile = document.getElementById('cp-avatar').files[0]; 
+                const avatarFile = document.getElementById('cp-avatar').files[0];
                 const bannerFile = document.getElementById('cp-banner').files[0];
-                
-                if (avatarFile) { 
-                    const avatarStoreRef = ref(storage, `users/${currentUser.uid}/avatars/${Date.now()}_${avatarFile.name}`); 
-                    await uploadBytes(avatarStoreRef, avatarFile); 
-                    avatarUrl = await getDownloadURL(avatarStoreRef); 
+
+                if (avatarFile) {
+                    const avatarStoreRef = ref(storage, `users/${currentUser.uid}/avatars/${Date.now()}_${avatarFile.name}`);
+                    await uploadBytes(avatarStoreRef, avatarFile);
+                    avatarUrl = await getDownloadURL(avatarStoreRef);
                 }
-                if (bannerFile) { 
-                    const bannerStoreRef = ref(storage, `users/${currentUser.uid}/banners/${Date.now()}_${bannerFile.name}`); 
-                    await uploadBytes(bannerStoreRef, bannerFile); 
-                    bannerUrl = await getDownloadURL(bannerStoreRef); 
+                if (bannerFile) {
+                    const bannerStoreRef = ref(storage, `users/${currentUser.uid}/banners/${Date.now()}_${bannerFile.name}`);
+                    await uploadBytes(bannerStoreRef, bannerFile);
+                    bannerUrl = await getDownloadURL(bannerStoreRef);
                 }
 
                 if (editingProfileId) {
                     await updateDoc(doc(db, "artifacts", "starlight-max", "users", currentUser.uid, "profiles", editingProfileId), { name, username, avatarUrl, bannerUrl });
-                    if (username !== editingOldUsername && editingOldUsername) { 
-                        await deleteDoc(doc(db, "artifacts", "starlight-max", "public", "data", "usernames", editingOldUsername)); 
-                        await setDoc(usernameRef, { uid: currentUser.uid, profileId: editingProfileId }); 
+                    if (username !== editingOldUsername && editingOldUsername) {
+                        await deleteDoc(doc(db, "artifacts", "starlight-max", "public", "data", "usernames", editingOldUsername));
+                        await setDoc(usernameRef, { uid: currentUser.uid, profileId: editingProfileId });
                     }
-                    const pIndex = localProfiles.findIndex(p => p.id === editingProfileId); 
+                    const pIndex = localProfiles.findIndex(p => p.id === editingProfileId);
                     if (pIndex !== -1) localProfiles[pIndex] = { ...localProfiles[pIndex], name, username, avatarUrl, bannerUrl };
-                    if (currentProfile && currentProfile.id === editingProfileId) { 
-                        currentProfile.name = name; 
-                        currentProfile.username = username; 
-                        currentProfile.avatarUrl = avatarUrl; 
-                        currentProfile.bannerUrl = bannerUrl; 
-                        document.getElementById('nav-avatar').src = avatarUrl; 
-                        document.getElementById('drop-avatar').src = avatarUrl; 
-                        document.getElementById('drop-name').textContent = name; 
-                        document.getElementById('pv-name').textContent = name; 
-                        document.getElementById('pv-username').textContent = "@" + username; 
-                        document.getElementById('pv-avatar').src = avatarUrl; 
-                        document.getElementById('pv-banner').src = bannerUrl; 
+                    if (currentProfile && currentProfile.id === editingProfileId) {
+                        currentProfile.name = name;
+                        currentProfile.username = username;
+                        currentProfile.avatarUrl = avatarUrl;
+                        currentProfile.bannerUrl = bannerUrl;
+                        document.getElementById('nav-avatar').src = avatarUrl;
+                        document.getElementById('drop-avatar').src = avatarUrl;
+                        document.getElementById('drop-name').textContent = name;
+                        document.getElementById('pv-name').textContent = name;
+                        document.getElementById('pv-username').textContent = "@" + username;
+                        document.getElementById('pv-avatar').src = avatarUrl;
+                        document.getElementById('pv-banner').src = bannerUrl;
                     }
                 } else {
-                    const profileId = crypto.randomUUID(); 
+                    const profileId = crypto.randomUUID();
                     const profileData = { name, username, avatarUrl, bannerUrl, createdAt: Date.now(), myList: [], recentHistory: [] };
-                    await setDoc(doc(db, "artifacts", "starlight-max", "users", currentUser.uid, "profiles", profileId), profileData); 
-                    await setDoc(usernameRef, { uid: currentUser.uid, profileId: profileId }); 
+                    await setDoc(doc(db, "artifacts", "starlight-max", "users", currentUser.uid, "profiles", profileId), profileData);
+                    await setDoc(usernameRef, { uid: currentUser.uid, profileId: profileId });
                     localProfiles.push({ id: profileId, ...profileData });
                 }
-                cancelCreateProfile(); 
-            } catch (error) { 
-                errorEl.textContent = "Erro de permissão no Firebase ou internet. Confira o log."; 
-                errorEl.classList.remove('hidden'); 
+                cancelCreateProfile();
+            } catch (error) {
+                errorEl.textContent = "Erro de permissão no Firebase ou internet. Confira o log.";
+                errorEl.classList.remove('hidden');
             }
-            btnSave.innerHTML = editingProfileId ? 'Salvar Alterações' : 'Salvar Perfil'; 
+            btnSave.innerHTML = editingProfileId ? 'Salvar Alterações' : 'Salvar Perfil';
             btnSave.disabled = false;
         };
 
         window.deleteProfile = async () => {
-            if (!editingProfileId) return; 
+            if (!editingProfileId) return;
             const prof = localProfiles.find(p => p.id === editingProfileId);
             try {
                 if (prof.username) await deleteDoc(doc(db, "artifacts", "starlight-max", "public", "data", "usernames", prof.username));
                 await deleteDoc(doc(db, "artifacts", "starlight-max", "users", currentUser.uid, "profiles", editingProfileId));
                 localProfiles = localProfiles.filter(p => p.id !== editingProfileId);
-                
-                if (currentProfile && currentProfile.id === editingProfileId) { 
-                    currentProfile = null; 
-                    document.getElementById('main-app-container').classList.add('hidden'); 
+
+                if (currentProfile && currentProfile.id === editingProfileId) {
+                    currentProfile = null;
+                    document.getElementById('main-app-container').classList.add('hidden');
                 }
                 document.getElementById('create-profile-view').classList.add('hidden');
-                
-                if (localProfiles.length > 0) { 
-                    document.getElementById('profiles-selection-view').classList.remove('hidden'); 
-                    renderProfilesSelectionScreen(); 
+
+                if (localProfiles.length > 0) {
+                    document.getElementById('profiles-selection-view').classList.remove('hidden');
+                    renderProfilesSelectionScreen();
                 } else {
                     showCreateProfile();
                 }
-            } catch(e) { 
-                document.getElementById('cp-error').textContent = "Não foi possível excluir o perfil. Tente novamente."; 
-                document.getElementById('cp-error').classList.remove('hidden'); 
+            } catch (e) {
+                document.getElementById('cp-error').textContent = "Não foi possível excluir o perfil. Tente novamente.";
+                document.getElementById('cp-error').classList.remove('hidden');
             }
         };
 
         async function syncProfileDataToFirebase() {
             if (!currentProfile) return;
-            try { 
-                await updateDoc(doc(db, "artifacts", "starlight-max", "users", currentUser.uid, "profiles", currentProfile.id), { 
-                    myList: window.myList, 
-                    recentHistory: window.recentHistory 
-                }); 
-            } catch (error) {}
+            try {
+                await updateDoc(doc(db, "artifacts", "starlight-max", "users", currentUser.uid, "profiles", currentProfile.id), {
+                    myList: window.myList,
+                    recentHistory: window.recentHistory
+                });
+            } catch (error) { }
         }
 
         // ==========================================
         // PLAYER PERSONALIZADO
         // ==========================================
         const videoEl = document.getElementById('starlight-video-player');
-        let controlsTimeout; 
+        let controlsTimeout;
         let hlsInstance = null;
-        let isScrubbing = false; 
+        let isScrubbing = false;
         let playerState = { title: '', dubUrl: '', subUrl: '', currentUrl: '', isAlt: false, speed: 1, ratio: 'object-contain' };
 
         function resolveVideoUrl(url) {
@@ -991,22 +1179,22 @@
                 if (uri.searchParams.get('source')) return uri.searchParams.get('source');
                 if (uri.searchParams.get('d')) return uri.searchParams.get('d');
                 return url;
-            } catch(e) { return url; }
+            } catch (e) { return url; }
         }
 
         window.openPlayer = (title, originalUrl, altUrl) => {
             let dub = (originalUrl === 'none' || !originalUrl) ? '' : originalUrl;
             let sub = (altUrl === 'none' || !altUrl) ? '' : altUrl;
-            
+
             playerState = { title, dubUrl: dub, subUrl: sub, currentUrl: dub || sub, isAlt: !dub, speed: 1, ratio: 'object-contain' };
-            
+
             document.getElementById('player-title-display').textContent = title;
             document.getElementById('main-app-container').classList.add('hidden');
             document.getElementById('player-view').classList.remove('hidden');
-            
+
             // Adiciona o player no histórico para o botão voltar do Android/Browser funcionar
             history.pushState({ view: 'player' }, "", "#/player");
-            
+
             loadVideoSource(playerState.currentUrl);
             wakeUpPlayerControls();
         };
@@ -1040,7 +1228,7 @@
             if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
             document.getElementById('player-view').classList.add('hidden');
             document.getElementById('main-app-container').classList.remove('hidden');
-            
+
             // Voltar no histórico caso estejamos na rota do player
             if (window.location.hash === '#/player') {
                 history.back();
@@ -1061,12 +1249,12 @@
             document.getElementById('player-play-icon').classList.replace('fa-play', 'fa-pause');
             document.getElementById('player-play-icon').classList.remove('ml-2');
         });
-        
+
         videoEl.addEventListener('pause', () => {
             document.getElementById('player-play-icon').classList.replace('fa-pause', 'fa-play');
             document.getElementById('player-play-icon').classList.add('ml-2');
         });
-        
+
         videoEl.addEventListener('timeupdate', () => {
             if (isScrubbing) return;
             const percent = (videoEl.currentTime / videoEl.duration) * 100;
@@ -1075,7 +1263,7 @@
             document.getElementById('player-current-time').textContent = formatTime(videoEl.currentTime);
             document.getElementById('player-total-time').textContent = formatTime(videoEl.duration);
         });
-        
+
         videoEl.addEventListener('progress', () => {
             if (videoEl.buffered.length > 0) {
                 const bufferedEnd = videoEl.buffered.end(videoEl.buffered.length - 1);
@@ -1085,13 +1273,13 @@
         });
 
         window.startScrubbing = (e) => { isScrubbing = true; scrub(e); };
-        window.stopScrubbing = (e) => { if(isScrubbing) { scrub(e); isScrubbing = false; } };
+        window.stopScrubbing = (e) => { if (isScrubbing) { scrub(e); isScrubbing = false; } };
         window.scrub = (e) => {
             if (!isScrubbing) return;
             const rect = document.getElementById('scrubber-container').getBoundingClientRect();
             const pos = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
             const newTime = pos * videoEl.duration;
-            
+
             document.getElementById('player-progress-bar').style.width = `${pos * 100}%`;
             document.getElementById('player-thumb').style.left = `${pos * 100}%`;
             document.getElementById('player-current-time').textContent = formatTime(newTime);
@@ -1109,7 +1297,7 @@
             const ui = document.getElementById('player-ui-controls');
             ui.classList.remove('opacity-0');
             document.getElementById('player-view').classList.remove('hide-cursor');
-            
+
             clearTimeout(controlsTimeout);
             controlsTimeout = setTimeout(() => {
                 if (!videoEl.paused && document.getElementById('player-menu-overlay').classList.contains('hidden')) {
@@ -1124,25 +1312,25 @@
             const box = document.getElementById('player-menu-box');
             const title = document.getElementById('player-menu-title');
             const options = document.getElementById('player-menu-options');
-            
+
             overlay.classList.remove('hidden');
             setTimeout(() => { box.classList.remove('scale-95', 'opacity-0'); }, 10);
             options.innerHTML = '';
 
             if (type === 'audio') {
                 title.textContent = "Áudio e Legendas";
-                if(playerState.dubUrl) options.innerHTML += `<button onclick="setAudio(false)" class="player-glass-btn w-full text-left px-5 py-4 rounded-xl text-sm font-bold flex justify-between ${!playerState.isAlt ? 'active' : 'text-white'}">Padrão (Dublado) ${!playerState.isAlt ? '<i class="fa-solid fa-check"></i>' : ''}</button>`;
-                if(playerState.subUrl) options.innerHTML += `<button onclick="setAudio(true)" class="player-glass-btn w-full text-left px-5 py-4 rounded-xl text-sm font-bold flex justify-between ${playerState.isAlt ? 'active' : 'text-white'}">Alternativo (Legendado) ${playerState.isAlt ? '<i class="fa-solid fa-check"></i>' : ''}</button>`;
-            } 
+                if (playerState.dubUrl) options.innerHTML += `<button onclick="setAudio(false)" class="player-glass-btn w-full text-left px-5 py-4 rounded-xl text-sm font-bold flex justify-between ${!playerState.isAlt ? 'active' : 'text-white'}">Padrão (Dublado) ${!playerState.isAlt ? '<i class="fa-solid fa-check"></i>' : ''}</button>`;
+                if (playerState.subUrl) options.innerHTML += `<button onclick="setAudio(true)" class="player-glass-btn w-full text-left px-5 py-4 rounded-xl text-sm font-bold flex justify-between ${playerState.isAlt ? 'active' : 'text-white'}">Alternativo (Legendado) ${playerState.isAlt ? '<i class="fa-solid fa-check"></i>' : ''}</button>`;
+            }
             else if (type === 'ratio') {
                 title.textContent = "Ajuste de Tela";
-                const ratios = [{id: 'object-contain', name: 'Original'}, {id: 'object-cover', name: 'Preencher'}, {id: 'object-fill', name: 'Esticar'}];
+                const ratios = [{ id: 'object-contain', name: 'Original' }, { id: 'object-cover', name: 'Preencher' }, { id: 'object-fill', name: 'Esticar' }];
                 ratios.forEach(r => { options.innerHTML += `<button onclick="setRatio('${r.id}')" class="player-glass-btn w-full text-left px-5 py-4 rounded-xl text-sm font-bold flex justify-between ${playerState.ratio === r.id ? 'active' : 'text-white'}">${r.name} ${playerState.ratio === r.id ? '<i class="fa-solid fa-check"></i>' : ''}</button>`; });
             }
             else if (type === 'speed') {
                 title.textContent = "Velocidade";
                 const speeds = [0.5, 1, 1.25, 1.5, 2];
-                speeds.forEach(s => { options.innerHTML += `<button onclick="setSpeed(${s})" class="player-glass-btn w-full text-left px-5 py-4 rounded-xl text-sm font-bold flex justify-between ${playerState.speed === s ? 'active' : 'text-white'}">${s === 1 ? 'Normal (1x)' : s+'x'} ${playerState.speed === s ? '<i class="fa-solid fa-check"></i>' : ''}</button>`; });
+                speeds.forEach(s => { options.innerHTML += `<button onclick="setSpeed(${s})" class="player-glass-btn w-full text-left px-5 py-4 rounded-xl text-sm font-bold flex justify-between ${playerState.speed === s ? 'active' : 'text-white'}">${s === 1 ? 'Normal (1x)' : s + 'x'} ${playerState.speed === s ? '<i class="fa-solid fa-check"></i>' : ''}</button>`; });
             }
         };
 
@@ -1179,7 +1367,7 @@
         // =======================================================================
         // INTEGRAÇÃO DE CONTEÚDO FIRESTORE (Substituindo o TMDB na home/catálogo)
         // =======================================================================
-        
+
         // Puxa e cacheia os filmes/séries salvos no BD da Adm
         async function loadFirestoreContent() {
             try {
@@ -1197,44 +1385,44 @@
             }
         }
 
-        let isProfileMenuOpen = false; 
+        let isProfileMenuOpen = false;
         let isSeasonDropdownOpen = false;
 
         document.addEventListener('click', (e) => {
-            const profileMenu = document.getElementById('profile-dropdown'); 
+            const profileMenu = document.getElementById('profile-dropdown');
             const profileBtn = document.getElementById('btn-profile');
             if (isProfileMenuOpen && !profileMenu.contains(e.target) && !profileBtn.contains(e.target)) window.toggleProfileMenu();
-            
-            const seasonMenu = document.getElementById('season-dropdown-menu'); 
+
+            const seasonMenu = document.getElementById('season-dropdown-menu');
             const seasonBtn = document.getElementById('btn-season-select');
             if (isSeasonDropdownOpen && seasonMenu && seasonBtn && !seasonMenu.contains(e.target) && !seasonBtn.contains(e.target)) window.toggleSeasonDropdown();
         });
 
-        window.toggleProfileMenu = (e) => { 
-            if(e) e.stopPropagation(); 
-            const menu = document.getElementById('profile-dropdown'); 
-            isProfileMenuOpen = !isProfileMenuOpen; 
-            if(isProfileMenuOpen) menu.classList.remove('hidden'); else menu.classList.add('hidden'); 
+        window.toggleProfileMenu = (e) => {
+            if (e) e.stopPropagation();
+            const menu = document.getElementById('profile-dropdown');
+            isProfileMenuOpen = !isProfileMenuOpen;
+            if (isProfileMenuOpen) menu.classList.remove('hidden'); else menu.classList.add('hidden');
         };
 
-        window.toggleSeasonDropdown = (e) => { 
-            if(e) e.stopPropagation(); 
-            const menu = document.getElementById('season-dropdown-menu'); 
-            const chevron = document.getElementById('season-chevron'); 
-            isSeasonDropdownOpen = !isSeasonDropdownOpen; 
-            if(isSeasonDropdownOpen) { 
-                menu.classList.remove('hidden'); 
-                setTimeout(() => { menu.classList.remove('opacity-0', 'scale-95'); menu.classList.add('opacity-100', 'scale-100'); chevron.style.transform = 'rotate(180deg)'; }, 10); 
-            } else { 
-                menu.classList.remove('opacity-100', 'scale-100'); menu.classList.add('opacity-0', 'scale-95'); chevron.style.transform = 'rotate(0deg)'; 
-                setTimeout(() => { menu.classList.add('hidden'); }, 100); 
-            } 
+        window.toggleSeasonDropdown = (e) => {
+            if (e) e.stopPropagation();
+            const menu = document.getElementById('season-dropdown-menu');
+            const chevron = document.getElementById('season-chevron');
+            isSeasonDropdownOpen = !isSeasonDropdownOpen;
+            if (isSeasonDropdownOpen) {
+                menu.classList.remove('hidden');
+                setTimeout(() => { menu.classList.remove('opacity-0', 'scale-95'); menu.classList.add('opacity-100', 'scale-100'); chevron.style.transform = 'rotate(180deg)'; }, 10);
+            } else {
+                menu.classList.remove('opacity-100', 'scale-100'); menu.classList.add('opacity-0', 'scale-95'); chevron.style.transform = 'rotate(0deg)';
+                setTimeout(() => { menu.classList.add('hidden'); }, 100);
+            }
         };
 
         window.showView = (view, pushHistory = true) => {
             const views = ['home-view', 'catalog-view', 'mylist-view', 'search-view', 'details-view', 'profile-view', 'player-view'];
-            views.forEach(v => { const el = document.getElementById(v); if(el) el.classList.add('hidden'); });
-            
+            views.forEach(v => { const el = document.getElementById(v); if (el) el.classList.add('hidden'); });
+
             const navLinks = ['nav-home', 'nav-catalog', 'nav-list'];
             const activeClass = "px-6 py-2.5 rounded-full bg-white text-black font-semibold text-sm transition shadow-[0_0_10px_rgba(255,255,255,0.2)]";
             const inactiveClass = "px-6 py-2.5 rounded-full text-gray-300 hover:text-white font-medium text-sm transition";
@@ -1248,14 +1436,14 @@
                 if (view !== 'details') history.pushState({ view: view }, "", "#/" + path);
             }
 
-            if (view === 'player') return; 
-            
+            if (view === 'player') return;
+
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
             if (view === 'home') { document.getElementById('home-view').classList.remove('hidden'); document.getElementById('nav-home').className = activeClass; }
-            else if (view === 'catalog') { 
-                document.getElementById('catalog-view').classList.remove('hidden'); 
-                document.getElementById('nav-catalog').className = activeClass; 
+            else if (view === 'catalog') {
+                document.getElementById('catalog-view').classList.remove('hidden');
+                document.getElementById('nav-catalog').className = activeClass;
                 setCatalogFilter(window.currentCatalogFilter);
             }
             else if (view === 'list') { document.getElementById('mylist-view').classList.remove('hidden'); document.getElementById('nav-list').className = activeClass; renderMyList(); }
@@ -1268,7 +1456,7 @@
             const title = item.title;
             const imgUrl = item.poster || 'https://placehold.co/500x750/1a1a1a/444444?text=Sem+Imagem';
             const mediaType = item.type;
-            
+
             let badgeHtml = '';
             if (item.badgeText && (!item.badgeExpiration || item.badgeExpiration > Date.now())) {
                 badgeHtml = `<div class="absolute top-2 left-2 bg-gradient-to-r from-amber-500 to-orange-500 text-black text-[10px] font-black px-2 py-0.5 rounded shadow-lg z-10">${item.badgeText}</div>`;
@@ -1289,16 +1477,16 @@
         function renderMyList() {
             const grid = document.getElementById('mylist-grid'); const emptyState = document.getElementById('mylist-empty');
             grid.innerHTML = '';
-            if (window.myList.length === 0) { grid.classList.add('hidden'); emptyState.classList.remove('hidden'); emptyState.classList.add('flex'); } 
-            else { 
-                grid.classList.remove('hidden'); emptyState.classList.add('hidden'); emptyState.classList.remove('flex'); 
-                [...window.myList].reverse().forEach(item => { 
+            if (window.myList.length === 0) { grid.classList.add('hidden'); emptyState.classList.remove('hidden'); emptyState.classList.add('flex'); }
+            else {
+                grid.classList.remove('hidden'); emptyState.classList.add('hidden'); emptyState.classList.remove('flex');
+                [...window.myList].reverse().forEach(item => {
                     const dataId = typeof item === 'object' ? item.id : item;
                     const data = window.moviesMap[dataId];
-                    if(data) {
-                        grid.insertAdjacentHTML('beforeend', createCardHtml(data)); 
+                    if (data) {
+                        grid.insertAdjacentHTML('beforeend', createCardHtml(data));
                     }
-                }); 
+                });
             }
         }
 
@@ -1307,56 +1495,56 @@
             const recGrid = document.getElementById('profile-recent-grid'); const recEmpty = document.getElementById('profile-recent-empty');
 
             favGrid.innerHTML = '';
-            if (window.myList.length === 0) { favGrid.classList.add('hidden'); favEmpty.classList.remove('hidden'); favEmpty.classList.add('flex'); } 
-            else { 
-                favGrid.classList.remove('hidden'); favEmpty.classList.add('hidden'); favEmpty.classList.remove('flex'); 
-                [...window.myList].reverse().slice(0, 12).forEach(item => { 
+            if (window.myList.length === 0) { favGrid.classList.add('hidden'); favEmpty.classList.remove('hidden'); favEmpty.classList.add('flex'); }
+            else {
+                favGrid.classList.remove('hidden'); favEmpty.classList.add('hidden'); favEmpty.classList.remove('flex');
+                [...window.myList].reverse().slice(0, 12).forEach(item => {
                     const dataId = typeof item === 'object' ? item.id : item;
                     const data = window.moviesMap[dataId];
-                    if(data) {
-                        favGrid.insertAdjacentHTML('beforeend', createCardHtml(data)); 
+                    if (data) {
+                        favGrid.insertAdjacentHTML('beforeend', createCardHtml(data));
                     }
-                }); 
+                });
             }
 
             recGrid.innerHTML = '';
-            if (window.recentHistory.length === 0) { recGrid.classList.add('hidden'); recEmpty.classList.remove('hidden'); recEmpty.classList.add('flex'); } 
-            else { 
-                recGrid.classList.remove('hidden'); recEmpty.classList.add('hidden'); recEmpty.classList.remove('flex'); 
-                window.recentHistory.slice(0, 12).forEach(item => { 
+            if (window.recentHistory.length === 0) { recGrid.classList.add('hidden'); recEmpty.classList.remove('hidden'); recEmpty.classList.add('flex'); }
+            else {
+                recGrid.classList.remove('hidden'); recEmpty.classList.add('hidden'); recEmpty.classList.remove('flex');
+                window.recentHistory.slice(0, 12).forEach(item => {
                     const dataId = typeof item === 'object' ? item.id : item;
                     const data = window.moviesMap[dataId];
-                    if(data) {
-                        recGrid.insertAdjacentHTML('beforeend', createCardHtml(data)); 
+                    if (data) {
+                        recGrid.insertAdjacentHTML('beforeend', createCardHtml(data));
                     }
-                }); 
+                });
             }
         }
 
-        function addToRecentHistory(item) { 
-            window.recentHistory = window.recentHistory.filter(i => i.id !== item.id); 
-            window.recentHistory.unshift({id: item.id}); 
-            if (window.recentHistory.length > 20) window.recentHistory.pop(); 
-            syncProfileDataToFirebase(); 
+        function addToRecentHistory(item) {
+            window.recentHistory = window.recentHistory.filter(i => i.id !== item.id);
+            window.recentHistory.unshift({ id: item.id });
+            if (window.recentHistory.length > 20) window.recentHistory.pop();
+            syncProfileDataToFirebase();
         }
 
         let searchTimeoutIdLocal;
-        window.handleSearch = (event) => { 
-            const queryStr = event.target.value.trim(); 
-            clearTimeout(searchTimeoutIdLocal); 
-            if (queryStr.length >= 2) searchTimeoutIdLocal = setTimeout(() => performSearch(queryStr), 300); 
-            else if (queryStr.length === 0) window.showView('home'); 
+        window.handleSearch = (event) => {
+            const queryStr = event.target.value.trim();
+            clearTimeout(searchTimeoutIdLocal);
+            if (queryStr.length >= 2) searchTimeoutIdLocal = setTimeout(() => performSearch(queryStr), 300);
+            else if (queryStr.length === 0) window.showView('home');
         };
 
         function performSearch(queryStr, pushHistory = true) {
-            window.showView('search', false); 
+            window.showView('search', false);
             if (pushHistory) history.pushState({ view: 'search', query: queryStr }, "", `#/busca?q=${encodeURIComponent(queryStr)}`);
-            document.getElementById('search-query-display').textContent = queryStr; 
+            document.getElementById('search-query-display').textContent = queryStr;
             const grid = document.getElementById('search-grid'); const emptyState = document.getElementById('search-empty');
-            
+
             grid.innerHTML = '';
 
-            const validResults = window.firestoreContent.filter(item => 
+            const validResults = window.firestoreContent.filter(item =>
                 (item.title && item.title.toLowerCase().includes(queryStr.toLowerCase())) ||
                 (item.synopsis && item.synopsis.toLowerCase().includes(queryStr.toLowerCase()))
             );
@@ -1373,19 +1561,19 @@
             window.currentCatalogFilter = filter;
             document.getElementById('catalog-grid').innerHTML = '';
             const emptyState = document.getElementById('catalog-empty');
-            
-            ['all', 'movie', 'tv'].forEach(f => { 
+
+            ['all', 'movie', 'tv'].forEach(f => {
                 const btnId = f === 'movie' ? 'movies' : (f === 'tv' ? 'series' : 'all');
-                document.getElementById(`filter-${btnId}`).className = f === filter ? "px-5 py-2 rounded-full bg-white text-black font-semibold text-sm transition shadow-lg" : "px-5 py-2 rounded-full bg-[#1a1a1a] text-white hover:bg-gray-800 font-medium text-sm transition border border-white/10"; 
-            }); 
-            
+                document.getElementById(`filter-${btnId}`).className = f === filter ? "px-5 py-2 rounded-full bg-white text-black font-semibold text-sm transition shadow-lg" : "px-5 py-2 rounded-full bg-[#1a1a1a] text-white hover:bg-gray-800 font-medium text-sm transition border border-white/10";
+            });
+
             let filtered = window.firestoreContent;
             if (filter !== 'all') {
                 filtered = filtered.filter(item => item.type === filter);
             }
 
             const grid = document.getElementById('catalog-grid');
-            if(filtered.length > 0) {
+            if (filtered.length > 0) {
                 grid.classList.remove('hidden'); emptyState.classList.add('hidden'); emptyState.classList.remove('flex');
                 filtered.forEach(item => grid.insertAdjacentHTML('beforeend', createCardHtml(item)));
             } else {
@@ -1393,11 +1581,11 @@
             }
         };
 
-        window.addEventListener('scroll', () => { 
-            const navbar = document.getElementById('navbar'); 
-            if (window.scrollY > 50) navbar.classList.add('bg-[#050505]', 'shadow-lg'); 
-            else navbar.classList.remove('bg-[#050505]', 'shadow-lg'); 
-            
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) navbar.classList.add('bg-[#050505]', 'shadow-lg');
+            else navbar.classList.remove('bg-[#050505]', 'shadow-lg');
+
             // Oculta o pop-up instantaneamente ao rolar a página para baixo/cima
             if (!document.getElementById('hover-card').classList.contains('opacity-0')) {
                 window.hideHoverCard(true);
@@ -1405,49 +1593,49 @@
         }, { passive: true });
 
         window.scrollCarousel = (id, direction) => { const carousel = document.getElementById(id); carousel.scrollBy({ left: direction * (carousel.clientWidth * 0.7), behavior: 'smooth' }); };
-        
+
         window.openDetails = async (id, pushHistory = true) => {
             window.hideHoverCard(true); window.showView('details', false);
             if (pushHistory) history.pushState({ view: 'details', params: { id } }, "", `#/detalhes/${id}`);
-            
+
             const content = document.getElementById('det-content'); const bg = document.getElementById('det-bg'); const epiSection = document.getElementById('det-episodes-section');
             content.style.opacity = '0'; bg.classList.add('opacity-0'); epiSection.classList.add('hidden');
-            
+
             const data = window.moviesMap[id];
             if (!data) return;
-            
-            window.currentDetailsItem = { id: id, type: data.type, data: data }; 
+
+            window.currentDetailsItem = { id: id, type: data.type, data: data };
             addToRecentHistory(data);
-            
-            bg.src = data.backdrop || data.poster || 'https://placehold.co/1280x720/050505/333333?text=Cover'; 
+
+            bg.src = data.backdrop || data.poster || 'https://placehold.co/1280x720/050505/333333?text=Cover';
             bg.onload = () => { bg.classList.remove('opacity-0'); content.style.opacity = '1'; };
-            
+
             const titleEl = document.getElementById('det-title'); const logoEl = document.getElementById('det-logo');
-            if (data.logo) { 
-                logoEl.src = data.logo; logoEl.classList.remove('hidden'); titleEl.classList.add('hidden'); 
-            } else { 
-                titleEl.textContent = data.title; titleEl.classList.remove('hidden'); logoEl.classList.add('hidden'); 
+            if (data.logo) {
+                logoEl.src = data.logo; logoEl.classList.remove('hidden'); titleEl.classList.add('hidden');
+            } else {
+                titleEl.textContent = data.title; titleEl.classList.remove('hidden'); logoEl.classList.add('hidden');
             }
 
             const year = data.year || '';
             const rating = data.ageRating ? (data.ageRating === 'L' ? 'Livre' : data.ageRating) : '14';
             let metaHtml = `<span class="border border-white/40 px-1.5 py-0.5 rounded text-[10px] md:text-xs font-bold text-gray-200">${rating}</span><span class="text-blue-500 font-black ml-1 text-lg leading-none">·</span><span>${year}</span>`;
-            
-            if (data.type === 'tv' && data.seasons) { 
-                metaHtml += `<span class="text-blue-500 font-black ml-1 text-lg leading-none">·</span><span>${Object.keys(data.seasons).length} Temporadas</span>`; 
+
+            if (data.type === 'tv' && data.seasons) {
+                metaHtml += `<span class="text-blue-500 font-black ml-1 text-lg leading-none">·</span><span>${Object.keys(data.seasons).length} Temporadas</span>`;
             }
-            
-            if(data.badgeText && (!data.badgeExpiration || data.badgeExpiration > Date.now())) {
+
+            if (data.badgeText && (!data.badgeExpiration || data.badgeExpiration > Date.now())) {
                 metaHtml += `<span class="bg-gradient-to-r from-yellow-600 to-yellow-400 text-black px-2 py-0.5 rounded text-[10px] md:text-xs font-black ml-3 uppercase shadow-[0_0_8px_rgba(234,179,8,0.4)]">${data.badgeText}</span>`;
             }
-            
-            document.getElementById('det-meta').innerHTML = metaHtml; 
+
+            document.getElementById('det-meta').innerHTML = metaHtml;
             document.getElementById('det-desc').textContent = data.synopsis || "Nenhuma sinopse disponível.";
             if (data.genres) document.getElementById('det-genres').innerHTML = data.genres.map(g => `<span class="px-0 py-0 text-gray-400 mr-4">${g}</span>`).join('');
-            
+
             const btns = document.getElementById('det-action-buttons');
             let mainPlayBtn = '';
-            
+
             if (data.type === 'movie') {
                 const safeTitleEscaped = data.title.replace(/'/g, "\\'");
                 const urlD = data.url ? data.url : 'none';
@@ -1464,9 +1652,9 @@
 
             if (data.type === 'tv' && data.seasons) {
                 epiSection.classList.remove('hidden');
-                const validSeasonsKeys = Object.keys(data.seasons).sort((a,b)=>Number(a)-Number(b));
+                const validSeasonsKeys = Object.keys(data.seasons).sort((a, b) => Number(a) - Number(b));
                 const container = document.getElementById('season-options-container');
-                if(validSeasonsKeys.length > 0) {
+                if (validSeasonsKeys.length > 0) {
                     container.innerHTML = validSeasonsKeys.map((sKey, index) => {
                         const s = data.seasons[sKey];
                         const bgClass = index === 0 ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-gray-300 hover:bg-[#2a2a2a] hover:text-white';
@@ -1479,24 +1667,24 @@
             }
         };
 
-        window.selectSeasonCustom = (seasonKey, seasonName, element) => { 
-            document.getElementById('current-season-text').textContent = seasonName; 
-            document.querySelectorAll('.season-option').forEach(opt => opt.className = 'season-option block w-full text-left px-4 py-2.5 text-sm transition-colors text-gray-300 hover:bg-[#2a2a2a] hover:text-white'); 
-            element.className = 'season-option block w-full text-left px-4 py-2.5 text-sm transition-colors bg-blue-600 hover:bg-blue-700 text-white'; 
-            window.toggleSeasonDropdown(); 
-            if(window.currentDetailsItem.id) window.loadSeasonEpisodes(window.currentDetailsItem.id, seasonKey); 
+        window.selectSeasonCustom = (seasonKey, seasonName, element) => {
+            document.getElementById('current-season-text').textContent = seasonName;
+            document.querySelectorAll('.season-option').forEach(opt => opt.className = 'season-option block w-full text-left px-4 py-2.5 text-sm transition-colors text-gray-300 hover:bg-[#2a2a2a] hover:text-white');
+            element.className = 'season-option block w-full text-left px-4 py-2.5 text-sm transition-colors bg-blue-600 hover:bg-blue-700 text-white';
+            window.toggleSeasonDropdown();
+            if (window.currentDetailsItem.id) window.loadSeasonEpisodes(window.currentDetailsItem.id, seasonKey);
         };
 
         window.loadSeasonEpisodes = (id, seasonKey) => {
-            const grid = document.getElementById('det-episodes-grid'); 
+            const grid = document.getElementById('det-episodes-grid');
             const data = window.moviesMap[id];
             if (!data || !data.seasons || !data.seasons[seasonKey] || !data.seasons[seasonKey].episodes) {
-                grid.innerHTML = '<p class="text-gray-500 col-span-full">Nenhum episódio cadastrado para esta temporada.</p>'; 
+                grid.innerHTML = '<p class="text-gray-500 col-span-full">Nenhum episódio cadastrado para esta temporada.</p>';
                 return;
             }
 
             const eps = data.seasons[seasonKey].episodes;
-            grid.innerHTML = eps.sort((a,b)=>a.episode_number-b.episode_number).map(ep => {
+            grid.innerHTML = eps.sort((a, b) => a.episode_number - b.episode_number).map(ep => {
                 const img = ep.still_path || 'https://placehold.co/500x281/1a1a1a/444444?text=Episodio';
                 const safeEpName = (`Episódio ${ep.episode_number}: ${ep.title}`).replace(/'/g, "\\'");
                 const urlD = ep.url || 'none';
@@ -1527,20 +1715,20 @@
         window.handleCardLeave = () => { hideTimeoutLocal = setTimeout(() => window.hideHoverCard(), 150); };
 
         window.showHoverCard = (element) => {
-            const id = element.getAttribute('data-id'); window.currentHoveredItem = { id }; 
+            const id = element.getAttribute('data-id'); window.currentHoveredItem = { id };
             const movie = window.moviesMap[id]; if (!movie) return;
 
-            const isInList = window.myList.some(item => item.id == id || item == id); 
-            document.getElementById('hc-icon-list').className = isInList ? "fa-solid fa-check text-sm text-green-400" : "fa-solid fa-plus text-sm"; 
+            const isInList = window.myList.some(item => item.id == id || item == id);
+            document.getElementById('hc-icon-list').className = isInList ? "fa-solid fa-check text-sm text-green-400" : "fa-solid fa-plus text-sm";
             document.getElementById('hc-text-list').textContent = isInList ? "Na lista" : "Salvar";
 
             const titleEl = document.getElementById('hc-title'); const logoEl = document.getElementById('hc-logo');
             titleEl.classList.add('hidden'); logoEl.classList.add('hidden'); logoEl.src = '';
-            
+
             document.getElementById('hc-img').src = movie.backdrop || movie.poster || 'https://placehold.co/500x281/1a1a1a/444444?text=Cover';
-            
+
             const badgeEl = document.getElementById('hc-rating-badge');
-            if(movie.badgeText && (!movie.badgeExpiration || movie.badgeExpiration > Date.now())) {
+            if (movie.badgeText && (!movie.badgeExpiration || movie.badgeExpiration > Date.now())) {
                 badgeEl.textContent = movie.badgeText;
                 badgeEl.classList.remove('hidden');
             } else { badgeEl.classList.add('hidden'); }
@@ -1552,7 +1740,7 @@
             const genresContainer = document.getElementById('hc-genres'); genresContainer.innerHTML = '';
             if (movie.genres) movie.genres.slice(0, 3).forEach(g => { genresContainer.innerHTML += `<span class="px-2 py-0.5 bg-white/10 rounded-full border border-white/5">${g}</span>`; });
 
-            if (movie.logo) { logoEl.src = movie.logo; logoEl.classList.remove('hidden'); } 
+            if (movie.logo) { logoEl.src = movie.logo; logoEl.classList.remove('hidden'); }
             else { titleEl.textContent = movie.title; titleEl.classList.remove('hidden'); }
 
             const card = document.getElementById('hover-card'); const rect = element.getBoundingClientRect();
@@ -1564,27 +1752,27 @@
 
         window.hideHoverCard = (instant = false) => {
             const card = document.getElementById('hover-card');
-            if (instant) { card.classList.remove('transition-all', 'duration-200', 'opacity-100', 'scale-100', 'pointer-events-auto'); card.classList.add('opacity-0', 'scale-95', 'pointer-events-none'); void card.offsetWidth; card.classList.add('transition-all', 'duration-200'); } 
+            if (instant) { card.classList.remove('transition-all', 'duration-200', 'opacity-100', 'scale-100', 'pointer-events-auto'); card.classList.add('opacity-0', 'scale-95', 'pointer-events-none'); void card.offsetWidth; card.classList.add('transition-all', 'duration-200'); }
             else { card.classList.remove('opacity-100', 'scale-100', 'pointer-events-auto'); card.classList.add('opacity-0', 'scale-95', 'pointer-events-none'); }
         }
 
-        window.openDetailsFromHover = () => { if(window.currentHoveredItem.id) window.openDetails(window.currentHoveredItem.id); window.hideHoverCard(true); };
+        window.openDetailsFromHover = () => { if (window.currentHoveredItem.id) window.openDetails(window.currentHoveredItem.id); window.hideHoverCard(true); };
 
         window.toggleMyList = () => {
-            if (!window.currentHoveredItem.id) return; 
+            if (!window.currentHoveredItem.id) return;
             const index = window.myList.findIndex(item => item.id == window.currentHoveredItem.id || item == window.currentHoveredItem.id);
-            if (index >= 0) window.myList.splice(index, 1); 
+            if (index >= 0) window.myList.splice(index, 1);
             else { window.myList.push({ id: window.currentHoveredItem.id }); }
             syncProfileDataToFirebase(); document.getElementById('hc-icon-list').className = index < 0 ? "fa-solid fa-check text-sm text-green-400" : "fa-solid fa-plus text-sm"; document.getElementById('hc-text-list').textContent = index < 0 ? "Na lista" : "Salvar";
             if (!document.getElementById('mylist-view').classList.contains('hidden')) { renderMyList(); if (index >= 0) window.hideHoverCard(true); }
         };
 
         window.toggleDetailsList = () => {
-             if(!window.currentDetailsItem.id) return; 
-             const index = window.myList.findIndex(item => item.id == window.currentDetailsItem.id || item == window.currentDetailsItem.id);
-             if(index >= 0) window.myList.splice(index, 1); 
-             else { window.myList.push({ id: window.currentDetailsItem.id }); }
-             syncProfileDataToFirebase(); document.getElementById('det-icon-list').className = index < 0 ? "fa-solid fa-check text-green-400" : "fa-solid fa-plus";
+            if (!window.currentDetailsItem.id) return;
+            const index = window.myList.findIndex(item => item.id == window.currentDetailsItem.id || item == window.currentDetailsItem.id);
+            if (index >= 0) window.myList.splice(index, 1);
+            else { window.myList.push({ id: window.currentDetailsItem.id }); }
+            syncProfileDataToFirebase(); document.getElementById('det-icon-list').className = index < 0 ? "fa-solid fa-check text-green-400" : "fa-solid fa-plus";
         };
 
         // LÓGICA MÁGICA DOS CARROSSÉIS AUTOMÁTICOS
@@ -1609,9 +1797,9 @@
         async function initAppWithProfile() {
             try {
                 await loadFirestoreContent();
-                
+
                 // Ordenar os mais recentes pelo Firebase timestamp
-                const recentContent = [...window.firestoreContent].sort((a,b) => {
+                const recentContent = [...window.firestoreContent].sort((a, b) => {
                     const timeA = a.updatedAt?.seconds || 0;
                     const timeB = b.updatedAt?.seconds || 0;
                     return timeB - timeA;
@@ -1619,7 +1807,7 @@
 
                 // Destaques: Se não houver destaque, joga o primeiro como fallback com mais segurança
                 updateFeaturedHero();
-                
+
                 // Buscar Carrosséis do Admin do Banco
                 const carouselsContainer = document.getElementById('home-carousels-container');
                 carouselsContainer.innerHTML = '';
@@ -1666,7 +1854,7 @@
                         }
                     });
                 }
-                
+
                 window.handleInitialRoute();
 
                 if (!document.getElementById('catalog-view').classList.contains('hidden')) {
@@ -1682,37 +1870,37 @@
         }
 
         function updateHeroSection(item) {
-            if(!item) return;
+            if (!item) return;
             const heroBg = document.getElementById('hero-bg');
-            
+
             // Adicionado OnError para caso a imagem esteja falhando ou não exista, forçar a tela a não ficar preta
-            heroBg.onerror = function() {
+            heroBg.onerror = function () {
                 this.onerror = null;
                 this.src = 'https://placehold.co/1280x720/050505/333333?text=StarlightMax';
-                this.classList.remove('skeleton', 'opacity-0'); 
+                this.classList.remove('skeleton', 'opacity-0');
                 document.getElementById('hero-content').style.opacity = '1';
             };
 
-            heroBg.src = item.backdrop || item.poster || 'https://placehold.co/1280x720/050505/333333?text=Cover'; 
-            heroBg.onload = () => { 
-                heroBg.classList.remove('skeleton', 'opacity-0'); 
-                document.getElementById('hero-content').style.opacity = '1'; 
+            heroBg.src = item.backdrop || item.poster || 'https://placehold.co/1280x720/050505/333333?text=Cover';
+            heroBg.onload = () => {
+                heroBg.classList.remove('skeleton', 'opacity-0');
+                document.getElementById('hero-content').style.opacity = '1';
             };
-            
-            if (item.logo) { document.getElementById('hero-logo').src = item.logo; document.getElementById('hero-logo').classList.remove('hidden'); document.getElementById('hero-title').classList.add('hidden'); } 
+
+            if (item.logo) { document.getElementById('hero-logo').src = item.logo; document.getElementById('hero-logo').classList.remove('hidden'); document.getElementById('hero-title').classList.add('hidden'); }
             else { document.getElementById('hero-title').innerHTML = `"${item.title}"`; document.getElementById('hero-title').classList.remove('hidden'); document.getElementById('hero-logo').classList.add('hidden'); }
 
             const movieGenres = (item.genres || []).slice(0, 2);
             let metaHtml = `<span class="bg-yellow-500 text-black px-1.5 py-0.5 rounded text-xs font-bold mr-2">StarlightMax</span><span class="font-bold text-white">${item.ageRating === 'L' ? 'Livre' : item.ageRating}</span><span class="w-1 h-1 rounded-full bg-gray-500 mx-1"></span><span class="font-semibold">${item.year}</span>`;
             movieGenres.forEach(genre => metaHtml += `<span class="w-1 h-1 rounded-full bg-gray-500 mx-1"></span><span class="px-3 py-1 bg-white/5 rounded-full text-xs border border-white/10">${genre}</span>`);
-            
+
             document.getElementById('hero-meta').innerHTML = metaHtml; document.getElementById('hero-overview').textContent = item.synopsis || "Nenhuma sinopse disponível.";
-            
+
             const safeTitle = item.title.replace(/'/g, "\\'");
             const urlD = item.url ? item.url : 'none';
             const urlS = item.altUrl ? item.altUrl : 'none';
 
-            if(item.type === 'movie') {
+            if (item.type === 'movie') {
                 document.getElementById('hero-actions').innerHTML = `<button onclick="window.openPlayer('${safeTitle}', '${urlD}', '${urlS}')" class="bg-white text-black px-8 py-3.5 rounded-lg font-bold flex items-center gap-2 hover:bg-gray-200 transition shadow-lg hover:scale-105 active:scale-95"><i class="fa-solid fa-play"></i> Assistir</button><button onclick="window.openDetails('${item.id}')" class="bg-[#1a1a1a]/80 backdrop-blur-md text-white px-8 py-3.5 rounded-lg font-bold flex items-center gap-2 hover:bg-[#2a2a2a] transition border border-white/10 hover:scale-105 active:scale-95"><i class="fa-solid fa-plus"></i> Mais Informações</button>`;
             } else {
                 document.getElementById('hero-actions').innerHTML = `<button onclick="window.openDetails('${item.id}')" class="bg-white text-black px-8 py-3.5 rounded-lg font-bold flex items-center gap-2 hover:bg-gray-200 transition shadow-lg hover:scale-105 active:scale-95"><i class="fa-solid fa-play"></i> Episódios</button><button onclick="window.openDetails('${item.id}')" class="bg-[#1a1a1a]/80 backdrop-blur-md text-white px-8 py-3.5 rounded-lg font-bold flex items-center gap-2 hover:bg-[#2a2a2a] transition border border-white/10 hover:scale-105 active:scale-95"><i class="fa-solid fa-plus"></i> Mais Informações</button>`;
@@ -1738,8 +1926,8 @@
 
         window.handleInitialRoute = () => {
             const hash = window.location.hash;
-            if (hash.startsWith('#/detalhes/')) { const parts = hash.split('/'); if (parts.length >= 3) { window.openDetails(parts[2], false); history.replaceState({ view: 'details', params: { id: parts[2] } }, "", hash); return; } } 
-            else if (hash.startsWith('#/busca')) { const queryStr = new URLSearchParams(hash.split('?')[1]).get('q'); if (queryStr) { document.getElementById('search-input').value = queryStr; performSearch(queryStr, false); history.replaceState({ view: 'search', query: queryStr }, "", hash); return; } } 
+            if (hash.startsWith('#/detalhes/')) { const parts = hash.split('/'); if (parts.length >= 3) { window.openDetails(parts[2], false); history.replaceState({ view: 'details', params: { id: parts[2] } }, "", hash); return; } }
+            else if (hash.startsWith('#/busca')) { const queryStr = new URLSearchParams(hash.split('?')[1]).get('q'); if (queryStr) { document.getElementById('search-input').value = queryStr; performSearch(queryStr, false); history.replaceState({ view: 'search', query: queryStr }, "", hash); return; } }
             else if (hash === '#/catalogo') { window.showView('catalog', false); history.replaceState({ view: 'catalog' }, "", hash); return; }
             else if (hash === '#/minha-lista') { window.showView('list', false); history.replaceState({ view: 'list' }, "", hash); return; }
             else if (hash === '#/perfil') { window.showView('profile', false); history.replaceState({ view: 'profile' }, "", hash); return; }
@@ -1747,4 +1935,5 @@
         }
     </script>
 </body>
+
 </html>
