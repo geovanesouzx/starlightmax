@@ -228,9 +228,10 @@
                         <i class="fa-solid fa-search absolute left-3 text-gray-400 transition-colors group-focus-within:text-white pointer-events-none z-10"></i>
                         <input type="text" id="search-input" onkeyup="handleSearch(event)" placeholder="Filmes, séries..." class="search-input-expanding bg-transparent text-white w-10 focus:w-48 lg:focus:w-64 transition-all duration-300 outline-none pl-9 py-2 rounded-full text-sm focus:bg-white/10 cursor-pointer focus:cursor-text">
                     </div>
-                    <a href="#" id="nav-home" onclick="showView('home')" class="px-6 py-2.5 rounded-full bg-white text-black font-semibold text-sm transition shadow-[0_0_10px_rgba(255,255,255,0.2)]">Início</a>
-                    <a href="#" id="nav-catalog" onclick="showView('catalog')" class="px-6 py-2.5 rounded-full text-gray-300 hover:text-white font-medium text-sm transition">Catálogo</a>
-                    <a href="#" id="nav-list" onclick="showView('list')" class="px-6 py-2.5 rounded-full text-gray-300 hover:text-white font-medium text-sm transition">Minha Lista</a>
+                    <!-- Resolvido: Mudado para buttons em vez de <a> para corrigir navegação e não resetar hash -->
+                    <button id="nav-home" onclick="showView('home')" class="px-6 py-2.5 rounded-full bg-white text-black font-semibold text-sm transition shadow-[0_0_10px_rgba(255,255,255,0.2)]">Início</button>
+                    <button id="nav-catalog" onclick="showView('catalog')" class="px-6 py-2.5 rounded-full text-gray-300 hover:text-white font-medium text-sm transition">Catálogo</button>
+                    <button id="nav-list" onclick="showView('list')" class="px-6 py-2.5 rounded-full text-gray-300 hover:text-white font-medium text-sm transition">Minha Lista</button>
                 </div>
 
                 <div class="flex-1 flex justify-end items-center gap-4">
@@ -300,39 +301,9 @@
                     </div>
                 </div>
 
-                <div class="relative z-20 pb-20 pt-10 px-6 md:px-12 space-y-12">
-                    <section>
-                        <div class="flex justify-between items-end mb-4 px-2">
-                            <h2 class="text-xl md:text-2xl font-bold text-white tracking-wide">Adicionados Recentemente</h2>
-                            <div class="flex gap-2">
-                                <button onclick="scrollCarousel('trending-carousel', -1)" class="w-9 h-9 rounded-full bg-[#1a1a1a]/80 border border-white/10 text-white flex items-center justify-center hover:bg-white hover:text-black transition"><i class="fa-solid fa-chevron-left text-sm"></i></button>
-                                <button onclick="scrollCarousel('trending-carousel', 1)" class="w-9 h-9 rounded-full bg-[#1a1a1a]/80 border border-white/10 text-white flex items-center justify-center hover:bg-white hover:text-black transition"><i class="fa-solid fa-chevron-right text-sm"></i></button>
-                            </div>
-                        </div>
-                        <div id="trending-carousel" class="flex gap-5 overflow-x-auto no-scrollbar scroll-smooth py-4 px-2 pb-6"></div>
-                    </section>
-
-                    <section>
-                        <div class="flex justify-between items-end mb-4 px-2">
-                            <h2 class="text-xl md:text-2xl font-bold text-white tracking-wide">Populares em Filmes</h2>
-                            <div class="flex gap-2">
-                                <button onclick="scrollCarousel('popular-carousel', -1)" class="w-9 h-9 rounded-full bg-[#1a1a1a]/80 border border-white/10 text-white flex items-center justify-center hover:bg-white hover:text-black transition"><i class="fa-solid fa-chevron-left text-sm"></i></button>
-                                <button onclick="scrollCarousel('popular-carousel', 1)" class="w-9 h-9 rounded-full bg-[#1a1a1a]/80 border border-white/10 text-white flex items-center justify-center hover:bg-white hover:text-black transition"><i class="fa-solid fa-chevron-right text-sm"></i></button>
-                            </div>
-                        </div>
-                        <div id="popular-carousel" class="flex gap-5 overflow-x-auto no-scrollbar scroll-smooth py-4 px-2 pb-6"></div>
-                    </section>
-                    
-                    <section>
-                        <div class="flex justify-between items-end mb-4 px-2">
-                            <h2 class="text-xl md:text-2xl font-bold text-white tracking-wide">Séries Aclamadas</h2>
-                            <div class="flex gap-2">
-                                <button onclick="scrollCarousel('toprated-carousel', -1)" class="w-9 h-9 rounded-full bg-[#1a1a1a]/80 border border-white/10 text-white flex items-center justify-center hover:bg-white hover:text-black transition"><i class="fa-solid fa-chevron-left text-sm"></i></button>
-                                <button onclick="scrollCarousel('toprated-carousel', 1)" class="w-9 h-9 rounded-full bg-[#1a1a1a]/80 border border-white/10 text-white flex items-center justify-center hover:bg-white hover:text-black transition"><i class="fa-solid fa-chevron-right text-sm"></i></button>
-                            </div>
-                        </div>
-                        <div id="toprated-carousel" class="flex gap-5 overflow-x-auto no-scrollbar scroll-smooth py-4 px-2 pb-6"></div>
-                    </section>
+                <!-- CARROSSÉIS GERADOS AUTOMATICAMENTE POR GÊNERO -->
+                <div id="home-carousels-container" class="relative z-20 pb-20 pt-10 px-6 md:px-12 space-y-12">
+                    <!-- Os carrosséis serão injetados aqui via JS -->
                 </div>
             </div>
 
@@ -503,7 +474,7 @@
         import { getFirestore, collection, doc, setDoc, getDoc, getDocs, query, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 
-        // Configuração original do Firebase StarlightMax MANTIDA INTACTA
+        // Configuração original do Firebase StarlightMax
         const firebaseConfig = {
             apiKey: "AIzaSyA791i8R8Bmrn3toFxFltZ40TU7PUavev8",
             authDomain: "starlight-max.firebaseapp.com",
@@ -576,12 +547,15 @@
         function listenForFeaturedItems() {
             onSnapshot(doc(db, 'config', 'featured'), (docSnap) => {
                 window.featuredItemIds = docSnap.exists() ? (docSnap.data()?.items || []) : [];
-                updateFeaturedHero();
+                // Tenta atualizar se o BD de filmes já estiver carregado na memória
+                if (Object.keys(window.moviesMap).length > 0) {
+                    updateFeaturedHero();
+                }
             });
         }
 
         function updateFeaturedHero() {
-            if (window.featuredItemIds.length > 0 && window.moviesMap) {
+            if (window.featuredItemIds.length > 0 && Object.keys(window.moviesMap).length > 0) {
                 // Pega o primeiro filme de destaque disponível na memória
                 const firstFeatured = window.moviesMap[window.featuredItemIds[0]];
                 if (firstFeatured) {
@@ -1445,6 +1419,25 @@
              syncProfileDataToFirebase(); document.getElementById('det-icon-list').className = index < 0 ? "fa-solid fa-check text-green-400" : "fa-solid fa-plus";
         };
 
+        // LÓGICA MÁGICA DOS CARROSSÉIS AUTOMÁTICOS
+        window.addCarouselSection = (container, title, items, carouselId) => {
+            if (!items || items.length === 0) return;
+            const section = document.createElement('section');
+            section.innerHTML = `
+                <div class="flex justify-between items-end mb-4 px-2">
+                    <h2 class="text-xl md:text-2xl font-bold text-white tracking-wide">${title}</h2>
+                    <div class="flex gap-2">
+                        <button onclick="scrollCarousel('${carouselId}', -1)" class="w-9 h-9 rounded-full bg-[#1a1a1a]/80 border border-white/10 text-white flex items-center justify-center hover:bg-white hover:text-black transition"><i class="fa-solid fa-chevron-left text-sm"></i></button>
+                        <button onclick="scrollCarousel('${carouselId}', 1)" class="w-9 h-9 rounded-full bg-[#1a1a1a]/80 border border-white/10 text-white flex items-center justify-center hover:bg-white hover:text-black transition"><i class="fa-solid fa-chevron-right text-sm"></i></button>
+                    </div>
+                </div>
+                <div id="${carouselId}" class="flex gap-5 overflow-x-auto no-scrollbar scroll-smooth py-4 px-2 pb-6">
+                    ${items.map(item => `<div class="flex-none w-36 md:w-48">${createCardHtml(item)}</div>`).join('')}
+                </div>
+            `;
+            container.appendChild(section);
+        };
+
         async function initAppWithProfile() {
             try {
                 await loadFirestoreContent();
@@ -1455,24 +1448,47 @@
                     const timeB = b.updatedAt?.seconds || 0;
                     return timeB - timeA;
                 });
-                
-                const movies = recentContent.filter(c => c.type === 'movie');
-                const series = recentContent.filter(c => c.type === 'tv');
 
                 // Destaques: Se não houver destaque, joga o primeiro como fallback
-                if (recentContent.length > 0 && window.featuredItemIds.length === 0) { 
-                    updateHeroSection(recentContent[0]); 
-                } else if (window.featuredItemIds.length > 0) {
+                if (window.featuredItemIds.length > 0) {
                     updateFeaturedHero();
+                } else if (recentContent.length > 0) { 
+                    updateHeroSection(recentContent[0]); 
                 }
                 
-                populateCarousel('trending-carousel', recentContent.slice(0, 15));
-                populateCarousel('popular-carousel', movies.slice(0, 15));
-                populateCarousel('toprated-carousel', series.slice(0, 15));
+                // Gerar Carrosséis Dinâmicos Baseados nos Gêneros
+                const carouselsContainer = document.getElementById('home-carousels-container');
+                carouselsContainer.innerHTML = '';
+
+                // 1. O Carrossel de "Adicionados Recentemente" sempre vem primeiro
+                window.addCarouselSection(carouselsContainer, 'Adicionados Recentemente', recentContent.slice(0, 15), 'recent-carousel');
+
+                // 2. Extrair gêneros e agrupar
+                const genreMap = {};
+                recentContent.forEach(item => {
+                    if (item.genres && Array.isArray(item.genres)) {
+                        item.genres.forEach(g => {
+                            if (!genreMap[g]) genreMap[g] = [];
+                            genreMap[g].push(item);
+                        });
+                    }
+                });
+
+                // 3. Ordenar gêneros (os que têm mais conteúdos aparecem primeiro)
+                const sortedGenres = Object.keys(genreMap).sort((a, b) => genreMap[b].length - genreMap[a].length);
+                
+                // 4. Exibir as 10 maiores categorias que tenham no mínimo 3 itens
+                let carouselsAdded = 0;
+                sortedGenres.forEach(genre => {
+                    if (carouselsAdded < 10 && genreMap[genre].length >= 3) {
+                        const sectionId = `genre-carousel-${carouselsAdded}`;
+                        window.addCarouselSection(carouselsContainer, genre, genreMap[genre].slice(0, 15), sectionId);
+                        carouselsAdded++;
+                    }
+                });
                 
                 window.handleInitialRoute();
 
-                // Garante que o catalogo e minha lista carreguem caso tenham ficado em cache vazios
                 if (!document.getElementById('catalog-view').classList.contains('hidden')) {
                     setCatalogFilter(window.currentCatalogFilter);
                 }
@@ -1508,11 +1524,6 @@
             } else {
                 document.getElementById('hero-actions').innerHTML = `<button onclick="window.openDetails('${item.id}')" class="bg-white text-black px-8 py-3.5 rounded-lg font-bold flex items-center gap-2 hover:bg-gray-200 transition shadow-lg hover:scale-105 active:scale-95"><i class="fa-solid fa-play"></i> Episódios</button><button onclick="window.openDetails('${item.id}')" class="bg-[#1a1a1a]/80 backdrop-blur-md text-white px-8 py-3.5 rounded-lg font-bold flex items-center gap-2 hover:bg-[#2a2a2a] transition border border-white/10 hover:scale-105 active:scale-95"><i class="fa-solid fa-plus"></i> Mais Informações</button>`;
             }
-        }
-
-        function populateCarousel(containerId, items) { 
-            const container = document.getElementById(containerId); container.innerHTML = ''; 
-            items.forEach(item => { container.insertAdjacentHTML('beforeend', `<div class="flex-none w-36 md:w-48">${createCardHtml(item)}</div>`); }); 
         }
 
         window.addEventListener('popstate', (event) => {
