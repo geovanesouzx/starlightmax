@@ -35,7 +35,7 @@
         }
 
         .hero-gradient-side {
-            background: linear-gradient(to right, #050505 0%, rgba(5, 5, 5, 0.8) 40%, rgba(5, 5, 5, 0) 100%);
+            background: linear-gradient(to right, #050505 0%, rgba(5, 5, 5, 0.9) 30%, rgba(5, 5, 5, 0) 100%);
         }
 
         .carousel-item-img {
@@ -113,10 +113,34 @@
         .hide-cursor {
             cursor: none !important;
         }
+
+        /* Profile Specific Styles */
+        .profile-glass-card {
+            background: rgba(20, 20, 20, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+        }
+        
+        .achievement-badge {
+            transition: all 0.3s ease;
+        }
+        .achievement-badge:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -10px rgba(245, 158, 11, 0.4);
+            border-color: rgba(245, 158, 11, 0.6);
+        }
     </style>
 </head>
 
 <body class="antialiased">
+
+    <!-- Notificações Toast -->
+    <div id="toast-msg" class="fixed top-24 right-4 z-[9999] transform transition-all duration-300 translate-x-[150%] bg-blue-600 text-white px-6 py-3 rounded-xl shadow-2xl font-semibold flex items-center gap-3 border border-white/20">
+        <i class="fa-solid fa-bell"></i>
+        <span id="toast-text">Mensagem</span>
+    </div>
 
     <!-- 1. SPLASH SCREEN (Carregamento) -->
     <div id="splash-screen"
@@ -441,14 +465,15 @@
             <div id="home-view" class="block">
                 <div class="relative w-full h-screen flex items-center px-6 md:px-16" id="hero-section">
                     <div class="absolute inset-0 w-full h-full">
+                        <!-- Imagem do Herói com Transição Suave -->
                         <img id="hero-bg" src="" alt="Filme em Destaque"
-                            class="w-full h-full object-cover object-top opacity-0 transition-opacity duration-1000 skeleton">
+                            class="w-full h-full object-cover object-top opacity-0 transition-opacity duration-500 skeleton">
                         <div class="absolute inset-0 hero-gradient"></div>
                         <div class="absolute inset-0 hero-gradient-side"></div>
                     </div>
 
                     <div class="relative z-10 w-full max-w-3xl mt-16" id="hero-content"
-                        style="opacity: 0; transition: opacity 1s ease;">
+                        style="opacity: 0; transition: opacity 0.5s ease;">
                         <div id="hero-title-container" class="mb-4 min-h-[100px] flex items-end">
                             <h1 id="hero-title"
                                 class="text-6xl md:text-8xl font-black text-white uppercase tracking-tighter drop-shadow-lg"
@@ -471,6 +496,9 @@
 
                         <div class="flex items-center gap-4" id="hero-actions"></div>
                     </div>
+                    
+                    <!-- Indicadores do Carrossel (Opcional visual) -->
+                    <div id="hero-indicators" class="absolute bottom-10 right-10 flex gap-2 z-20"></div>
                 </div>
 
                 <!-- CARROSSÉIS GERADOS AUTOMATICAMENTE POR GÊNERO -->
@@ -576,68 +604,166 @@
                 </div>
             </div>
 
-            <!-- TELA 6: PERFIL DE USUÁRIO -->
+            <!-- TELA 6: PERFIL DE USUÁRIO (TOTALMENTE REDESENHADO) -->
             <div id="profile-view" class="hidden min-h-screen pb-20 bg-[#050505]">
-                <div class="relative w-full h-64 md:h-80 bg-gray-900 border-b border-white/10">
-                    <img id="pv-banner" src="" class="w-full h-full object-cover opacity-50">
+                
+                <!-- Novo Banner e Card Principal -->
+                <div class="relative w-full h-[40vh] md:h-[50vh]">
+                    <img id="pv-banner" src="" class="w-full h-full object-cover opacity-60 filter brightness-75">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent"></div>
+                    <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-transparent"></div>
                 </div>
 
-                <div
-                    class="px-6 md:px-16 relative -mt-16 md:-mt-24 flex flex-col md:flex-row items-center md:items-end gap-6 md:gap-8 z-10">
-                    <div class="w-32 h-32 md:w-44 md:h-44 rounded-2xl border-4 border-[#050505] overflow-hidden bg-teal-500 shadow-2xl relative group cursor-pointer"
-                        onclick="editProfileFromApp()">
-                        <img id="pv-avatar" src=""
-                            class="w-full h-full object-cover group-hover:opacity-60 transition-opacity">
-                        <div
-                            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                            <i class="fa-solid fa-camera text-white text-2xl"></i>
+                <!-- Conteúdo do Perfil Sobrepondo o Banner -->
+                <div class="px-6 md:px-12 lg:px-20 relative z-10 -mt-32 md:-mt-48 max-w-[1400px] mx-auto">
+                    
+                    <div class="profile-glass-card rounded-3xl p-6 md:p-10 flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-10">
+                        
+                        <!-- Avatar Centralizado/Esquerda -->
+                        <div class="relative shrink-0 -mt-16 md:-mt-20">
+                            <div class="w-36 h-36 md:w-48 md:h-48 rounded-full border-[6px] border-[#141414] overflow-hidden bg-teal-500 shadow-[0_0_40px_rgba(0,0,0,0.8)] relative group cursor-pointer" onclick="editProfileFromApp()">
+                                <img id="pv-avatar" src="" class="w-full h-full object-cover group-hover:opacity-60 transition-opacity">
+                                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/50 backdrop-blur-sm">
+                                    <i class="fa-solid fa-camera text-white text-3xl"></i>
+                                </div>
+                            </div>
+                            <!-- Level Badge Flutuante -->
+                            <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-400 to-orange-600 text-black font-black text-xs md:text-sm px-4 py-1.5 rounded-full border-2 border-[#141414] shadow-lg whitespace-nowrap tracking-wider">
+                                LEVEL 15
+                            </div>
                         </div>
-                    </div>
-                    <div class="text-center md:text-left mb-2 md:mb-6">
-                        <h1 id="pv-name" class="text-3xl md:text-5xl font-black text-white tracking-tight uppercase">...
-                        </h1>
-                        <div
-                            class="flex items-center justify-center md:justify-start gap-3 mt-2 text-gray-400 font-medium">
-                            <span id="pv-username">@...</span>
-                            <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-                            <span class="text-blue-400 text-sm uppercase tracking-wider font-bold">Assinante Max</span>
-                        </div>
-                    </div>
-                    <div class="md:ml-auto mb-2 md:mb-6 flex gap-3">
-                        <button onclick="editProfileFromApp()"
-                            class="bg-white/10 hover:bg-white/20 border border-white/10 text-white px-5 py-2.5 rounded-lg font-semibold text-sm transition flex items-center gap-2">
-                            <i class="fa-solid fa-pen"></i> Editar Perfil
-                        </button>
-                    </div>
-                </div>
 
-                <div class="px-6 md:px-16 mt-12 md:mt-20 space-y-16">
-                    <section>
-                        <div class="flex items-center gap-3 mb-6">
-                            <i class="fa-solid fa-clock-rotate-left text-xl text-blue-500"></i>
-                            <h2 class="text-2xl font-bold text-white tracking-wide">Assistidos Recentemente</h2>
-                        </div>
-                        <div id="profile-recent-grid"
-                            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5"></div>
-                        <div id="profile-recent-empty"
-                            class="hidden flex-col items-center justify-center py-10 bg-[#1a1a1a]/30 border border-white/5 rounded-xl">
-                            <p class="text-gray-500 text-sm">Você ainda não assistiu a nenhum título.</p>
-                        </div>
-                    </section>
+                        <!-- Informações do Usuário -->
+                        <div class="flex-1 text-center md:text-left flex flex-col items-center md:items-start">
+                            <h1 id="pv-name" class="text-3xl md:text-5xl font-black text-white tracking-tight leading-none mb-1">...</h1>
+                            <p id="pv-username" class="text-gray-400 font-semibold text-base md:text-lg mb-4">@...</p>
+                            
+                            <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-5">
+                                <span class="px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-bold uppercase tracking-wider shadow-inner"><i class="fa-solid fa-crown mr-1.5"></i> Assinante Premium</span>
+                                <span class="px-3 py-1 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs font-bold uppercase tracking-wider shadow-inner"><i class="fa-solid fa-fire mr-1.5"></i> Cineasta Viciado</span>
+                            </div>
 
-                    <section>
-                        <div class="flex items-center gap-3 mb-6">
-                            <i class="fa-solid fa-heart text-xl text-red-500"></i>
-                            <h2 class="text-2xl font-bold text-white tracking-wide">Favoritos (Minha Lista)</h2>
+                            <p class="text-gray-300 text-sm md:text-base max-w-2xl leading-relaxed italic border-l-4 border-amber-500 pl-4 bg-white/5 py-2 rounded-r-lg">
+                                "Sempre em busca da próxima grande história. Amo animes shounen, ficção científica e um bom mistério de final de semana."
+                            </p>
                         </div>
-                        <div id="profile-favorites-grid"
-                            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5"></div>
-                        <div id="profile-favorites-empty"
-                            class="hidden flex-col items-center justify-center py-10 bg-[#1a1a1a]/30 border border-white/5 rounded-xl">
-                            <p class="text-gray-500 text-sm">Sua lista de favoritos está vazia.</p>
+
+                        <!-- Botões de Ação -->
+                        <div class="flex flex-col gap-3 w-full md:w-auto shrink-0 mt-2 md:mt-0">
+                            <button onclick="editProfileFromApp()" class="w-full bg-white hover:bg-gray-200 text-black px-6 py-3.5 rounded-xl font-bold transition flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                                <i class="fa-solid fa-pen"></i> Editar Perfil
+                            </button>
+                            <button onclick="shareProfile()" class="w-full bg-transparent hover:bg-white/10 border border-white/20 text-white px-6 py-3.5 rounded-xl font-bold transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-share-nodes"></i> Compartilhar
+                            </button>
                         </div>
-                    </section>
+                    </div>
+
+                    <!-- Números e Estatísticas -->
+                    <div class="grid grid-cols-3 gap-3 md:gap-6 mt-8 md:mt-12 max-w-5xl mx-auto">
+                        <div class="profile-glass-card rounded-2xl p-4 md:p-6 text-center group hover:bg-white/5 transition-colors cursor-default">
+                            <h3 class="text-3xl md:text-5xl font-black text-white group-hover:scale-110 transition-transform duration-300" id="pv-stat-watched">0</h3>
+                            <p class="text-[10px] md:text-sm text-gray-400 font-bold uppercase tracking-widest mt-2">Assistidos</p>
+                        </div>
+                        <div class="profile-glass-card rounded-2xl p-4 md:p-6 text-center group hover:bg-white/5 transition-colors cursor-default">
+                            <h3 class="text-3xl md:text-5xl font-black text-red-500 group-hover:scale-110 transition-transform duration-300 drop-shadow-[0_0_15px_rgba(239,68,68,0.3)]" id="pv-stat-fav">0</h3>
+                            <p class="text-[10px] md:text-sm text-gray-400 font-bold uppercase tracking-widest mt-2">Favoritos</p>
+                        </div>
+                        <div class="profile-glass-card rounded-2xl p-4 md:p-6 text-center group hover:bg-white/5 transition-colors cursor-default border-amber-500/30">
+                            <h3 class="text-3xl md:text-5xl font-black text-amber-500 group-hover:scale-110 transition-transform duration-300 drop-shadow-[0_0_15px_rgba(245,158,11,0.3)]">4</h3>
+                            <p class="text-[10px] md:text-sm text-amber-500/70 font-bold uppercase tracking-widest mt-2">Conquistas</p>
+                        </div>
+                    </div>
+
+                    <!-- Sessões de Conteúdo e Conquistas -->
+                    <div class="mt-16 space-y-16">
+                        
+                        <!-- Nova Seção: Quadro de Conquistas (Visual Showroom) -->
+                        <section class="bg-gradient-to-br from-[#141414] to-transparent border border-white/5 rounded-3xl p-6 md:p-10 relative overflow-hidden">
+                            <div class="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none"></div>
+                            
+                            <div class="flex items-center gap-3 mb-8 relative z-10">
+                                <i class="fa-solid fa-trophy text-2xl text-amber-500 drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]"></i>
+                                <h2 class="text-2xl md:text-3xl font-bold text-white tracking-wide">Galeria de Conquistas</h2>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 md:gap-6 relative z-10">
+                                <!-- Mock de Conquistas Premium -->
+                                <div class="achievement-badge bg-black/40 border border-slate-700 rounded-2xl p-4 text-center cursor-default group">
+                                    <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-tr from-yellow-400 to-amber-600 p-1 shadow-[0_0_20px_rgba(245,158,11,0.4)] group-hover:rotate-12 transition-transform">
+                                        <div class="w-full h-full bg-[#141414] rounded-full flex items-center justify-center">
+                                            <i class="fa-solid fa-seedling text-2xl text-amber-500"></i>
+                                        </div>
+                                    </div>
+                                    <h4 class="text-white font-bold text-sm leading-tight mb-1">Primeiros Passos</h4>
+                                    <p class="text-[10px] text-gray-400">Assista 5 episódios.</p>
+                                </div>
+
+                                <div class="achievement-badge bg-black/40 border border-slate-700 rounded-2xl p-4 text-center cursor-default group">
+                                    <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-tr from-blue-400 to-indigo-600 p-1 shadow-[0_0_20px_rgba(99,102,241,0.4)] group-hover:rotate-12 transition-transform">
+                                        <div class="w-full h-full bg-[#141414] rounded-full flex items-center justify-center">
+                                            <i class="fa-solid fa-meteor text-2xl text-indigo-400"></i>
+                                        </div>
+                                    </div>
+                                    <h4 class="text-white font-bold text-sm leading-tight mb-1">Maratonista</h4>
+                                    <p class="text-[10px] text-gray-400">Assista 50 episódios.</p>
+                                </div>
+
+                                <div class="achievement-badge bg-black/40 border border-slate-700 rounded-2xl p-4 text-center cursor-default group">
+                                    <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-tr from-red-400 to-rose-600 p-1 shadow-[0_0_20px_rgba(225,29,72,0.4)] group-hover:rotate-12 transition-transform">
+                                        <div class="w-full h-full bg-[#141414] rounded-full flex items-center justify-center">
+                                            <i class="fa-solid fa-heart text-2xl text-rose-500"></i>
+                                        </div>
+                                    </div>
+                                    <h4 class="text-white font-bold text-sm leading-tight mb-1">Colecionador</h4>
+                                    <p class="text-[10px] text-gray-400">Adicione 20 Favoritos.</p>
+                                </div>
+                                
+                                <div class="achievement-badge bg-black/40 border border-slate-700 rounded-2xl p-4 text-center cursor-default group">
+                                    <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-tr from-purple-400 to-fuchsia-600 p-1 shadow-[0_0_20px_rgba(192,38,211,0.4)] group-hover:rotate-12 transition-transform">
+                                        <div class="w-full h-full bg-[#141414] rounded-full flex items-center justify-center">
+                                            <i class="fa-solid fa-comment-dots text-2xl text-fuchsia-400"></i>
+                                        </div>
+                                    </div>
+                                    <h4 class="text-white font-bold text-sm leading-tight mb-1">Crítico Famoso</h4>
+                                    <p class="text-[10px] text-gray-400">Escreva 10 comentários.</p>
+                                </div>
+
+                                <!-- Slot Bloqueado -->
+                                <div class="bg-black/20 border border-white/5 rounded-2xl p-4 text-center cursor-not-allowed opacity-50 grayscale">
+                                    <div class="w-16 h-16 mx-auto mb-3 rounded-full border-2 border-dashed border-gray-600 flex items-center justify-center">
+                                        <i class="fa-solid fa-lock text-xl text-gray-500"></i>
+                                    </div>
+                                    <h4 class="text-gray-400 font-bold text-sm leading-tight mb-1">????</h4>
+                                    <p class="text-[10px] text-gray-600">Continue explorando.</p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section>
+                            <div class="flex items-center gap-3 mb-6 px-2">
+                                <i class="fa-solid fa-clock-rotate-left text-xl text-blue-500"></i>
+                                <h2 class="text-2xl font-bold text-white tracking-wide">Assistidos Recentemente</h2>
+                            </div>
+                            <div id="profile-recent-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 md:gap-5"></div>
+                            <div id="profile-recent-empty" class="hidden flex-col items-center justify-center py-12 bg-[#141414]/50 border border-white/5 rounded-2xl backdrop-blur-sm">
+                                <i class="fa-solid fa-ghost text-4xl text-gray-600 mb-3"></i>
+                                <p class="text-gray-400 text-sm">Este usuário não tem histórico recente.</p>
+                            </div>
+                        </section>
+
+                        <section>
+                            <div class="flex items-center gap-3 mb-6 px-2">
+                                <i class="fa-solid fa-heart text-xl text-red-500 drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]"></i>
+                                <h2 class="text-2xl font-bold text-white tracking-wide">Favoritos (Coleção)</h2>
+                            </div>
+                            <div id="profile-favorites-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 md:gap-5"></div>
+                            <div id="profile-favorites-empty" class="hidden flex-col items-center justify-center py-12 bg-[#141414]/50 border border-white/5 rounded-2xl backdrop-blur-sm">
+                                <i class="fa-solid fa-box-open text-4xl text-gray-600 mb-3"></i>
+                                <p class="text-gray-400 text-sm">A estante de favoritos está vazia.</p>
+                            </div>
+                        </section>
+                    </div>
                 </div>
             </div>
         </main>
@@ -714,6 +840,10 @@
         window.recentHistory = [];
         window.currentCatalogFilter = 'all';
         window.featuredItemIds = []; // Variável para os Destaques
+        
+        let heroIntervalId = null;
+        let currentHeroIndex = 0;
+        let validFeaturedMovies = [];
 
         // Autenticação e Perfis
         let currentUser = null;
@@ -728,6 +858,24 @@
         // Assets do Admin
         let starlightAvatars = [];
         let starlightBanners = [];
+
+        // Toast System
+        window.showToast = (message) => {
+            const toast = document.getElementById('toast-msg');
+            document.getElementById('toast-text').textContent = message;
+            toast.classList.remove('translate-x-[150%]');
+            setTimeout(() => {
+                toast.classList.add('translate-x-[150%]');
+            }, 3000);
+        };
+
+        // Copiar Link Perfil
+        window.shareProfile = () => {
+            const link = window.location.origin + window.location.pathname + `#/perfil-publico/${currentProfile.username}`;
+            navigator.clipboard.writeText(link).then(() => {
+                window.showToast("Link do perfil copiado com sucesso!");
+            });
+        };
 
         window.loginWithGoogle = async () => {
             try { await signInWithPopup(auth, new GoogleAuthProvider()); }
@@ -751,6 +899,7 @@
                 currentUser = null;
                 currentProfile = null;
                 isManageMode = false;
+                if(heroIntervalId) clearInterval(heroIntervalId); // Limpa rotação
                 document.getElementById('splash-screen').classList.add('hidden');
                 document.getElementById('main-app-container').classList.add('hidden');
                 document.getElementById('profiles-selection-view').classList.add('hidden');
@@ -786,33 +935,55 @@
 
         function updateFeaturedHero() {
             if (Object.keys(window.moviesMap).length === 0) return;
-
-            let featuredMovie = null;
+            
+            validFeaturedMovies = [];
+            
+            // 1. Filtra todos os IDs para garantir que o filme ainda existe no banco
             if (window.featuredItemIds && window.featuredItemIds.length > 0) {
-                // Itera de trás para frente (do mais recente adicionado para o mais antigo)
-                // Isso garante que pega o último destaque que você marcou no painel
-                // e ignora IDs "fantasmas" de filmes que foram deletados do banco.
-                for (let i = window.featuredItemIds.length - 1; i >= 0; i--) {
-                    const id = window.featuredItemIds[i];
+                window.featuredItemIds.forEach(id => {
                     if (window.moviesMap[id]) {
-                        featuredMovie = window.moviesMap[id];
-                        break; // Achou um filme válido, para a busca
+                        validFeaturedMovies.push(window.moviesMap[id]);
                     }
-                }
+                });
             }
-
-            if (featuredMovie) {
-                updateHeroSection(featuredMovie);
-            } else {
-                // Caso não tenha destaque ou todos os IDs salvos tenham sido deletados, usa os mais recentes
-                const recentContent = [...window.firestoreContent].sort((a, b) => {
+            
+            // 2. Fallback: Se não tiver nenhum destaque válido, pega os 5 mais recentes adicionados
+            if (validFeaturedMovies.length === 0) {
+                const recentContent = [...window.firestoreContent].sort((a,b) => {
                     const timeA = a.updatedAt?.seconds || 0;
                     const timeB = b.updatedAt?.seconds || 0;
                     return timeB - timeA;
                 });
+                validFeaturedMovies = recentContent.slice(0, 5);
+            }
 
-                if (recentContent.length > 0) {
-                    updateHeroSection(recentContent[0]);
+            // 3. Limpa o relógio anterior se ele existir
+            if (heroIntervalId) {
+                clearInterval(heroIntervalId);
+            }
+            
+            // 4. Mostra o primeiro filme e inicia a rotação
+            if (validFeaturedMovies.length > 0) {
+                currentHeroIndex = 0;
+                updateHeroSection(validFeaturedMovies[currentHeroIndex]);
+                
+                // Só ativa o temporizador se tiver mais de um filme
+                if (validFeaturedMovies.length > 1) {
+                    heroIntervalId = setInterval(() => {
+                        // Faz o Fade-out
+                        const heroBg = document.getElementById('hero-bg');
+                        const heroContent = document.getElementById('hero-content');
+                        
+                        heroBg.classList.add('opacity-0');
+                        heroContent.style.opacity = '0';
+                        
+                        // Espera meio segundo para trocar o conteúdo
+                        setTimeout(() => {
+                            currentHeroIndex = (currentHeroIndex + 1) % validFeaturedMovies.length;
+                            updateHeroSection(validFeaturedMovies[currentHeroIndex]);
+                        }, 500);
+                        
+                    }, 4500); // 4000ms exibindo + 500ms transição
                 }
             }
         }
@@ -889,6 +1060,8 @@
             document.getElementById('nav-avatar').src = currentProfile.avatarUrl;
             document.getElementById('drop-avatar').src = currentProfile.avatarUrl;
             document.getElementById('drop-name').textContent = currentProfile.name;
+            
+            // Dados da tela de Perfil Nova
             document.getElementById('pv-name').textContent = currentProfile.name;
             document.getElementById('pv-username').textContent = "@" + currentProfile.username;
             document.getElementById('pv-avatar').src = currentProfile.avatarUrl;
@@ -1491,6 +1664,10 @@
         }
 
         function renderProfileView() {
+            // Atualiza as estatísticas rápidas do Perfil
+            document.getElementById('pv-stat-watched').textContent = window.recentHistory.length;
+            document.getElementById('pv-stat-fav').textContent = window.myList.length;
+
             const favGrid = document.getElementById('profile-favorites-grid'); const favEmpty = document.getElementById('profile-favorites-empty');
             const recGrid = document.getElementById('profile-recent-grid'); const recEmpty = document.getElementById('profile-recent-empty');
 
@@ -1805,7 +1982,7 @@
                     return timeB - timeA;
                 });
 
-                // Destaques: Se não houver destaque, joga o primeiro como fallback com mais segurança
+                // Destaques
                 updateFeaturedHero();
 
                 // Buscar Carrosséis do Admin do Banco
@@ -1872,19 +2049,30 @@
         function updateHeroSection(item) {
             if (!item) return;
             const heroBg = document.getElementById('hero-bg');
+            const heroContent = document.getElementById('hero-content');
 
             // Adicionado OnError para caso a imagem esteja falhando ou não exista, forçar a tela a não ficar preta
             heroBg.onerror = function () {
                 this.onerror = null;
                 this.src = 'https://placehold.co/1280x720/050505/333333?text=StarlightMax';
                 this.classList.remove('skeleton', 'opacity-0');
-                document.getElementById('hero-content').style.opacity = '1';
+                heroContent.style.opacity = '1';
             };
 
             heroBg.src = item.backdrop || item.poster || 'https://placehold.co/1280x720/050505/333333?text=Cover';
             heroBg.onload = () => {
                 heroBg.classList.remove('skeleton', 'opacity-0');
-                document.getElementById('hero-content').style.opacity = '1';
+                heroContent.style.opacity = '1';
+                
+                // Opcional: Atualizar os indicadores do carrossel (bolinhas)
+                const indicatorsDiv = document.getElementById('hero-indicators');
+                if (indicatorsDiv && validFeaturedMovies.length > 1) {
+                    indicatorsDiv.innerHTML = validFeaturedMovies.map((_, i) => 
+                        `<div class="w-2 h-2 rounded-full transition-all duration-300 ${i === currentHeroIndex ? 'w-6 bg-white' : 'bg-white/30'}"></div>`
+                    ).join('');
+                } else if (indicatorsDiv) {
+                    indicatorsDiv.innerHTML = '';
+                }
             };
 
             if (item.logo) { document.getElementById('hero-logo').src = item.logo; document.getElementById('hero-logo').classList.remove('hidden'); document.getElementById('hero-title').classList.add('hidden'); }
