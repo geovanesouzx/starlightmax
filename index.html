@@ -496,19 +496,19 @@
 
     </div>
 
-    <!-- Scripts da Aplicação Integrados com Firestore (Conteúdo do App Mango) -->
+    <!-- Scripts da Aplicação Integrados com Firestore -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, collection, doc, setDoc, getDoc, getDocs, query, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, doc, setDoc, getDoc, getDocs, query, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 
-        // Configuração do Firebase StarlightMax (Mantida a original)
+        // Configuração original do Firebase StarlightMax MANTIDA INTACTA
         const firebaseConfig = {
             apiKey: "AIzaSyA791i8R8Bmrn3toFxFltZ40TU7PUavev8",
             authDomain: "starlight-max.firebaseapp.com",
             projectId: "starlight-max",
-            storageBucket: "starlight-max.firebasestorage.app", // ajustado pro padrão do storage
+            storageBucket: "starlight-max.firebasestorage.app",
             messagingSenderId: "120477177511",
             appId: "1:120477177511:web:5a75a2dd6d8089c829ed82"
         };
@@ -528,6 +528,7 @@
         window.myList = []; 
         window.recentHistory = [];
         window.currentCatalogFilter = 'all'; 
+        window.featuredItemIds = []; // Variável para os Destaques
 
         // Autenticação e Perfis
         let currentUser = null; 
@@ -551,6 +552,10 @@
             if (user) { 
                 currentUser = user; 
                 document.getElementById('login-view').classList.add('hidden'); 
+                
+                // Ativar o listener de destaques quando logar
+                listenForFeaturedItems();
+                
                 await loadUserProfiles(); 
             } else { 
                 currentUser = null; 
@@ -564,6 +569,26 @@
                 document.getElementById('login-view').classList.remove('hidden'); 
             }
         });
+
+        // ------------------------------------------
+        // SISTEMA DE DESTAQUES (FEATURED)
+        // ------------------------------------------
+        function listenForFeaturedItems() {
+            onSnapshot(doc(db, 'config', 'featured'), (docSnap) => {
+                window.featuredItemIds = docSnap.exists() ? (docSnap.data()?.items || []) : [];
+                updateFeaturedHero();
+            });
+        }
+
+        function updateFeaturedHero() {
+            if (window.featuredItemIds.length > 0 && window.moviesMap) {
+                // Pega o primeiro filme de destaque disponível na memória
+                const firstFeatured = window.moviesMap[window.featuredItemIds[0]];
+                if (firstFeatured) {
+                    updateHeroSection(firstFeatured);
+                }
+            }
+        }
 
         async function loadUserProfiles() {
             document.getElementById('splash-screen').classList.remove('hidden');
@@ -1088,7 +1113,11 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
             if (view === 'home') { document.getElementById('home-view').classList.remove('hidden'); document.getElementById('nav-home').className = activeClass; }
-            else if (view === 'catalog') { document.getElementById('catalog-view').classList.remove('hidden'); document.getElementById('nav-catalog').className = activeClass; if (document.getElementById('catalog-grid').children.length === 0) setCatalogFilter('all'); }
+            else if (view === 'catalog') { 
+                document.getElementById('catalog-view').classList.remove('hidden'); 
+                document.getElementById('nav-catalog').className = activeClass; 
+                setCatalogFilter(window.currentCatalogFilter);
+            }
             else if (view === 'list') { document.getElementById('mylist-view').classList.remove('hidden'); document.getElementById('nav-list').className = activeClass; renderMyList(); }
             else if (view === 'search') { document.getElementById('search-view').classList.remove('hidden'); }
             else if (view === 'details') { document.getElementById('details-view').classList.remove('hidden'); }
@@ -1105,7 +1134,7 @@
                 badgeHtml = `<div class="absolute top-2 left-2 bg-gradient-to-r from-amber-500 to-orange-500 text-black text-[10px] font-black px-2 py-0.5 rounded shadow-lg z-10">${item.badgeText}</div>`;
             }
 
-            return `<div class="carousel-item cursor-pointer group flex flex-col gap-2 relative w-full" data-id="${item.id}" onmouseenter="handleItemEnter(this)" onmouseleave="handleItemLeave()" onclick="openDetails('${item.id}')">
+            return `<div class="carousel-item w-full cursor-pointer group flex flex-col gap-2 relative" data-id="${item.id}" onmouseenter="handleItemEnter(this)" onmouseleave="handleItemLeave()" onclick="openDetails('${item.id}')">
                 <div class="relative overflow-hidden rounded-xl">
                     ${badgeHtml}
                     <img src="${imgUrl}" alt="${title}" class="w-full aspect-[2/3] object-cover carousel-item-img" loading="lazy">
@@ -1124,8 +1153,11 @@
             else { 
                 grid.classList.remove('hidden'); emptyState.classList.add('hidden'); emptyState.classList.remove('flex'); 
                 [...window.myList].reverse().forEach(item => { 
-                    const data = window.moviesMap[item.id] || item;
-                    grid.insertAdjacentHTML('beforeend', createCardHtml(data)); 
+                    const dataId = typeof item === 'object' ? item.id : item;
+                    const data = window.moviesMap[dataId];
+                    if(data) {
+                        grid.insertAdjacentHTML('beforeend', createCardHtml(data)); 
+                    }
                 }); 
             }
         }
@@ -1139,8 +1171,11 @@
             else { 
                 favGrid.classList.remove('hidden'); favEmpty.classList.add('hidden'); favEmpty.classList.remove('flex'); 
                 [...window.myList].reverse().slice(0, 12).forEach(item => { 
-                    const data = window.moviesMap[item.id] || item;
-                    favGrid.insertAdjacentHTML('beforeend', createCardHtml(data)); 
+                    const dataId = typeof item === 'object' ? item.id : item;
+                    const data = window.moviesMap[dataId];
+                    if(data) {
+                        favGrid.insertAdjacentHTML('beforeend', createCardHtml(data)); 
+                    }
                 }); 
             }
 
@@ -1149,15 +1184,18 @@
             else { 
                 recGrid.classList.remove('hidden'); recEmpty.classList.add('hidden'); recEmpty.classList.remove('flex'); 
                 window.recentHistory.slice(0, 12).forEach(item => { 
-                    const data = window.moviesMap[item.id] || item;
-                    recGrid.insertAdjacentHTML('beforeend', createCardHtml(data)); 
+                    const dataId = typeof item === 'object' ? item.id : item;
+                    const data = window.moviesMap[dataId];
+                    if(data) {
+                        recGrid.insertAdjacentHTML('beforeend', createCardHtml(data)); 
+                    }
                 }); 
             }
         }
 
         function addToRecentHistory(item) { 
             window.recentHistory = window.recentHistory.filter(i => i.id !== item.id); 
-            window.recentHistory.unshift(item); 
+            window.recentHistory.unshift({id: item.id}); 
             if (window.recentHistory.length > 20) window.recentHistory.pop(); 
             syncProfileDataToFirebase(); 
         }
@@ -1271,7 +1309,7 @@
 
             btns.innerHTML = `
                 ${mainPlayBtn}
-                <button onclick="window.toggleDetailsList()" class="w-12 h-12 bg-[#2a2a2a]/80 backdrop-blur-md hover:bg-[#3a3a3a] text-white rounded-lg flex items-center justify-center transition border border-white/10"><i id="det-icon-list" class="${window.myList.some(item => item.id == id) ? "fa-solid fa-check text-green-400" : "fa-solid fa-plus"}"></i></button>
+                <button onclick="window.toggleDetailsList()" class="w-12 h-12 bg-[#2a2a2a]/80 backdrop-blur-md hover:bg-[#3a3a3a] text-white rounded-lg flex items-center justify-center transition border border-white/10"><i id="det-icon-list" class="${window.myList.some(item => item.id == id || item == id) ? "fa-solid fa-check text-green-400" : "fa-solid fa-plus"}"></i></button>
             `;
 
             if (data.type === 'tv' && data.seasons) {
@@ -1342,7 +1380,7 @@
             const id = element.getAttribute('data-id'); window.currentHoveredItem = { id }; 
             const movie = window.moviesMap[id]; if (!movie) return;
 
-            const isInList = window.myList.some(item => item.id == id); 
+            const isInList = window.myList.some(item => item.id == id || item == id); 
             document.getElementById('hc-icon-list').className = isInList ? "fa-solid fa-check text-sm text-green-400" : "fa-solid fa-plus text-sm"; 
             document.getElementById('hc-text-list').textContent = isInList ? "Na lista" : "Salvar";
 
@@ -1383,30 +1421,41 @@
         window.openDetailsFromHover = () => { if(window.currentHoveredItem.id) window.openDetails(window.currentHoveredItem.id); window.hideHoverCard(true); };
 
         window.toggleMyList = () => {
-            if (!window.currentHoveredItem.id) return; const index = window.myList.findIndex(item => item.id == window.currentHoveredItem.id);
-            if (index >= 0) window.myList.splice(index, 1); else { const movieToSave = window.moviesMap[window.currentHoveredItem.id]; if(movieToSave) { window.myList.push({ id: movieToSave.id }); } }
+            if (!window.currentHoveredItem.id) return; 
+            const index = window.myList.findIndex(item => item.id == window.currentHoveredItem.id || item == window.currentHoveredItem.id);
+            if (index >= 0) window.myList.splice(index, 1); 
+            else { window.myList.push({ id: window.currentHoveredItem.id }); }
             syncProfileDataToFirebase(); document.getElementById('hc-icon-list').className = index < 0 ? "fa-solid fa-check text-sm text-green-400" : "fa-solid fa-plus text-sm"; document.getElementById('hc-text-list').textContent = index < 0 ? "Na lista" : "Salvar";
             if (!document.getElementById('mylist-view').classList.contains('hidden')) { renderMyList(); if (index >= 0) window.hideHoverCard(true); }
         };
 
         window.toggleDetailsList = () => {
-             if(!window.currentDetailsItem.id) return; const index = window.myList.findIndex(item => item.id == window.currentDetailsItem.id);
-             if(index >= 0) window.myList.splice(index, 1); else { window.myList.push({ id: window.currentDetailsItem.id }); }
-             syncProfileDataToFirebase(); document.getElementById('det-icon-list').className = window.myList.some(item => item.id == window.currentDetailsItem.id) ? "fa-solid fa-check text-green-400" : "fa-solid fa-plus";
+             if(!window.currentDetailsItem.id) return; 
+             const index = window.myList.findIndex(item => item.id == window.currentDetailsItem.id || item == window.currentDetailsItem.id);
+             if(index >= 0) window.myList.splice(index, 1); 
+             else { window.myList.push({ id: window.currentDetailsItem.id }); }
+             syncProfileDataToFirebase(); document.getElementById('det-icon-list').className = index < 0 ? "fa-solid fa-check text-green-400" : "fa-solid fa-plus";
         };
 
         async function initAppWithProfile() {
             try {
                 await loadFirestoreContent();
                 
-                // Ordenar os mais recentes (simulação baseada na posição no array ou data, usaremos ordem inversa do array salvo)
-                const recentContent = [...window.firestoreContent].sort((a,b) => b.updatedAt?.seconds - a.updatedAt?.seconds);
+                // Ordenar os mais recentes pelo Firebase timestamp
+                const recentContent = [...window.firestoreContent].sort((a,b) => {
+                    const timeA = a.updatedAt?.seconds || 0;
+                    const timeB = b.updatedAt?.seconds || 0;
+                    return timeB - timeA;
+                });
+                
                 const movies = recentContent.filter(c => c.type === 'movie');
                 const series = recentContent.filter(c => c.type === 'tv');
 
-                if (recentContent.length > 0) { 
-                    // Pega algum item aleatório de sucesso ou o mais novo pra botar no Hero
+                // Destaques: Se não houver destaque, joga o primeiro como fallback
+                if (recentContent.length > 0 && window.featuredItemIds.length === 0) { 
                     updateHeroSection(recentContent[0]); 
+                } else if (window.featuredItemIds.length > 0) {
+                    updateFeaturedHero();
                 }
                 
                 populateCarousel('trending-carousel', recentContent.slice(0, 15));
@@ -1414,12 +1463,22 @@
                 populateCarousel('toprated-carousel', series.slice(0, 15));
                 
                 window.handleInitialRoute();
+
+                // Garante que o catalogo e minha lista carreguem caso tenham ficado em cache vazios
+                if (!document.getElementById('catalog-view').classList.contains('hidden')) {
+                    setCatalogFilter(window.currentCatalogFilter);
+                }
+                if (!document.getElementById('mylist-view').classList.contains('hidden')) {
+                    renderMyList();
+                }
+
             } catch (error) {
                 console.error("Erro no InitApp:", error);
             }
         }
 
         function updateHeroSection(item) {
+            if(!item) return;
             document.getElementById('hero-bg').src = item.backdrop || item.poster || 'https://placehold.co/1280x720/050505/333333?text=Cover'; 
             document.getElementById('hero-bg').onload = () => { document.getElementById('hero-bg').classList.remove('skeleton', 'opacity-0'); document.getElementById('hero-content').style.opacity = '1'; };
             
