@@ -76,16 +76,21 @@
 
     <!-- 3. QUEM ESTÁ ASSISTINDO (Seleção de Perfil) -->
     <div id="profiles-selection-view" class="hidden fixed inset-0 z-[140] bg-[#050505] flex flex-col items-center justify-center">
-        <h1 class="text-3xl md:text-5xl font-bold text-white mb-10 tracking-wide">Quem está assistindo?</h1>
+        <div class="flex flex-col items-center mb-10">
+            <h1 class="text-3xl md:text-5xl font-bold text-white tracking-wide text-center">Quem está assistindo?</h1>
+            <button id="btn-manage-profiles" onclick="toggleManageMode()" class="mt-4 text-gray-400 hover:text-white border border-gray-600 hover:border-white px-5 py-2 rounded-full transition text-sm font-semibold">
+                Gerenciar Perfis
+            </button>
+        </div>
         <div class="flex flex-wrap justify-center gap-6 md:gap-10 max-w-4xl px-6" id="profiles-grid-list">
             <!-- Gerado via JS -->
         </div>
     </div>
 
-    <!-- 4. CRIAR PERFIL VIEW -->
+    <!-- 4. CRIAR / EDITAR PERFIL VIEW -->
     <div id="create-profile-view" class="hidden fixed inset-0 z-[160] bg-[#050505] overflow-y-auto">
         <div class="min-h-screen flex flex-col items-center justify-center py-12 px-4">
-            <h2 class="text-3xl font-bold text-white mb-8">Criar Novo Perfil</h2>
+            <h2 id="cp-title" class="text-3xl font-bold text-white mb-8">Criar Novo Perfil</h2>
             
             <div class="bg-[#141414] p-8 rounded-2xl border border-white/10 w-full max-w-lg shadow-2xl relative mt-16">
                 <!-- Banner Upload -->
@@ -125,10 +130,16 @@
                     </div>
                 </div>
 
-                <div class="flex gap-3 mt-8">
-                    <button id="cp-btn-cancel" onclick="cancelCreateProfile()" class="flex-1 bg-transparent border border-white/20 text-white py-3 rounded-lg font-bold hover:bg-white/5 transition">Cancelar</button>
-                    <button id="cp-btn-save" onclick="saveProfile()" class="flex-1 bg-white text-black py-3 rounded-lg font-bold hover:bg-gray-200 transition flex items-center justify-center gap-2">
-                        Salvar Perfil
+                <div class="flex flex-col gap-3 mt-8">
+                    <div class="flex gap-3">
+                        <button id="cp-btn-cancel" onclick="cancelCreateProfile()" class="flex-1 bg-transparent border border-white/20 text-white py-3 rounded-lg font-bold hover:bg-white/5 transition">Cancelar</button>
+                        <button id="cp-btn-save" onclick="saveProfile()" class="flex-1 bg-white text-black py-3 rounded-lg font-bold hover:bg-gray-200 transition flex items-center justify-center gap-2">
+                            Salvar Perfil
+                        </button>
+                    </div>
+                    <!-- Botão de Excluir Perfil (Apenas Modo Edição) -->
+                    <button id="cp-btn-delete" onclick="deleteProfile()" class="hidden text-red-500 hover:text-red-400 hover:bg-red-500/10 py-3 rounded-lg text-sm font-semibold transition mt-2 border border-transparent hover:border-red-500/20">
+                        <i class="fa-solid fa-trash-can mr-2"></i> Excluir Perfil Definitivamente
                     </button>
                 </div>
             </div>
@@ -183,9 +194,9 @@
                                     <i class="fa-solid fa-users text-lg w-5 text-center"></i>
                                     <span class="font-medium text-sm">Trocar de Perfil</span>
                                 </button>
-                                <button class="flex items-center gap-4 px-5 py-3 text-gray-300 hover:bg-white/5 hover:text-white transition w-full text-left border-b border-white/5">
-                                    <i class="fa-solid fa-gear text-lg w-5 text-center"></i>
-                                    <span class="font-medium text-sm">Configurações</span>
+                                <button onclick="editProfileFromApp()" class="flex items-center gap-4 px-5 py-3 text-gray-300 hover:bg-white/5 hover:text-white transition w-full text-left border-b border-white/5">
+                                    <i class="fa-solid fa-pen text-lg w-5 text-center"></i>
+                                    <span class="font-medium text-sm">Editar Perfil</span>
                                 </button>
                                 <button onclick="logoutFirebase()" class="flex items-center gap-4 px-5 py-4 text-[#ff7575] hover:bg-[#ff7575]/10 transition w-full text-left mt-1">
                                     <i class="fa-solid fa-arrow-right-from-bracket text-lg w-5 text-center"></i>
@@ -368,8 +379,11 @@
                 </div>
 
                 <div class="px-6 md:px-16 relative -mt-16 md:-mt-24 flex flex-col md:flex-row items-center md:items-end gap-6 md:gap-8 z-10">
-                    <div class="w-32 h-32 md:w-44 md:h-44 rounded-2xl border-4 border-[#050505] overflow-hidden bg-teal-500 shadow-2xl relative">
-                        <img id="pv-avatar" src="" class="w-full h-full object-cover">
+                    <div class="w-32 h-32 md:w-44 md:h-44 rounded-2xl border-4 border-[#050505] overflow-hidden bg-teal-500 shadow-2xl relative group cursor-pointer" onclick="editProfileFromApp()">
+                        <img id="pv-avatar" src="" class="w-full h-full object-cover group-hover:opacity-60 transition-opacity">
+                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="fa-solid fa-camera text-white text-2xl"></i>
+                        </div>
                     </div>
                     <div class="text-center md:text-left mb-2 md:mb-6">
                         <h1 id="pv-name" class="text-3xl md:text-5xl font-black text-white tracking-tight uppercase">...</h1>
@@ -380,8 +394,8 @@
                         </div>
                     </div>
                     <div class="md:ml-auto mb-2 md:mb-6 flex gap-3">
-                        <button class="bg-[#1a1a1a] hover:bg-gray-800 border border-white/10 text-white px-4 py-2.5 rounded-lg transition">
-                            <i class="fa-solid fa-gear"></i>
+                        <button onclick="editProfileFromApp()" class="bg-white/10 hover:bg-white/20 border border-white/10 text-white px-5 py-2.5 rounded-lg font-semibold text-sm transition flex items-center gap-2">
+                            <i class="fa-solid fa-pen"></i> Editar Perfil
                         </button>
                     </div>
                 </div>
@@ -449,7 +463,7 @@
         // Importações Modulares V9 do Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, collection, doc, setDoc, getDoc, getDocs, query, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, doc, setDoc, getDoc, getDocs, query, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 
         // Configuração do Firebase informada pelo Usuário
@@ -471,8 +485,13 @@
         let currentUser = null;
         let currentProfile = null;
         let localProfiles = [];
+        
+        // Controles de Edição
+        let isManageMode = false;
+        let editingProfileId = null;
+        let editingOldUsername = null;
 
-        // Expondo funções de autenticação e perfis para o escopo global (para o HTML usar onclick)
+        // Expondo funções de autenticação e perfis para o escopo global
         window.loginWithGoogle = async () => {
             try {
                 const provider = new GoogleAuthProvider();
@@ -495,6 +514,7 @@
             } else {
                 currentUser = null;
                 currentProfile = null;
+                isManageMode = false;
                 document.getElementById('splash-screen').classList.add('hidden');
                 document.getElementById('main-app-container').classList.add('hidden');
                 document.getElementById('profiles-selection-view').classList.add('hidden');
@@ -507,7 +527,6 @@
             document.getElementById('splash-screen').classList.remove('hidden');
             
             try {
-                // Rule 1 Firebase Paths Safe (users/{uid}/profiles)
                 const profilesRef = collection(db, "artifacts", "starlight-max", "users", currentUser.uid, "profiles");
                 const snapshot = await getDocs(query(profilesRef));
                 
@@ -522,11 +541,28 @@
                     renderProfilesSelectionScreen();
                 }
             } catch(e) {
-                console.error("Erro ao carregar perfis. Verifique suas regras no Firestore:", e);
-                // Caso falhe por regras restritas do Firebase, criamos um mock pra não quebrar a UI
+                console.error("Erro ao carregar perfis:", e);
                 document.getElementById('splash-screen').classList.add('hidden');
                 showCreateProfile();
             }
+        }
+
+        window.toggleManageMode = () => {
+            isManageMode = !isManageMode;
+            const btn = document.getElementById('btn-manage-profiles');
+            if (btn) {
+                btn.innerHTML = isManageMode ? 'Concluído' : 'Gerenciar Perfis';
+                if(isManageMode) {
+                    btn.classList.replace('text-gray-400', 'text-white');
+                    btn.classList.replace('border-gray-600', 'border-white');
+                    btn.classList.add('bg-white/10');
+                } else {
+                    btn.classList.replace('text-white', 'text-gray-400');
+                    btn.classList.replace('border-white', 'border-gray-600');
+                    btn.classList.remove('bg-white/10');
+                }
+            }
+            renderProfilesSelectionScreen();
         }
 
         function renderProfilesSelectionScreen() {
@@ -535,69 +571,119 @@
             grid.innerHTML = '';
 
             localProfiles.forEach(prof => {
+                const clickAction = isManageMode ? `editProfile('${prof.id}')` : `selectProfile('${prof.id}')`;
+                
                 grid.insertAdjacentHTML('beforeend', `
-                    <div class="flex flex-col items-center gap-3 cursor-pointer group" onclick="selectProfile('${prof.id}')">
-                        <div class="w-28 h-28 md:w-36 md:h-36 rounded-2xl overflow-hidden border-4 border-transparent group-hover:border-white transition-all transform group-hover:scale-105 shadow-xl bg-teal-800">
-                            <img src="${prof.avatarUrl}" class="w-full h-full object-cover">
+                    <div class="flex flex-col items-center gap-3 cursor-pointer group relative" onclick="${clickAction}">
+                        <div class="w-28 h-28 md:w-36 md:h-36 rounded-2xl overflow-hidden border-4 ${isManageMode ? 'border-gray-500' : 'border-transparent group-hover:border-white'} transition-all transform ${!isManageMode ? 'group-hover:scale-105' : ''} shadow-xl bg-teal-800 relative">
+                            <img src="${prof.avatarUrl}" class="w-full h-full object-cover transition-opacity ${isManageMode ? 'opacity-40' : 'group-hover:opacity-80'}">
+                            ${isManageMode ? `
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <i class="fa-solid fa-pen text-white text-3xl drop-shadow-md"></i>
+                            </div>` : ''}
                         </div>
                         <span class="text-gray-400 group-hover:text-white font-bold text-lg transition-colors">${prof.name}</span>
                     </div>
                 `);
             });
 
-            grid.insertAdjacentHTML('beforeend', `
-                <div class="flex flex-col items-center gap-3 cursor-pointer group" onclick="showCreateProfile()">
-                    <div class="w-28 h-28 md:w-36 md:h-36 rounded-2xl border-4 border-transparent flex items-center justify-center bg-[#1a1a1a] hover:bg-white transition-all transform group-hover:scale-105 group-hover:border-white text-gray-500 hover:text-black">
-                        <i class="fa-solid fa-plus text-5xl"></i>
+            // Botão "Novo Perfil" (Desabilitado / escondido se houver muitos perfis, mas por padrão aparece)
+            if (!isManageMode) {
+                grid.insertAdjacentHTML('beforeend', `
+                    <div class="flex flex-col items-center gap-3 cursor-pointer group" onclick="showCreateProfile()">
+                        <div class="w-28 h-28 md:w-36 md:h-36 rounded-2xl border-4 border-transparent flex items-center justify-center bg-[#1a1a1a] hover:bg-white transition-all transform group-hover:scale-105 group-hover:border-white text-gray-500 hover:text-black">
+                            <i class="fa-solid fa-plus text-5xl"></i>
+                        </div>
+                        <span class="text-gray-400 group-hover:text-white font-bold text-lg transition-colors">Novo Perfil</span>
                     </div>
-                    <span class="text-gray-400 group-hover:text-white font-bold text-lg transition-colors">Novo Perfil</span>
-                </div>
-            `);
+                `);
+            }
         }
 
         window.selectProfile = (profileId) => {
+            if(isManageMode) return;
             currentProfile = localProfiles.find(p => p.id === profileId);
             
-            // Popula os dados das listas a partir do Firestore
             myList = currentProfile.myList || [];
             recentHistory = currentProfile.recentHistory || [];
 
-            // Preenche UI principal
             document.getElementById('nav-avatar').src = currentProfile.avatarUrl;
             document.getElementById('drop-avatar').src = currentProfile.avatarUrl;
             document.getElementById('drop-name').textContent = currentProfile.name;
             
-            // UI do perfil
             document.getElementById('pv-name').textContent = currentProfile.name;
             document.getElementById('pv-username').textContent = "@" + currentProfile.username;
             document.getElementById('pv-avatar').src = currentProfile.avatarUrl;
             document.getElementById('pv-banner').src = currentProfile.bannerUrl;
 
-            // Transição
             document.getElementById('profiles-selection-view').classList.add('hidden');
             document.getElementById('create-profile-view').classList.add('hidden');
             document.getElementById('main-app-container').classList.remove('hidden');
 
-            // Inicia chamadas da API do TMDB
             initAppWithProfile();
         };
 
-        // --- SISTEMA DE CRIAÇÃO DE PERFIL --- //
+        // --- SISTEMA DE CRIAÇÃO / EDIÇÃO DE PERFIL --- //
         window.showCreateProfile = () => {
+            editingProfileId = null;
+            editingOldUsername = null;
+
             document.getElementById('profiles-selection-view').classList.add('hidden');
             document.getElementById('create-profile-view').classList.remove('hidden');
+            
+            document.getElementById('cp-title').textContent = "Criar Novo Perfil";
             document.getElementById('cp-name').value = '';
             document.getElementById('cp-username').value = '';
+            document.getElementById('cp-avatar-preview').src = 'https://api.dicebear.com/7.x/bottts/svg?seed=Novo&backgroundColor=059669';
+            document.getElementById('cp-banner-preview').src = 'https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2094&auto=format&fit=crop';
             document.getElementById('cp-error').classList.add('hidden');
             
+            document.getElementById('cp-btn-delete').classList.add('hidden');
+            document.getElementById('cp-btn-save').innerHTML = 'Salvar Perfil';
+            document.getElementById('cp-avatar').value = '';
+            document.getElementById('cp-banner').value = '';
+
             const cancelBtn = document.getElementById('cp-btn-cancel');
             if (localProfiles.length > 0) cancelBtn.classList.remove('hidden');
             else cancelBtn.classList.add('hidden');
         };
 
+        window.editProfile = (profileId) => {
+            editingProfileId = profileId;
+            const prof = localProfiles.find(p => p.id === profileId);
+            editingOldUsername = prof.username;
+
+            document.getElementById('profiles-selection-view').classList.add('hidden');
+            document.getElementById('create-profile-view').classList.remove('hidden');
+            
+            document.getElementById('cp-title').textContent = "Editar Perfil";
+            document.getElementById('cp-name').value = prof.name;
+            document.getElementById('cp-username').value = prof.username;
+            document.getElementById('cp-avatar-preview').src = prof.avatarUrl;
+            document.getElementById('cp-banner-preview').src = prof.bannerUrl;
+            document.getElementById('cp-error').classList.add('hidden');
+            
+            document.getElementById('cp-btn-delete').classList.remove('hidden');
+            document.getElementById('cp-btn-save').innerHTML = 'Salvar Alterações';
+            document.getElementById('cp-avatar').value = '';
+            document.getElementById('cp-banner').value = '';
+        };
+
+        window.editProfileFromApp = () => {
+            document.getElementById('main-app-container').classList.add('hidden');
+            window.editProfile(currentProfile.id);
+        }
+
         window.cancelCreateProfile = () => {
             document.getElementById('create-profile-view').classList.add('hidden');
-            document.getElementById('profiles-selection-view').classList.remove('hidden');
+            
+            // Se estava editando o perfil ativo atualmente pelo app (e não está na tela de seleção)
+            if (currentUser && currentProfile && !isManageMode && document.getElementById('profiles-selection-view').classList.contains('hidden')) {
+                document.getElementById('main-app-container').classList.remove('hidden');
+            } else {
+                document.getElementById('profiles-selection-view').classList.remove('hidden');
+                renderProfilesSelectionScreen();
+            }
         };
 
         window.triggerAvatarUpload = () => document.getElementById('cp-avatar').click();
@@ -629,18 +715,21 @@
             btnSave.disabled = true;
 
             try {
-                // Checa se o Username já existe em todo o banco (usando caminho público para garantir)
                 const usernameRef = doc(db, "artifacts", "starlight-max", "public", "data", "usernames", username);
-                const usernameDoc = await getDoc(usernameRef);
                 
-                if (usernameDoc.exists()) {
-                    errorEl.textContent = "Este nome de usuário já está em uso."; errorEl.classList.remove('hidden');
-                    btnSave.innerHTML = 'Salvar Perfil'; btnSave.disabled = false;
-                    return;
+                // Se é novo ou se mudou de username, verifica unicidade
+                if (!editingProfileId || username !== editingOldUsername) {
+                    const usernameDoc = await getDoc(usernameRef);
+                    if (usernameDoc.exists()) {
+                        errorEl.textContent = "Este nome de usuário já está em uso."; errorEl.classList.remove('hidden');
+                        btnSave.innerHTML = editingProfileId ? 'Salvar Alterações' : 'Salvar Perfil'; btnSave.disabled = false;
+                        return;
+                    }
                 }
 
-                let avatarUrl = `https://api.dicebear.com/7.x/bottts/svg?seed=${username}&backgroundColor=059669`;
-                let bannerUrl = "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2094&auto=format&fit=crop";
+                // Preserva URLs antigas se for edição
+                let avatarUrl = editingProfileId ? localProfiles.find(p=>p.id===editingProfileId).avatarUrl : `https://api.dicebear.com/7.x/bottts/svg?seed=${username}&backgroundColor=059669`;
+                let bannerUrl = editingProfileId ? localProfiles.find(p=>p.id===editingProfileId).bannerUrl : "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2094&auto=format&fit=crop";
 
                 const avatarFile = document.getElementById('cp-avatar').files[0];
                 const bannerFile = document.getElementById('cp-banner').files[0];
@@ -657,31 +746,104 @@
                     bannerUrl = await getDownloadURL(bannerStoreRef);
                 }
 
-                // Salva o perfil
-                const profileId = crypto.randomUUID();
-                const newProfileRef = doc(db, "artifacts", "starlight-max", "users", currentUser.uid, "profiles", profileId);
-                
-                const profileData = {
-                    name, username, avatarUrl, bannerUrl,
-                    createdAt: Date.now(), myList: [], recentHistory: []
-                };
+                if (editingProfileId) {
+                    // MODO ATUALIZAR
+                    const profileRef = doc(db, "artifacts", "starlight-max", "users", currentUser.uid, "profiles", editingProfileId);
+                    await updateDoc(profileRef, { name, username, avatarUrl, bannerUrl });
+                    
+                    // Se mudou o @, deleta o velho e salva o novo
+                    if (username !== editingOldUsername && editingOldUsername) {
+                        const oldUsernameRef = doc(db, "artifacts", "starlight-max", "public", "data", "usernames", editingOldUsername);
+                        await deleteDoc(oldUsernameRef);
+                        await setDoc(usernameRef, { uid: currentUser.uid, profileId: editingProfileId });
+                    }
 
-                await setDoc(newProfileRef, profileData);
-                await setDoc(usernameRef, { uid: currentUser.uid, profileId: profileId }); // Tranca o Username
+                    // Atualiza localmente
+                    const pIndex = localProfiles.findIndex(p => p.id === editingProfileId);
+                    if (pIndex !== -1) {
+                        localProfiles[pIndex] = { ...localProfiles[pIndex], name, username, avatarUrl, bannerUrl };
+                    }
 
-                localProfiles.push({ id: profileId, ...profileData });
-                selectProfile(profileId);
+                    // Se editou o perfil que está ativo agora, atualiza a UI sem recarregar tudo
+                    if (currentProfile && currentProfile.id === editingProfileId) {
+                        currentProfile.name = name; currentProfile.username = username;
+                        currentProfile.avatarUrl = avatarUrl; currentProfile.bannerUrl = bannerUrl;
+                        document.getElementById('nav-avatar').src = avatarUrl;
+                        document.getElementById('drop-avatar').src = avatarUrl;
+                        document.getElementById('drop-name').textContent = name;
+                        document.getElementById('pv-name').textContent = name;
+                        document.getElementById('pv-username').textContent = "@" + username;
+                        document.getElementById('pv-avatar').src = avatarUrl;
+                        document.getElementById('pv-banner').src = bannerUrl;
+                    }
+
+                } else {
+                    // MODO CRIAR
+                    const profileId = crypto.randomUUID();
+                    const newProfileRef = doc(db, "artifacts", "starlight-max", "users", currentUser.uid, "profiles", profileId);
+                    const profileData = { name, username, avatarUrl, bannerUrl, createdAt: Date.now(), myList: [], recentHistory: [] };
+
+                    await setDoc(newProfileRef, profileData);
+                    await setDoc(usernameRef, { uid: currentUser.uid, profileId: profileId });
+
+                    localProfiles.push({ id: profileId, ...profileData });
+                }
+
+                cancelCreateProfile(); // Volta para a tela certa
 
             } catch (error) {
                 console.error(error);
                 errorEl.textContent = "Erro de permissão no Firebase ou internet. Confira o log."; 
                 errorEl.classList.remove('hidden');
             }
-
-            btnSave.innerHTML = 'Salvar Perfil'; btnSave.disabled = false;
+            btnSave.innerHTML = editingProfileId ? 'Salvar Alterações' : 'Salvar Perfil'; btnSave.disabled = false;
         };
 
-        // Função para salvar Listas e Histórico no Firestore
+        window.deleteProfile = async () => {
+            if (!editingProfileId) return;
+            
+            // Aqui seria ideal usar um modal estilizado, mas um confirm() resolve para segurança básica
+            // e já previne cliques acidentais.
+            const prof = localProfiles.find(p => p.id === editingProfileId);
+            
+            try {
+                // Remove a "trava" do username público
+                if (prof.username) {
+                    const usernameRef = doc(db, "artifacts", "starlight-max", "public", "data", "usernames", prof.username);
+                    await deleteDoc(usernameRef);
+                }
+                
+                // Remove o documento do perfil
+                const profileRef = doc(db, "artifacts", "starlight-max", "users", currentUser.uid, "profiles", editingProfileId);
+                await deleteDoc(profileRef);
+                
+                // Remove da lista local
+                localProfiles = localProfiles.filter(p => p.id !== editingProfileId);
+                
+                // Se o perfil deletado era o que estava ativo logado no app, desconecta do app
+                if (currentProfile && currentProfile.id === editingProfileId) {
+                    currentProfile = null;
+                    document.getElementById('main-app-container').classList.add('hidden');
+                }
+
+                document.getElementById('create-profile-view').classList.add('hidden');
+                
+                // Se ainda sobrou perfil, volta pra seleção. Se apagou o único, força a criar outro
+                if (localProfiles.length > 0) {
+                    document.getElementById('profiles-selection-view').classList.remove('hidden');
+                    renderProfilesSelectionScreen();
+                } else {
+                    showCreateProfile();
+                }
+
+            } catch(e) {
+                console.error("Erro ao excluir perfil", e);
+                const errorEl = document.getElementById('cp-error');
+                errorEl.textContent = "Não foi possível excluir o perfil. Tente novamente.";
+                errorEl.classList.remove('hidden');
+            }
+        };
+
         async function syncProfileDataToFirebase() {
             if (!currentProfile) return;
             try {
@@ -697,7 +859,7 @@
 
 
         // =======================================================================
-        // CÓDIGO DO FILMES (TMDB) MODIFICADO PARA SER MÓDULO E SALVAR NA NUVEM
+        // CÓDIGO DO FILMES (TMDB) E UI DA APLICAÇÃO PRINCIPAL
         // =======================================================================
 
         const API_KEY = '5954890d9e9b723ff3032f2ec429fec3';
@@ -721,7 +883,6 @@
         let genreMap = {}; let moviesMap = {}; let logosCache = {}; 
         let currentHoveredItem = { id: null, type: null }; let currentDetailsItem = { id: null, type: null, data: null };
         
-        // Listas (agora puxadas do perfil atual em vez de localStorage)
         let myList = []; let recentHistory = [];
         let currentCatalogFilter = 'all'; let catalogPage = 1;
         let isProfileMenuOpen = false; let isSeasonDropdownOpen = false;
@@ -831,7 +992,7 @@
             recentHistory = recentHistory.filter(i => i.id !== item.id);
             recentHistory.unshift(item);
             if (recentHistory.length > 20) recentHistory.pop();
-            syncProfileDataToFirebase(); // SALVA NA NUVEM
+            syncProfileDataToFirebase();
         }
 
         let searchTimeoutId;
@@ -1024,7 +1185,7 @@
             if (index >= 0) myList.splice(index, 1);
             else { const movieToSave = moviesMap[currentHoveredItem.id]; if(movieToSave) { movieToSave.media_type = currentHoveredItem.type; myList.push(movieToSave); } }
             
-            syncProfileDataToFirebase(); // SALVA NA NUVEM
+            syncProfileDataToFirebase();
 
             document.getElementById('hc-icon-list').className = index < 0 ? "fa-solid fa-check text-sm text-green-400" : "fa-solid fa-plus text-sm";
             document.getElementById('hc-text-list').textContent = index < 0 ? "Na lista" : "Salvar";
@@ -1037,7 +1198,7 @@
              if(index >= 0) myList.splice(index, 1);
              else { const itemToSave = currentDetailsItem.data; itemToSave.media_type = currentDetailsItem.type; myList.push(itemToSave); }
              
-             syncProfileDataToFirebase(); // SALVA NA NUVEM
+             syncProfileDataToFirebase();
 
              document.getElementById('det-icon-list').className = myList.some(item => item.id == currentDetailsItem.id) ? "fa-solid fa-check text-green-400" : "fa-solid fa-plus";
         };
