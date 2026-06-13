@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Biblioteca HLS.js para suportar reprodução de listas .m3u8 igual ao ExoPlayer do Android -->
+    <!-- Biblioteca HLS.js para suportar reprodução de listas .m3u8 -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
     <style>
@@ -72,9 +72,7 @@
             color: black;
             border-color: transparent;
         }
-        .hide-cursor {
-            cursor: none !important;
-        }
+        .hide-cursor { cursor: none !important; }
     </style>
 </head>
 <body class="antialiased">
@@ -92,8 +90,7 @@
             <span class="text-4xl font-bold tracking-tighter text-white mb-2">STARLIGHT<span class="text-blue-500">MAX</span></span>
             <p class="text-gray-400 mb-8 text-sm">Faça login para acessar seus perfis e salvar seu progresso na nuvem.</p>
             <button onclick="loginWithGoogle()" class="w-full bg-white text-black font-bold py-3.5 rounded-lg flex items-center justify-center gap-3 hover:bg-gray-200 transition shadow-lg">
-                <i class="fa-brands fa-google text-red-500"></i>
-                Continuar com o Google
+                <i class="fa-brands fa-google text-red-500"></i> Continuar com o Google
             </button>
             <p id="login-error" class="text-red-400 text-xs mt-4 hidden bg-red-900/30 p-3 rounded-lg border border-red-500/30"></p>
         </div>
@@ -107,9 +104,7 @@
                 Gerenciar Perfis
             </button>
         </div>
-        <div class="flex flex-wrap justify-center gap-6 md:gap-10 max-w-4xl px-6" id="profiles-grid-list">
-            <!-- Gerado via JS -->
-        </div>
+        <div class="flex flex-wrap justify-center gap-6 md:gap-10 max-w-4xl px-6" id="profiles-grid-list"></div>
     </div>
 
     <!-- 4. CRIAR / EDITAR PERFIL VIEW -->
@@ -118,7 +113,6 @@
             <h2 id="cp-title" class="text-3xl font-bold text-white mb-8">Criar Novo Perfil</h2>
             
             <div class="bg-[#141414] p-8 rounded-2xl border border-white/10 w-full max-w-lg shadow-2xl relative mt-16">
-                <!-- Banner Upload -->
                 <div class="h-32 w-full bg-gray-800 rounded-xl mb-16 relative overflow-hidden group cursor-pointer border border-white/10" onclick="triggerBannerUpload()">
                     <img id="cp-banner-preview" src="https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2094&auto=format&fit=crop" class="w-full h-full object-cover opacity-60">
                     <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/60 transition duration-300">
@@ -128,7 +122,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Avatar Upload -->
                 <div class="absolute top-20 left-1/2 -translate-x-1/2 w-28 h-28 rounded-2xl border-4 border-[#141414] bg-teal-600 overflow-hidden group cursor-pointer shadow-xl z-10" onclick="triggerAvatarUpload()">
                     <img id="cp-avatar-preview" src="https://api.dicebear.com/7.x/bottts/svg?seed=Novo&backgroundColor=059669" class="w-full h-full object-cover">
                     <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/60 transition duration-300">
@@ -157,9 +150,7 @@
                 <div class="flex flex-col gap-3 mt-8">
                     <div class="flex gap-3">
                         <button id="cp-btn-cancel" onclick="cancelCreateProfile()" class="flex-1 bg-transparent border border-white/20 text-white py-3 rounded-lg font-bold hover:bg-white/5 transition">Cancelar</button>
-                        <button id="cp-btn-save" onclick="saveProfile()" class="flex-1 bg-white text-black py-3 rounded-lg font-bold hover:bg-gray-200 transition flex items-center justify-center gap-2">
-                            Salvar Perfil
-                        </button>
+                        <button id="cp-btn-save" onclick="saveProfile()" class="flex-1 bg-white text-black py-3 rounded-lg font-bold hover:bg-gray-200 transition flex items-center justify-center gap-2">Salvar Perfil</button>
                     </div>
                     <button id="cp-btn-delete" onclick="deleteProfile()" class="hidden text-red-500 hover:text-red-400 hover:bg-red-500/10 py-3 rounded-lg text-sm font-semibold transition mt-2 border border-transparent hover:border-red-500/20">
                         <i class="fa-solid fa-trash-can mr-2"></i> Excluir Perfil Definitivamente
@@ -171,19 +162,14 @@
 
     <!-- 5. PLAYER DE VÍDEO PERSONALIZADO -->
     <div id="player-view" class="hidden fixed inset-0 z-[300] bg-black" onmousemove="wakeUpPlayerControls()" onclick="wakeUpPlayerControls()">
-        <!-- Elemento de Vídeo -->
         <video id="starlight-video-player" class="w-full h-full object-contain" playsinline preload="auto"></video>
         
-        <!-- Detector de Toques/Cliques Duplos para Avançar e Voltar -->
         <div class="absolute inset-0 flex">
             <div class="w-1/2 h-full z-10" ondblclick="skipPlayer(-10)"></div>
             <div class="w-1/2 h-full z-10" ondblclick="skipPlayer(10)"></div>
         </div>
 
-        <!-- Interface de Controles (Overlay) -->
         <div id="player-ui-controls" class="absolute inset-0 flex flex-col justify-between bg-gradient-to-b from-black/80 via-transparent to-black/80 transition-opacity duration-300 z-20">
-            
-            <!-- HEADER (Seta Voltar e Título) -->
             <div class="p-6 md:p-10 flex items-center gap-6 w-full bg-gradient-to-b from-black/60 to-transparent">
                 <button onclick="closePlayer()" class="text-white hover:text-gray-300 transition w-12 h-12 flex items-center justify-center bg-black/40 rounded-full backdrop-blur-md">
                     <i class="fa-solid fa-arrow-left text-xl"></i>
@@ -191,82 +177,48 @@
                 <h2 id="player-title-display" class="text-white text-lg md:text-xl font-bold truncate drop-shadow-md">Carregando...</h2>
             </div>
 
-            <!-- CENTRO (Voltar 10s, Play/Pause, Avançar 10s) -->
             <div class="flex items-center justify-center gap-12 md:gap-24 absolute inset-0 pointer-events-none">
-                <!-- Botão Voltar 10s -->
-                <button onclick="skipPlayer(-10)" class="pointer-events-auto w-14 h-14 md:w-16 md:h-16 rounded-full bg-black/40 flex items-center justify-center text-white hover:bg-white/20 transition backdrop-blur-md border border-white/10">
-                    <i class="fa-solid fa-rotate-left text-2xl"></i>
-                </button>
-                
-                <!-- Botão Play/Pause Gigante -->
-                <button onclick="togglePlayerPlay()" id="player-play-btn" class="pointer-events-auto w-20 h-20 md:w-24 md:h-24 rounded-full bg-black/40 flex items-center justify-center text-white hover:bg-white/20 transition backdrop-blur-md border border-white/10 shadow-2xl">
-                    <i id="player-play-icon" class="fa-solid fa-play text-3xl md:text-4xl ml-2"></i>
-                </button>
-
-                <!-- Botão Avançar 10s -->
-                <button onclick="skipPlayer(10)" class="pointer-events-auto w-14 h-14 md:w-16 md:h-16 rounded-full bg-black/40 flex items-center justify-center text-white hover:bg-white/20 transition backdrop-blur-md border border-white/10">
-                    <i class="fa-solid fa-rotate-right text-2xl"></i>
-                </button>
+                <button onclick="skipPlayer(-10)" class="pointer-events-auto w-14 h-14 md:w-16 md:h-16 rounded-full bg-black/40 flex items-center justify-center text-white hover:bg-white/20 transition backdrop-blur-md border border-white/10"><i class="fa-solid fa-rotate-left text-2xl"></i></button>
+                <button onclick="togglePlayerPlay()" id="player-play-btn" class="pointer-events-auto w-20 h-20 md:w-24 md:h-24 rounded-full bg-black/40 flex items-center justify-center text-white hover:bg-white/20 transition backdrop-blur-md border border-white/10 shadow-2xl"><i id="player-play-icon" class="fa-solid fa-play text-3xl md:text-4xl ml-2"></i></button>
+                <button onclick="skipPlayer(10)" class="pointer-events-auto w-14 h-14 md:w-16 md:h-16 rounded-full bg-black/40 flex items-center justify-center text-white hover:bg-white/20 transition backdrop-blur-md border border-white/10"><i class="fa-solid fa-rotate-right text-2xl"></i></button>
             </div>
 
-            <!-- BOTTOM BAR (Barra de Progresso + Botões Liquid Glass) -->
             <div class="p-6 md:px-12 pb-8 md:pb-12 flex flex-col gap-4 w-full bg-gradient-to-t from-black/80 to-transparent pointer-events-auto">
-                
-                <!-- Premium Scrubber (Barra Laranja Estilo Mango) -->
                 <div class="relative w-full h-8 flex items-center group cursor-pointer" onmousedown="startScrubbing(event)" onmousemove="scrub(event)" onmouseup="stopScrubbing(event)" onmouseleave="stopScrubbing(event)" id="scrubber-container">
                     <div class="w-full h-1.5 group-hover:h-2.5 transition-all bg-white/30 rounded-full relative overflow-hidden pointer-events-none">
-                        <!-- Barra de Buffer -->
                         <div id="player-buffer-bar" class="absolute top-0 left-0 h-full bg-white/40 rounded-full w-0"></div>
-                        <!-- Barra de Progresso Real -->
                         <div id="player-progress-bar" class="absolute top-0 left-0 h-full bg-orange-500 rounded-full w-0 shadow-[0_0_10px_rgba(249,115,22,0.8)]"></div>
                     </div>
-                    <!-- Bolinha de Progresso -->
                     <div id="player-thumb" class="absolute w-4 h-4 group-hover:w-5 group-hover:h-5 bg-orange-500 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all pointer-events-none transform -translate-x-1/2" style="left: 0%;">
                         <div class="absolute inset-1 bg-white rounded-full"></div>
                     </div>
                 </div>
                 
-                <!-- Controles Inferiores (Tempo e Menus) -->
                 <div class="flex flex-col md:flex-row items-center justify-between mt-2 gap-4">
                     <div class="text-white font-semibold text-sm md:text-base drop-shadow-md tracking-wide">
                         <span id="player-current-time">00:00</span> <span class="text-gray-400 mx-1">/</span> <span id="player-total-time">00:00</span>
                     </div>
-                    
                     <div class="flex flex-wrap justify-center gap-3">
-                        <button onclick="openPlayerMenuOverlay('audio')" class="player-glass-btn px-4 md:px-5 py-2.5 rounded-xl text-white text-xs md:text-sm font-bold flex items-center gap-2">
-                            <i class="fa-solid fa-language text-lg"></i> Áudio e Legendas
-                        </button>
-                        <button onclick="openPlayerMenuOverlay('ratio')" class="player-glass-btn px-4 md:px-5 py-2.5 rounded-xl text-white text-xs md:text-sm font-bold flex items-center gap-2">
-                            <i class="fa-solid fa-expand text-lg"></i> Ajuste de Tela
-                        </button>
-                        <button onclick="openPlayerMenuOverlay('speed')" class="player-glass-btn px-4 md:px-5 py-2.5 rounded-xl text-white text-xs md:text-sm font-bold flex items-center gap-2">
-                            <i class="fa-solid fa-gauge-high text-lg"></i> <span id="player-speed-display">1x</span>
-                        </button>
+                        <button onclick="openPlayerMenuOverlay('audio')" class="player-glass-btn px-4 md:px-5 py-2.5 rounded-xl text-white text-xs md:text-sm font-bold flex items-center gap-2"><i class="fa-solid fa-language text-lg"></i> Áudio e Legendas</button>
+                        <button onclick="openPlayerMenuOverlay('ratio')" class="player-glass-btn px-4 md:px-5 py-2.5 rounded-xl text-white text-xs md:text-sm font-bold flex items-center gap-2"><i class="fa-solid fa-expand text-lg"></i> Ajuste de Tela</button>
+                        <button onclick="openPlayerMenuOverlay('speed')" class="player-glass-btn px-4 md:px-5 py-2.5 rounded-xl text-white text-xs md:text-sm font-bold flex items-center gap-2"><i class="fa-solid fa-gauge-high text-lg"></i> <span id="player-speed-display">1x</span></button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Overlays de Menu Interno do Player -->
         <div id="player-menu-overlay" class="hidden absolute inset-0 bg-black/60 z-[310] flex items-center justify-center backdrop-blur-sm" onclick="closePlayerMenuOverlay()">
-            <!-- Box Central do Menu -->
             <div id="player-menu-box" class="bg-[#141414]/95 border border-white/10 rounded-3xl p-8 w-[360px] shadow-[0_20px_50px_rgba(0,0,0,0.8)] flex flex-col gap-4 transform transition-all scale-95 opacity-0" onclick="event.stopPropagation()">
                 <h3 id="player-menu-title" class="text-white text-xl font-black mb-2">Menu</h3>
-                <div id="player-menu-options" class="flex flex-col gap-2">
-                    <!-- Gerado dinamicamente via JS -->
-                </div>
+                <div id="player-menu-options" class="flex flex-col gap-2"></div>
             </div>
         </div>
     </div>
 
-
-    <!-- 6. MAIN APP CONTAINER (Escondido até selecionar o perfil) -->
+    <!-- 6. MAIN APP CONTAINER -->
     <div id="main-app-container" class="hidden relative">
-        
-        <!-- Barra de Navegação -->
         <nav class="fixed w-full z-50 top-0 transition-all duration-300 pt-4 pb-4" id="navbar">
             <div class="flex items-center justify-between px-6 md:px-12">
-                
                 <div class="flex-1">
                     <span class="text-2xl font-bold tracking-tighter text-white cursor-pointer" onclick="showView('home')">STARLIGHT<span class="text-blue-500">MAX</span></span>
                 </div>
@@ -305,16 +257,13 @@
                             
                             <div class="py-2 flex flex-col">
                                 <button onclick="window.location.reload()" class="flex items-center gap-4 px-5 py-3 text-gray-300 hover:bg-white/5 hover:text-white transition w-full text-left">
-                                    <i class="fa-solid fa-users text-lg w-5 text-center"></i>
-                                    <span class="font-medium text-sm">Trocar de Perfil</span>
+                                    <i class="fa-solid fa-users text-lg w-5 text-center"></i> <span class="font-medium text-sm">Trocar de Perfil</span>
                                 </button>
                                 <button onclick="editProfileFromApp()" class="flex items-center gap-4 px-5 py-3 text-gray-300 hover:bg-white/5 hover:text-white transition w-full text-left border-b border-white/5">
-                                    <i class="fa-solid fa-pen text-lg w-5 text-center"></i>
-                                    <span class="font-medium text-sm">Editar Perfil</span>
+                                    <i class="fa-solid fa-pen text-lg w-5 text-center"></i> <span class="font-medium text-sm">Editar Perfil</span>
                                 </button>
                                 <button onclick="logoutFirebase()" class="flex items-center gap-4 px-5 py-4 text-[#ff7575] hover:bg-[#ff7575]/10 transition w-full text-left mt-1">
-                                    <i class="fa-solid fa-arrow-right-from-bracket text-lg w-5 text-center"></i>
-                                    <span class="font-medium text-sm">Sair da conta</span>
+                                    <i class="fa-solid fa-arrow-right-from-bracket text-lg w-5 text-center"></i> <span class="font-medium text-sm">Sair da conta</span>
                                 </button>
                             </div>
                         </div>
@@ -326,7 +275,6 @@
         <main>
             <!-- TELA 1: INÍCIO (Home View) -->
             <div id="home-view" class="block">
-                <!-- Seção de Destaque -->
                 <div class="relative w-full h-screen flex items-center px-6 md:px-16" id="hero-section">
                     <div class="absolute inset-0 w-full h-full">
                         <img id="hero-bg" src="" alt="Filme em Destaque" class="w-full h-full object-cover object-top opacity-0 transition-opacity duration-1000 skeleton">
@@ -352,33 +300,27 @@
                     </div>
                 </div>
 
-                <!-- Trilhos de Conteúdo -->
                 <div class="relative z-20 pb-20 pt-10 px-6 md:px-12 space-y-12">
                     <section>
                         <div class="flex justify-between items-end mb-4 px-2">
-                            <h2 class="text-xl md:text-2xl font-bold text-white tracking-wide">Continue Assistindo / Tendências</h2>
+                            <h2 class="text-xl md:text-2xl font-bold text-white tracking-wide">Adicionados Recentemente</h2>
                             <div class="flex gap-2">
                                 <button onclick="scrollCarousel('trending-carousel', -1)" class="w-9 h-9 rounded-full bg-[#1a1a1a]/80 border border-white/10 text-white flex items-center justify-center hover:bg-white hover:text-black transition"><i class="fa-solid fa-chevron-left text-sm"></i></button>
                                 <button onclick="scrollCarousel('trending-carousel', 1)" class="w-9 h-9 rounded-full bg-[#1a1a1a]/80 border border-white/10 text-white flex items-center justify-center hover:bg-white hover:text-black transition"><i class="fa-solid fa-chevron-right text-sm"></i></button>
                             </div>
                         </div>
-                        <div id="trending-carousel" class="flex gap-5 overflow-x-auto no-scrollbar scroll-smooth py-4 px-2 pb-6">
-                            <div class="flex-none w-36 md:w-48 aspect-[2/3] skeleton rounded-xl"></div>
-                            <div class="flex-none w-36 md:w-48 aspect-[2/3] skeleton rounded-xl"></div>
-                        </div>
+                        <div id="trending-carousel" class="flex gap-5 overflow-x-auto no-scrollbar scroll-smooth py-4 px-2 pb-6"></div>
                     </section>
 
                     <section>
                         <div class="flex justify-between items-end mb-4 px-2">
-                            <h2 class="text-xl md:text-2xl font-bold text-white tracking-wide">Populares na StarlightMax</h2>
+                            <h2 class="text-xl md:text-2xl font-bold text-white tracking-wide">Populares em Filmes</h2>
                             <div class="flex gap-2">
                                 <button onclick="scrollCarousel('popular-carousel', -1)" class="w-9 h-9 rounded-full bg-[#1a1a1a]/80 border border-white/10 text-white flex items-center justify-center hover:bg-white hover:text-black transition"><i class="fa-solid fa-chevron-left text-sm"></i></button>
                                 <button onclick="scrollCarousel('popular-carousel', 1)" class="w-9 h-9 rounded-full bg-[#1a1a1a]/80 border border-white/10 text-white flex items-center justify-center hover:bg-white hover:text-black transition"><i class="fa-solid fa-chevron-right text-sm"></i></button>
                             </div>
                         </div>
-                        <div id="popular-carousel" class="flex gap-5 overflow-x-auto no-scrollbar scroll-smooth py-4 px-2 pb-6">
-                            <div class="flex-none w-36 md:w-48 aspect-[2/3] skeleton rounded-xl"></div>
-                        </div>
+                        <div id="popular-carousel" class="flex gap-5 overflow-x-auto no-scrollbar scroll-smooth py-4 px-2 pb-6"></div>
                     </section>
                     
                     <section>
@@ -389,9 +331,7 @@
                                 <button onclick="scrollCarousel('toprated-carousel', 1)" class="w-9 h-9 rounded-full bg-[#1a1a1a]/80 border border-white/10 text-white flex items-center justify-center hover:bg-white hover:text-black transition"><i class="fa-solid fa-chevron-right text-sm"></i></button>
                             </div>
                         </div>
-                        <div id="toprated-carousel" class="flex gap-5 overflow-x-auto no-scrollbar scroll-smooth py-4 px-2 pb-6">
-                            <div class="flex-none w-36 md:w-48 aspect-[2/3] skeleton rounded-xl"></div>
-                        </div>
+                        <div id="toprated-carousel" class="flex gap-5 overflow-x-auto no-scrollbar scroll-smooth py-4 px-2 pb-6"></div>
                     </section>
                 </div>
             </div>
@@ -400,16 +340,13 @@
             <div id="catalog-view" class="hidden pt-28 px-6 md:px-12 min-h-screen">
                 <div class="flex flex-wrap items-center gap-3 mb-8">
                     <button id="filter-all" onclick="setCatalogFilter('all')" class="px-5 py-2 rounded-full bg-white text-black font-semibold text-sm transition">Todos</button>
-                    <button id="filter-movies" onclick="setCatalogFilter('movies')" class="px-5 py-2 rounded-full bg-[#1a1a1a] text-white hover:bg-gray-800 font-medium text-sm transition border border-white/10">Filmes</button>
-                    <button id="filter-series" onclick="setCatalogFilter('series')" class="px-5 py-2 rounded-full bg-[#1a1a1a] text-white hover:bg-gray-800 font-medium text-sm transition border border-white/10">Séries</button>
-                    <button id="filter-animes" onclick="setCatalogFilter('animes')" class="px-5 py-2 rounded-full bg-[#1a1a1a] text-white hover:bg-gray-800 font-medium text-sm transition border border-white/10">Animes</button>
-                    <button class="px-5 py-2 rounded-full bg-[#1a1a1a] text-white hover:bg-gray-800 font-medium text-sm transition border border-white/10 md:ml-auto flex items-center gap-2">
-                        <i class="fa-solid fa-sliders"></i> Filtros
-                    </button>
+                    <button id="filter-movies" onclick="setCatalogFilter('movie')" class="px-5 py-2 rounded-full bg-[#1a1a1a] text-white hover:bg-gray-800 font-medium text-sm transition border border-white/10">Filmes</button>
+                    <button id="filter-series" onclick="setCatalogFilter('tv')" class="px-5 py-2 rounded-full bg-[#1a1a1a] text-white hover:bg-gray-800 font-medium text-sm transition border border-white/10">Séries</button>
                 </div>
                 <div id="catalog-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5 pb-10"></div>
-                <div class="flex justify-center pb-20">
-                    <button id="btn-load-more" onclick="loadMoreCatalog()" class="hidden px-6 py-3 bg-[#1a1a1a] border border-white/10 hover:bg-white hover:text-black text-white rounded-full font-bold transition">Carregar mais</button>
+                <div id="catalog-empty" class="hidden col-span-full flex-col items-center py-20 text-gray-400">
+                    <i class="fa-solid fa-film text-5xl mb-4 opacity-30"></i>
+                    <p>Nenhum conteúdo encontrado para este filtro.</p>
                 </div>
             </div>
 
@@ -430,7 +367,7 @@
                 <div id="search-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5 pb-20"></div>
                 <div id="search-empty" class="hidden flex-col items-center justify-center text-gray-400 mt-20 gap-4">
                     <i class="fa-solid fa-magnifying-glass text-5xl mb-2 opacity-30"></i>
-                    <p class="text-lg text-center max-w-md">Não encontramos nenhum filme ou série correspondente à sua busca. Tente palavras diferentes.</p>
+                    <p class="text-lg text-center max-w-md">Não encontramos nada correspondente à sua busca.</p>
                 </div>
             </div>
 
@@ -450,9 +387,7 @@
                         <p id="det-desc" class="text-gray-300 text-sm md:text-base leading-relaxed max-w-2xl mb-6 line-clamp-4 md:line-clamp-none drop-shadow-md"></p>
                         <div id="det-genres" class="flex flex-wrap gap-2 mb-8 text-xs text-gray-400 font-medium"></div>
 
-                        <div class="flex flex-wrap items-center gap-3" id="det-action-buttons">
-                            <!-- Botões Injetados via JS -->
-                        </div>
+                        <div class="flex flex-wrap items-center gap-3" id="det-action-buttons"></div>
                     </div>
                 </div>
 
@@ -460,14 +395,11 @@
                 <div id="det-episodes-section" class="hidden px-6 md:px-16 mt-6 md:mt-12 relative z-20">
                     <div class="flex items-center gap-4 mb-6 relative">
                         <h2 class="text-2xl font-bold text-white tracking-wide">Episódios</h2>
-                        
-                        <!-- SELETOR DE TEMPORADA CUSTOMIZADO -->
                         <div class="relative inline-block text-left" id="season-selector-wrapper">
-                            <button onclick="toggleSeasonDropdown()" id="btn-season-select" type="button" class="inline-flex justify-between items-center w-[160px] rounded-lg border border-white/10 bg-[#141414] px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-[#1a1a1a] focus:outline-none focus:ring-1 focus:ring-white/20 transition-all">
+                            <button onclick="toggleSeasonDropdown()" id="btn-season-select" type="button" class="inline-flex justify-between items-center w-[160px] rounded-lg border border-white/10 bg-[#141414] px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-[#1a1a1a] focus:outline-none transition-all">
                                 <span id="current-season-text">Temporada 1</span>
                                 <i class="fa-solid fa-chevron-down text-xs ml-2 transition-transform duration-200" id="season-chevron"></i>
                             </button>
-
                             <div id="season-dropdown-menu" class="hidden absolute left-0 z-50 mt-1 w-[160px] rounded-lg bg-[#141414] border border-white/10 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden origin-top transform scale-95 transition-all duration-100 opacity-0 custom-scrollbar max-h-[250px] overflow-y-auto">
                                 <div class="py-1" role="none" id="season-options-container"></div>
                             </div>
@@ -544,7 +476,7 @@
             </div>
             <div class="p-5 pt-2 flex flex-col gap-3">
                 <div class="flex items-center gap-2 text-xs font-semibold text-gray-300">
-                    <span class="bg-yellow-500 text-black px-1.5 py-0.5 rounded text-[10px]">TMDb</span>
+                    <span id="hc-rating-badge" class="bg-yellow-500 text-black px-1.5 py-0.5 rounded text-[10px] hidden"></span>
                     <span id="hc-rating" class="text-white font-bold flex items-center gap-1"></span>
                     <span class="w-1 h-1 bg-gray-500 rounded-full"></span>
                     <span id="hc-year"></span>
@@ -564,21 +496,19 @@
 
     </div>
 
-    <!-- Módulo de Scripts Firebase e Lógica da Aplicação Limpa e Organizada -->
+    <!-- Scripts da Aplicação Integrados com Firestore (Conteúdo do App Mango) -->
     <script type="module">
-        // =======================================================================
-        // 1. IMPORTAÇÕES E CONFIGURAÇÃO
-        // =======================================================================
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, collection, doc, setDoc, getDoc, getDocs, query, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 
+        // Configuração do Firebase StarlightMax (Mantida a original)
         const firebaseConfig = {
             apiKey: "AIzaSyA791i8R8Bmrn3toFxFltZ40TU7PUavev8",
             authDomain: "starlight-max.firebaseapp.com",
             projectId: "starlight-max",
-            storageBucket: "starlight-max.firebasestorage.app",
+            storageBucket: "starlight-max.firebasestorage.app", // ajustado pro padrão do storage
             messagingSenderId: "120477177511",
             appId: "1:120477177511:web:5a75a2dd6d8089c829ed82"
         };
@@ -588,45 +518,18 @@
         const db = getFirestore(app);
         const storage = getStorage(app);
 
-        // =======================================================================
-        // 2. VARIÁVEIS GLOBAIS DA APLICAÇÃO
-        // =======================================================================
-        const API_KEY = '5954890d9e9b723ff3032f2ec429fec3';
-        const BASE_URL = 'https://api.themoviedb.org/3';
-        const IMG_BASE_URL = 'https://image.tmdb.org/t/p/';
-        
-        const ENDPOINTS = {
-            trendingMovies: `/trending/movie/week?api_key=${API_KEY}&language=pt-BR`,
-            popularMovies: `/movie/popular?api_key=${API_KEY}&language=pt-BR&page=1`,
-            topRatedTV: `/tv/top_rated?api_key=${API_KEY}&language=pt-BR&page=1`,
-            genres: `/genre/movie/list?api_key=${API_KEY}&language=pt-BR`
-        };
-
-        const CATALOG_ENDPOINTS = {
-            all: `/trending/all/week?api_key=${API_KEY}&language=pt-BR`,
-            movies: `/discover/movie?api_key=${API_KEY}&language=pt-BR&sort_by=popularity.desc`,
-            series: `/discover/tv?api_key=${API_KEY}&language=pt-BR&sort_by=popularity.desc`,
-            animes: `/discover/tv?api_key=${API_KEY}&language=pt-BR&with_genres=16&with_original_language=ja&sort_by=popularity.desc`
-        };
-
-        // Dados do TMDB e Listas
-        window.genreMap = {}; 
+        // ==========================================
+        // VARIÁVEIS GLOBAIS
+        // ==========================================
+        window.firestoreContent = []; // Todo conteúdo do BD cacheado localmente
         window.moviesMap = {}; 
-        window.logosCache = {}; 
         window.currentHoveredItem = { id: null, type: null }; 
         window.currentDetailsItem = { id: null, type: null, data: null };
         window.myList = []; 
         window.recentHistory = [];
         window.currentCatalogFilter = 'all'; 
-        window.catalogPage = 1;
 
-        // DUMMY URLs para o Player Personalizado testar o funcionamento HLS/MP4
-        const DUMMY_DUB = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4';
-        const DUMMY_SUB = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
-
-        // =======================================================================
-        // 3. SISTEMA DE AUTENTICAÇÃO E GERENCIAMENTO DE PERFIS
-        // =======================================================================
+        // Autenticação e Perfis
         let currentUser = null; 
         let currentProfile = null; 
         let localProfiles = [];
@@ -635,10 +538,9 @@
         let editingOldUsername = null;
 
         window.loginWithGoogle = async () => {
-            try { 
-                await signInWithPopup(auth, new GoogleAuthProvider()); 
-            } catch (error) { 
-                document.getElementById('login-error').textContent = "Erro ao fazer login. Tente abrir o site em uma nova aba inteira."; 
+            try { await signInWithPopup(auth, new GoogleAuthProvider()); } 
+            catch (error) { 
+                document.getElementById('login-error').textContent = "Erro ao fazer login. Tente novamente."; 
                 document.getElementById('login-error').classList.remove('hidden'); 
             }
         };
@@ -917,9 +819,9 @@
             } catch (error) {}
         }
 
-        // =======================================================================
-        // 4. PLAYER PERSONALIZADO (NOVA IMPLEMENTAÇÃO WEB)
-        // =======================================================================
+        // ==========================================
+        // PLAYER PERSONALIZADO
+        // ==========================================
         const videoEl = document.getElementById('starlight-video-player');
         let controlsTimeout; 
         let hlsInstance = null;
@@ -936,8 +838,8 @@
         }
 
         window.openPlayer = (title, originalUrl, altUrl) => {
-            let dub = originalUrl === 'none' ? '' : originalUrl;
-            let sub = altUrl === 'none' ? '' : altUrl;
+            let dub = (originalUrl === 'none' || !originalUrl) ? '' : originalUrl;
+            let sub = (altUrl === 'none' || !altUrl) ? '' : altUrl;
             
             playerState = { title, dubUrl: dub, subUrl: sub, currentUrl: dub || sub, isAlt: !dub, speed: 1, ratio: 'object-contain' };
             
@@ -1109,10 +1011,27 @@
             closePlayerMenuOverlay();
         };
 
+        // =======================================================================
+        // INTEGRAÇÃO DE CONTEÚDO FIRESTORE (Substituindo o TMDB na home/catálogo)
+        // =======================================================================
+        
+        // Puxa e cacheia os filmes/séries salvos no BD da Adm
+        async function loadFirestoreContent() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "content"));
+                window.firestoreContent = [];
+                window.moviesMap = {};
 
-        // =======================================================================
-        // 5. NAVEGAÇÃO, TMDB, BUSCA E LÓGICA PRINCIPAL DO APP
-        // =======================================================================
+                querySnapshot.forEach((doc) => {
+                    const data = { id: doc.id, ...doc.data() };
+                    window.firestoreContent.push(data);
+                    window.moviesMap[data.id] = data;
+                });
+            } catch (error) {
+                console.error("Erro ao carregar conteúdo do Firestore:", error);
+            }
+        }
+
         let isProfileMenuOpen = false; 
         let isSeasonDropdownOpen = false;
 
@@ -1176,18 +1095,39 @@
             else if (view === 'profile') { document.getElementById('profile-view').classList.remove('hidden'); renderProfileView(); }
         };
 
-        function createCardHtml(item, isTV) {
-            const title = isTV ? (item.name || item.original_name) : (item.title || item.original_title);
-            const imgUrl = item.poster_path ? `${IMG_BASE_URL}w500${item.poster_path}` : 'https://placehold.co/500x750/1a1a1a/444444?text=Sem+Imagem';
-            const mediaType = isTV ? 'tv' : 'movie';
-            return `<div class="carousel-item cursor-pointer group flex flex-col gap-2 relative w-full" data-id="${item.id}" data-type="${mediaType}" onmouseenter="handleItemEnter(this)" onmouseleave="handleItemLeave()" onclick="openDetailsTMDB(${item.id}, '${mediaType}')"><div class="relative overflow-hidden rounded-xl"><img src="${imgUrl}" alt="${title}" class="w-full aspect-[2/3] object-cover carousel-item-img" loading="lazy"><div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"><i class="fa-solid fa-play text-white text-3xl drop-shadow-lg scale-75 group-hover:scale-100 transition-transform"></i></div></div><h3 class="text-gray-300 font-medium text-sm truncate w-full group-hover:text-white transition">${title}</h3></div>`;
+        function createCardHtml(item) {
+            const title = item.title;
+            const imgUrl = item.poster || 'https://placehold.co/500x750/1a1a1a/444444?text=Sem+Imagem';
+            const mediaType = item.type;
+            
+            let badgeHtml = '';
+            if (item.badgeText && (!item.badgeExpiration || item.badgeExpiration > Date.now())) {
+                badgeHtml = `<div class="absolute top-2 left-2 bg-gradient-to-r from-amber-500 to-orange-500 text-black text-[10px] font-black px-2 py-0.5 rounded shadow-lg z-10">${item.badgeText}</div>`;
+            }
+
+            return `<div class="carousel-item cursor-pointer group flex flex-col gap-2 relative w-full" data-id="${item.id}" onmouseenter="handleItemEnter(this)" onmouseleave="handleItemLeave()" onclick="openDetails('${item.id}')">
+                <div class="relative overflow-hidden rounded-xl">
+                    ${badgeHtml}
+                    <img src="${imgUrl}" alt="${title}" class="w-full aspect-[2/3] object-cover carousel-item-img" loading="lazy">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <i class="fa-solid fa-play text-white text-3xl drop-shadow-lg scale-75 group-hover:scale-100 transition-transform"></i>
+                    </div>
+                </div>
+                <h3 class="text-gray-300 font-medium text-sm truncate w-full group-hover:text-white transition">${title}</h3>
+            </div>`;
         }
 
         function renderMyList() {
             const grid = document.getElementById('mylist-grid'); const emptyState = document.getElementById('mylist-empty');
             grid.innerHTML = '';
             if (window.myList.length === 0) { grid.classList.add('hidden'); emptyState.classList.remove('hidden'); emptyState.classList.add('flex'); } 
-            else { grid.classList.remove('hidden'); emptyState.classList.add('hidden'); emptyState.classList.remove('flex'); [...window.myList].reverse().forEach(item => { window.moviesMap[item.id] = item; grid.insertAdjacentHTML('beforeend', createCardHtml(item, item.media_type === 'tv')); }); }
+            else { 
+                grid.classList.remove('hidden'); emptyState.classList.add('hidden'); emptyState.classList.remove('flex'); 
+                [...window.myList].reverse().forEach(item => { 
+                    const data = window.moviesMap[item.id] || item;
+                    grid.insertAdjacentHTML('beforeend', createCardHtml(data)); 
+                }); 
+            }
         }
 
         function renderProfileView() {
@@ -1196,165 +1136,210 @@
 
             favGrid.innerHTML = '';
             if (window.myList.length === 0) { favGrid.classList.add('hidden'); favEmpty.classList.remove('hidden'); favEmpty.classList.add('flex'); } 
-            else { favGrid.classList.remove('hidden'); favEmpty.classList.add('hidden'); favEmpty.classList.remove('flex'); [...window.myList].reverse().slice(0, 12).forEach(item => { favGrid.insertAdjacentHTML('beforeend', createCardHtml(item, item.media_type === 'tv')); }); }
+            else { 
+                favGrid.classList.remove('hidden'); favEmpty.classList.add('hidden'); favEmpty.classList.remove('flex'); 
+                [...window.myList].reverse().slice(0, 12).forEach(item => { 
+                    const data = window.moviesMap[item.id] || item;
+                    favGrid.insertAdjacentHTML('beforeend', createCardHtml(data)); 
+                }); 
+            }
 
             recGrid.innerHTML = '';
             if (window.recentHistory.length === 0) { recGrid.classList.add('hidden'); recEmpty.classList.remove('hidden'); recEmpty.classList.add('flex'); } 
-            else { recGrid.classList.remove('hidden'); recEmpty.classList.add('hidden'); recEmpty.classList.remove('flex'); window.recentHistory.slice(0, 12).forEach(item => { recGrid.insertAdjacentHTML('beforeend', createCardHtml(item, item.media_type === 'tv')); }); }
+            else { 
+                recGrid.classList.remove('hidden'); recEmpty.classList.add('hidden'); recEmpty.classList.remove('flex'); 
+                window.recentHistory.slice(0, 12).forEach(item => { 
+                    const data = window.moviesMap[item.id] || item;
+                    recGrid.insertAdjacentHTML('beforeend', createCardHtml(data)); 
+                }); 
+            }
         }
 
-        function addToRecentHistory(item, type) { 
-            item.media_type = type; 
+        function addToRecentHistory(item) { 
             window.recentHistory = window.recentHistory.filter(i => i.id !== item.id); 
             window.recentHistory.unshift(item); 
             if (window.recentHistory.length > 20) window.recentHistory.pop(); 
             syncProfileDataToFirebase(); 
         }
 
-        let searchTimeoutIdTMDB;
+        let searchTimeoutIdLocal;
         window.handleSearch = (event) => { 
             const query = event.target.value.trim(); 
-            clearTimeout(searchTimeoutIdTMDB); 
-            if (query.length >= 2) searchTimeoutIdTMDB = setTimeout(() => performSearch(query), 500); 
+            clearTimeout(searchTimeoutIdLocal); 
+            if (query.length >= 2) searchTimeoutIdLocal = setTimeout(() => performSearch(query), 300); 
             else if (query.length === 0) window.showView('home'); 
         };
 
-        async function performSearch(query, pushHistory = true) {
+        function performSearch(queryStr, pushHistory = true) {
             window.showView('search', false); 
-            if (pushHistory) history.pushState({ view: 'search', query: query }, "", `#/busca?q=${encodeURIComponent(query)}`);
-            document.getElementById('search-query-display').textContent = query; 
+            if (pushHistory) history.pushState({ view: 'search', query: queryStr }, "", `#/busca?q=${encodeURIComponent(queryStr)}`);
+            document.getElementById('search-query-display').textContent = queryStr; 
             const grid = document.getElementById('search-grid'); const emptyState = document.getElementById('search-empty');
-            grid.innerHTML = '<div class="col-span-full flex justify-center py-20"><i class="fa-solid fa-spinner fa-spin text-4xl text-gray-600"></i></div>'; 
-            grid.classList.remove('hidden'); emptyState.classList.add('hidden'); emptyState.classList.remove('flex');
-
-            try {
-                const data = await fetchAPI(`/search/multi?api_key=${API_KEY}&language=pt-BR&query=${encodeURIComponent(query)}&page=1`); 
-                grid.innerHTML = '';
-                if (data && data.results && data.results.length > 0) {
-                    const validResults = data.results.filter(item => (item.media_type === 'movie' || item.media_type === 'tv') && item.poster_path);
-                    if (validResults.length === 0) { grid.classList.add('hidden'); emptyState.classList.remove('hidden'); emptyState.classList.add('flex'); return; }
-                    validResults.forEach(item => { window.moviesMap[item.id] = item; grid.insertAdjacentHTML('beforeend', createCardHtml(item, item.media_type === 'tv')); });
-                } else { grid.classList.add('hidden'); emptyState.classList.remove('hidden'); emptyState.classList.add('flex'); }
-            } catch(e) { grid.classList.add('hidden'); emptyState.classList.remove('hidden'); emptyState.classList.add('flex'); }
-        }
-
-        window.setCatalogFilter = async (filter) => {
-            window.currentCatalogFilter = filter; window.catalogPage = 1; 
-            document.getElementById('catalog-grid').innerHTML = ''; document.getElementById('btn-load-more').classList.add('hidden');
-            ['all', 'movies', 'series', 'animes'].forEach(f => { document.getElementById(`filter-${f}`).className = f === filter ? "px-5 py-2 rounded-full bg-white text-black font-semibold text-sm transition shadow-lg" : "px-5 py-2 rounded-full bg-[#1a1a1a] text-white hover:bg-gray-800 font-medium text-sm transition border border-white/10"; });
-            await loadCatalogData();
-        };
-
-        async function loadCatalogData() {
-            const btnMore = document.getElementById('btn-load-more'); 
-            btnMore.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Carregando...'; btnMore.classList.remove('hidden'); btnMore.disabled = true;
             
-            const data = await fetchAPI(`${CATALOG_ENDPOINTS[window.currentCatalogFilter]}&page=${window.catalogPage}`);
-            if (data && data.results) {
-                const grid = document.getElementById('catalog-grid');
-                data.results.forEach(item => {
-                    if (!item.poster_path) return; 
-                    let mediaType = item.media_type || (window.currentCatalogFilter === 'movies' ? 'movie' : (window.currentCatalogFilter === 'series' || window.currentCatalogFilter === 'animes' ? 'tv' : (item.name ? 'tv' : 'movie')));
-                    item.media_type = mediaType; window.moviesMap[item.id] = item; 
-                    grid.insertAdjacentHTML('beforeend', createCardHtml(item, mediaType === 'tv'));
-                });
-                if (window.catalogPage < data.total_pages && window.catalogPage < 10) { btnMore.innerHTML = 'Carregar mais'; btnMore.disabled = false; btnMore.classList.remove('hidden'); } else { btnMore.classList.add('hidden'); }
-            } else { btnMore.classList.add('hidden'); }
+            grid.innerHTML = '';
+
+            const validResults = window.firestoreContent.filter(item => 
+                (item.title && item.title.toLowerCase().includes(queryStr.toLowerCase())) ||
+                (item.synopsis && item.synopsis.toLowerCase().includes(queryStr.toLowerCase()))
+            );
+
+            if (validResults.length > 0) {
+                grid.classList.remove('hidden'); emptyState.classList.add('hidden'); emptyState.classList.remove('flex');
+                validResults.forEach(item => grid.insertAdjacentHTML('beforeend', createCardHtml(item)));
+            } else {
+                grid.classList.add('hidden'); emptyState.classList.remove('hidden'); emptyState.classList.add('flex');
+            }
         }
 
-        window.loadMoreCatalog = () => { window.catalogPage++; loadCatalogData(); };
+        window.setCatalogFilter = (filter) => {
+            window.currentCatalogFilter = filter;
+            document.getElementById('catalog-grid').innerHTML = '';
+            const emptyState = document.getElementById('catalog-empty');
+            
+            ['all', 'movie', 'tv'].forEach(f => { 
+                const btnId = f === 'movie' ? 'movies' : (f === 'tv' ? 'series' : 'all');
+                document.getElementById(`filter-${btnId}`).className = f === filter ? "px-5 py-2 rounded-full bg-white text-black font-semibold text-sm transition shadow-lg" : "px-5 py-2 rounded-full bg-[#1a1a1a] text-white hover:bg-gray-800 font-medium text-sm transition border border-white/10"; 
+            }); 
+            
+            let filtered = window.firestoreContent;
+            if (filter !== 'all') {
+                filtered = filtered.filter(item => item.type === filter);
+            }
+
+            const grid = document.getElementById('catalog-grid');
+            if(filtered.length > 0) {
+                grid.classList.remove('hidden'); emptyState.classList.add('hidden'); emptyState.classList.remove('flex');
+                filtered.forEach(item => grid.insertAdjacentHTML('beforeend', createCardHtml(item)));
+            } else {
+                grid.classList.add('hidden'); emptyState.classList.remove('hidden'); emptyState.classList.add('flex');
+            }
+        };
 
         window.addEventListener('scroll', () => { const navbar = document.getElementById('navbar'); if (window.scrollY > 50) navbar.classList.add('bg-[#050505]', 'shadow-lg'); else navbar.classList.remove('bg-[#050505]', 'shadow-lg'); });
         window.scrollCarousel = (id, direction) => { const carousel = document.getElementById(id); carousel.scrollBy({ left: direction * (carousel.clientWidth * 0.7), behavior: 'smooth' }); };
         
-        async function fetchAPI(endpoint) { try { const res = await fetch(`${BASE_URL}${endpoint}`); return res.ok ? await res.json() : null; } catch (e) { return null; } }
-        async function fetchLogo(id, type = 'movie') { if (window.logosCache[id]) return window.logosCache[id]; try { const data = await fetchAPI(`/${type}/${id}/images?api_key=${API_KEY}`); if (data && data.logos && data.logos.length > 0) { let logo = data.logos.find(l => l.iso_639_1 === 'pt') || data.logos.find(l => l.iso_639_1 === 'en') || data.logos[0]; window.logosCache[id] = `${IMG_BASE_URL}w500${logo.file_path}`; return window.logosCache[id]; } } catch (e) {} return null; }
-
-        window.openDetailsTMDB = async (id, type, pushHistory = true) => {
+        window.openDetails = async (id, pushHistory = true) => {
             window.hideHoverCard(true); window.showView('details', false);
-            if (pushHistory) history.pushState({ view: 'details', params: { id, type } }, "", `#/detalhes/${type}/${id}`);
+            if (pushHistory) history.pushState({ view: 'details', params: { id } }, "", `#/detalhes/${id}`);
             
             const content = document.getElementById('det-content'); const bg = document.getElementById('det-bg'); const epiSection = document.getElementById('det-episodes-section');
             content.style.opacity = '0'; bg.classList.add('opacity-0'); epiSection.classList.add('hidden');
             
-            const data = await fetchAPI(`/${type}/${id}?api_key=${API_KEY}&language=pt-BR`); if (!data) return;
+            const data = window.moviesMap[id];
+            if (!data) return;
             
-            window.currentDetailsItem = { id: id, type: type, data: data }; addToRecentHistory(data, type);
+            window.currentDetailsItem = { id: id, type: data.type, data: data }; 
+            addToRecentHistory(data);
             
-            bg.src = `${IMG_BASE_URL}original${data.backdrop_path || data.poster_path}`; bg.onload = () => { bg.classList.remove('opacity-0'); content.style.opacity = '1'; };
-            const title = data.title || data.name || data.original_title; const logoUrl = await fetchLogo(id, type);
+            bg.src = data.backdrop || data.poster || 'https://placehold.co/1280x720/050505/333333?text=Cover'; 
+            bg.onload = () => { bg.classList.remove('opacity-0'); content.style.opacity = '1'; };
+            
             const titleEl = document.getElementById('det-title'); const logoEl = document.getElementById('det-logo');
+            if (data.logo) { 
+                logoEl.src = data.logo; logoEl.classList.remove('hidden'); titleEl.classList.add('hidden'); 
+            } else { 
+                titleEl.textContent = data.title; titleEl.classList.remove('hidden'); logoEl.classList.add('hidden'); 
+            }
 
-            if (logoUrl) { logoEl.src = logoUrl; logoEl.classList.remove('hidden'); titleEl.classList.add('hidden'); } else { titleEl.textContent = title; titleEl.classList.remove('hidden'); logoEl.classList.add('hidden'); }
-
-            const year = (data.release_date || data.first_air_date || '').substring(0, 4); const rating = data.vote_average ? data.vote_average.toFixed(1) : '';
-            let metaHtml = `<span class="border border-white/40 px-1.5 py-0.5 rounded text-[10px] md:text-xs font-bold text-gray-200">16</span><span class="bg-yellow-500 text-black px-1.5 py-0.5 rounded text-[10px] md:text-xs font-bold ml-3">TMDb</span> <span class="font-bold text-white ml-1">${rating}</span><span class="text-blue-500 font-black ml-1 text-lg leading-none">·</span><span>${year}</span>`;
-            if (type === 'tv') { metaHtml += `<span class="text-blue-500 font-black ml-1 text-lg leading-none">·</span><span>${data.number_of_seasons} Temporadas</span>`; } else { const hours = Math.floor(data.runtime / 60); const mins = data.runtime % 60; metaHtml += `<span class="text-blue-500 font-black ml-1 text-lg leading-none">·</span><span>${hours}h ${mins}m</span>`; }
-            metaHtml += `<span class="bg-gradient-to-r from-yellow-600 to-yellow-400 text-black px-2 py-0.5 rounded text-[10px] md:text-xs font-black ml-3 uppercase shadow-[0_0_8px_rgba(234,179,8,0.4)]">VIP</span>`;
+            const year = data.year || '';
+            const rating = data.ageRating ? (data.ageRating === 'L' ? 'Livre' : data.ageRating) : '14';
+            let metaHtml = `<span class="border border-white/40 px-1.5 py-0.5 rounded text-[10px] md:text-xs font-bold text-gray-200">${rating}</span><span class="text-blue-500 font-black ml-1 text-lg leading-none">·</span><span>${year}</span>`;
             
-            document.getElementById('det-meta').innerHTML = metaHtml; document.getElementById('det-desc').textContent = data.overview || "Nenhuma sinopse disponível.";
-            if (data.genres) document.getElementById('det-genres').innerHTML = data.genres.map(g => `<span class="px-0 py-0 text-gray-400 mr-4">${g.name}</span>`).join('');
+            if (data.type === 'tv' && data.seasons) { 
+                metaHtml += `<span class="text-blue-500 font-black ml-1 text-lg leading-none">·</span><span>${Object.keys(data.seasons).length} Temporadas</span>`; 
+            }
+            
+            if(data.badgeText && (!data.badgeExpiration || data.badgeExpiration > Date.now())) {
+                metaHtml += `<span class="bg-gradient-to-r from-yellow-600 to-yellow-400 text-black px-2 py-0.5 rounded text-[10px] md:text-xs font-black ml-3 uppercase shadow-[0_0_8px_rgba(234,179,8,0.4)]">${data.badgeText}</span>`;
+            }
+            
+            document.getElementById('det-meta').innerHTML = metaHtml; 
+            document.getElementById('det-desc').textContent = data.synopsis || "Nenhuma sinopse disponível.";
+            if (data.genres) document.getElementById('det-genres').innerHTML = data.genres.map(g => `<span class="px-0 py-0 text-gray-400 mr-4">${g}</span>`).join('');
             
             const btns = document.getElementById('det-action-buttons');
             let mainPlayBtn = '';
             
-            if (type === 'movie') {
-                const safeTitleEscaped = title.replace(/'/g, "\\'");
-                mainPlayBtn = `<button onclick="window.openPlayer('${safeTitleEscaped}', '${DUMMY_DUB}', '${DUMMY_SUB}')" class="bg-white text-black px-6 md:px-8 py-3.5 rounded-lg font-bold flex items-center gap-2 hover:bg-gray-200 transition shadow-lg text-sm md:text-base"><i class="fa-solid fa-play"></i> Assistir Filme</button>`;
+            if (data.type === 'movie') {
+                const safeTitleEscaped = data.title.replace(/'/g, "\\'");
+                const urlD = data.url ? data.url : 'none';
+                const urlS = data.altUrl ? data.altUrl : 'none';
+                mainPlayBtn = `<button onclick="window.openPlayer('${safeTitleEscaped}', '${urlD}', '${urlS}')" class="bg-white text-black px-6 md:px-8 py-3.5 rounded-lg font-bold flex items-center gap-2 hover:bg-gray-200 transition shadow-lg text-sm md:text-base"><i class="fa-solid fa-play"></i> Assistir Filme</button>`;
             } else {
                 mainPlayBtn = `<button onclick="document.getElementById('det-episodes-section').scrollIntoView({behavior: 'smooth'})" class="bg-white text-black px-6 md:px-8 py-3.5 rounded-lg font-bold flex items-center gap-2 hover:bg-gray-200 transition shadow-lg text-sm md:text-base"><i class="fa-solid fa-list"></i> Escolher Episódio</button>`;
             }
 
             btns.innerHTML = `
                 ${mainPlayBtn}
-                <button class="bg-[#2a2a2a]/80 backdrop-blur-md hover:bg-[#3a3a3a] text-white px-6 py-3.5 rounded-lg font-bold flex items-center gap-2 transition border border-white/10 text-sm md:text-base"><i class="fa-solid fa-play opacity-70"></i> Trailer</button>
                 <button onclick="window.toggleDetailsList()" class="w-12 h-12 bg-[#2a2a2a]/80 backdrop-blur-md hover:bg-[#3a3a3a] text-white rounded-lg flex items-center justify-center transition border border-white/10"><i id="det-icon-list" class="${window.myList.some(item => item.id == id) ? "fa-solid fa-check text-green-400" : "fa-solid fa-plus"}"></i></button>
             `;
 
-            if (type === 'tv' && data.seasons) {
+            if (data.type === 'tv' && data.seasons) {
                 epiSection.classList.remove('hidden');
-                const validSeasons = data.seasons.filter(s => s.season_number > 0);
+                const validSeasonsKeys = Object.keys(data.seasons).sort((a,b)=>Number(a)-Number(b));
                 const container = document.getElementById('season-options-container');
-                if(validSeasons.length > 0) {
-                    container.innerHTML = validSeasons.map((s, index) => {
+                if(validSeasonsKeys.length > 0) {
+                    container.innerHTML = validSeasonsKeys.map((sKey, index) => {
+                        const s = data.seasons[sKey];
                         const bgClass = index === 0 ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-gray-300 hover:bg-[#2a2a2a] hover:text-white';
-                        const safeSeasonName = s.name.replace(/'/g, "\\'");
-                        return `<button onclick="window.selectSeasonCustom(${s.season_number}, '${safeSeasonName}', this)" class="season-option block w-full text-left px-4 py-2.5 text-sm transition-colors ${bgClass}">${s.name}</button>`;
+                        const safeSeasonName = s.title.replace(/'/g, "\\'");
+                        return `<button onclick="window.selectSeasonCustom('${sKey}', '${safeSeasonName}', this)" class="season-option block w-full text-left px-4 py-2.5 text-sm transition-colors ${bgClass}">${s.title}</button>`;
                     }).join('');
-                    document.getElementById('current-season-text').textContent = validSeasons[0].name;
-                    window.loadSeasonEpisodes(id, validSeasons[0].season_number);
+                    document.getElementById('current-season-text').textContent = data.seasons[validSeasonsKeys[0]].title;
+                    window.loadSeasonEpisodes(id, validSeasonsKeys[0]);
                 }
             }
         };
 
-        window.selectSeasonCustom = (seasonNum, seasonName, element) => { 
+        window.selectSeasonCustom = (seasonKey, seasonName, element) => { 
             document.getElementById('current-season-text').textContent = seasonName; 
             document.querySelectorAll('.season-option').forEach(opt => opt.className = 'season-option block w-full text-left px-4 py-2.5 text-sm transition-colors text-gray-300 hover:bg-[#2a2a2a] hover:text-white'); 
             element.className = 'season-option block w-full text-left px-4 py-2.5 text-sm transition-colors bg-blue-600 hover:bg-blue-700 text-white'; 
             window.toggleSeasonDropdown(); 
-            if(window.currentDetailsItem.id) window.loadSeasonEpisodes(window.currentDetailsItem.id, seasonNum); 
+            if(window.currentDetailsItem.id) window.loadSeasonEpisodes(window.currentDetailsItem.id, seasonKey); 
         };
 
-        window.loadSeasonEpisodes = async (tvId, seasonNumber) => {
+        window.loadSeasonEpisodes = (id, seasonKey) => {
             const grid = document.getElementById('det-episodes-grid'); 
-            grid.innerHTML = '<div class="col-span-full py-10 text-center"><i class="fa-solid fa-spinner fa-spin text-3xl text-gray-600"></i></div>';
-            const data = await fetchAPI(`/tv/${tvId}/season/${seasonNumber}?api_key=${API_KEY}&language=pt-BR`);
-            if (!data || !data.episodes || data.episodes.length === 0) { grid.innerHTML = '<p class="text-gray-500 col-span-full">Nenhum episódio encontrado para esta temporada.</p>'; return; }
-            grid.innerHTML = data.episodes.map(ep => {
-                const img = ep.still_path ? `${IMG_BASE_URL}w500${ep.still_path}` : 'https://placehold.co/500x281/1a1a1a/444444?text=Sem+Imagem';
-                const safeEpName = (`Episódio ${ep.episode_number}: ${ep.name}`).replace(/'/g, "\\'");
-                return `<div class="flex flex-row gap-3 md:gap-4 bg-[#141414]/80 hover:bg-[#1a1a1a] p-3 rounded-xl transition cursor-pointer border border-white/5 group backdrop-blur-sm" onclick="window.openPlayer('${safeEpName}', '${DUMMY_DUB}', '${DUMMY_SUB}')"><div class="w-32 md:w-44 flex-shrink-0 relative rounded-md overflow-hidden"><img src="${img}" class="w-full aspect-video object-cover transition duration-300 group-hover:scale-105"><div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center"><i class="fa-solid fa-play text-white text-xl md:text-2xl drop-shadow-lg"></i></div></div><div class="flex flex-col justify-center flex-1 min-w-0 py-1"><div class="flex justify-between items-start gap-2 mb-1.5"><h4 class="text-white font-bold text-[13px] md:text-sm truncate leading-tight">${ep.episode_number}. ${ep.name}</h4><span class="text-gray-400 text-[10px] md:text-xs whitespace-nowrap bg-white/5 border border-white/10 px-1.5 py-0.5 rounded">${ep.runtime ? ep.runtime + 'm' : '45m'}</span></div><p class="text-gray-400 text-[10px] md:text-xs line-clamp-2 md:line-clamp-3 leading-relaxed">${ep.overview || "Sem sinopse disponível."}</p></div></div>`;
+            const data = window.moviesMap[id];
+            if (!data || !data.seasons || !data.seasons[seasonKey] || !data.seasons[seasonKey].episodes) {
+                grid.innerHTML = '<p class="text-gray-500 col-span-full">Nenhum episódio cadastrado para esta temporada.</p>'; 
+                return;
+            }
+
+            const eps = data.seasons[seasonKey].episodes;
+            grid.innerHTML = eps.sort((a,b)=>a.episode_number-b.episode_number).map(ep => {
+                const img = ep.still_path || 'https://placehold.co/500x281/1a1a1a/444444?text=Episodio';
+                const safeEpName = (`Episódio ${ep.episode_number}: ${ep.title}`).replace(/'/g, "\\'");
+                const urlD = ep.url || 'none';
+                const urlS = ep.altUrl || 'none';
+                const lockedClass = (!ep.url && !ep.altUrl) ? 'opacity-50 grayscale pointer-events-none' : '';
+
+                return `<div class="flex flex-row gap-3 md:gap-4 bg-[#141414]/80 hover:bg-[#1a1a1a] p-3 rounded-xl transition cursor-pointer border border-white/5 group backdrop-blur-sm ${lockedClass}" onclick="window.openPlayer('${safeEpName}', '${urlD}', '${urlS}')">
+                    <div class="w-32 md:w-44 flex-shrink-0 relative rounded-md overflow-hidden">
+                        <img src="${img}" class="w-full aspect-video object-cover transition duration-300 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                            ${(!ep.url && !ep.altUrl) ? '<i class="fa-solid fa-lock text-white text-xl md:text-2xl drop-shadow-lg"></i>' : '<i class="fa-solid fa-play text-white text-xl md:text-2xl drop-shadow-lg"></i>'}
+                        </div>
+                    </div>
+                    <div class="flex flex-col justify-center flex-1 min-w-0 py-1">
+                        <div class="flex justify-between items-start gap-2 mb-1.5">
+                            <h4 class="text-white font-bold text-[13px] md:text-sm truncate leading-tight">${ep.episode_number}. ${ep.title}</h4>
+                        </div>
+                        <p class="text-gray-400 text-[10px] md:text-xs line-clamp-2 md:line-clamp-3 leading-relaxed">${ep.overview || "Sem sinopse disponível."}</p>
+                    </div>
+                </div>`;
             }).join('');
         }
 
-        let hoverTimeoutTMDB; let hideTimeoutTMDB;
-        window.handleItemEnter = (element) => { clearTimeout(hideTimeoutTMDB); if (window.currentHoveredItem.id && window.currentHoveredItem.id !== element.getAttribute('data-id')) window.hideHoverCard(true); hoverTimeoutTMDB = setTimeout(() => window.showHoverCard(element), 400); };
-        window.handleItemLeave = () => { clearTimeout(hoverTimeoutTMDB); hideTimeoutTMDB = setTimeout(() => window.hideHoverCard(), 150); };
-        window.handleCardEnter = () => { clearTimeout(hideTimeoutTMDB); };
-        window.handleCardLeave = () => { hideTimeoutTMDB = setTimeout(() => window.hideHoverCard(), 150); };
+        let hoverTimeoutLocal; let hideTimeoutLocal;
+        window.handleItemEnter = (element) => { clearTimeout(hideTimeoutLocal); if (window.currentHoveredItem.id && window.currentHoveredItem.id !== element.getAttribute('data-id')) window.hideHoverCard(true); hoverTimeoutLocal = setTimeout(() => window.showHoverCard(element), 400); };
+        window.handleItemLeave = () => { clearTimeout(hoverTimeoutLocal); hideTimeoutLocal = setTimeout(() => window.hideHoverCard(), 150); };
+        window.handleCardEnter = () => { clearTimeout(hideTimeoutLocal); };
+        window.handleCardLeave = () => { hideTimeoutLocal = setTimeout(() => window.hideHoverCard(), 150); };
 
-        window.showHoverCard = async (element) => {
-            const id = element.getAttribute('data-id'); const type = element.getAttribute('data-type'); window.currentHoveredItem = { id, type }; 
+        window.showHoverCard = (element) => {
+            const id = element.getAttribute('data-id'); window.currentHoveredItem = { id }; 
             const movie = window.moviesMap[id]; if (!movie) return;
 
             const isInList = window.myList.some(item => item.id == id); 
@@ -1364,16 +1349,23 @@
             const titleEl = document.getElementById('hc-title'); const logoEl = document.getElementById('hc-logo');
             titleEl.classList.add('hidden'); logoEl.classList.add('hidden'); logoEl.src = '';
             
-            document.getElementById('hc-img').src = movie.backdrop_path ? `${IMG_BASE_URL}w500${movie.backdrop_path}` : `${IMG_BASE_URL}w500${movie.poster_path}`;
-            document.getElementById('hc-rating').innerHTML = `${movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'} <i class="fa-solid fa-star text-yellow-500 text-[10px]"></i>`;
-            document.getElementById('hc-year').textContent = (movie.release_date || movie.first_air_date || '').substring(0, 4);
-            document.getElementById('hc-desc').textContent = movie.overview || "Sem sinopse disponível.";
+            document.getElementById('hc-img').src = movie.backdrop || movie.poster || 'https://placehold.co/500x281/1a1a1a/444444?text=Cover';
+            
+            const badgeEl = document.getElementById('hc-rating-badge');
+            if(movie.badgeText && (!movie.badgeExpiration || movie.badgeExpiration > Date.now())) {
+                badgeEl.textContent = movie.badgeText;
+                badgeEl.classList.remove('hidden');
+            } else { badgeEl.classList.add('hidden'); }
+
+            document.getElementById('hc-rating').innerHTML = `${movie.ageRating === 'L' ? 'Livre' : movie.ageRating}`;
+            document.getElementById('hc-year').textContent = movie.year || '';
+            document.getElementById('hc-desc').textContent = movie.synopsis || "Sem sinopse disponível.";
 
             const genresContainer = document.getElementById('hc-genres'); genresContainer.innerHTML = '';
-            if (movie.genre_ids) movie.genre_ids.slice(0, 3).forEach(gId => { if (window.genreMap[gId]) genresContainer.innerHTML += `<span class="px-2 py-0.5 bg-white/10 rounded-full border border-white/5">${window.genreMap[gId]}</span>`; });
+            if (movie.genres) movie.genres.slice(0, 3).forEach(g => { genresContainer.innerHTML += `<span class="px-2 py-0.5 bg-white/10 rounded-full border border-white/5">${g}</span>`; });
 
-            const logoUrl = await fetchLogo(id, type); 
-            if (logoUrl) { logoEl.src = logoUrl; logoEl.classList.remove('hidden'); } else { titleEl.textContent = movie.title || movie.name || movie.original_title; titleEl.classList.remove('hidden'); }
+            if (movie.logo) { logoEl.src = movie.logo; logoEl.classList.remove('hidden'); } 
+            else { titleEl.textContent = movie.title; titleEl.classList.remove('hidden'); }
 
             const card = document.getElementById('hover-card'); const rect = element.getBoundingClientRect();
             card.style.display = 'flex'; card.style.visibility = 'hidden'; const cardHeight = card.offsetHeight; card.style.display = ''; card.style.visibility = '';
@@ -1388,53 +1380,77 @@
             else { card.classList.remove('opacity-100', 'scale-100', 'pointer-events-auto'); card.classList.add('opacity-0', 'scale-95', 'pointer-events-none'); }
         }
 
-        window.openDetailsFromHover = () => { if(window.currentHoveredItem.id && window.currentHoveredItem.type) window.openDetailsTMDB(window.currentHoveredItem.id, window.currentHoveredItem.type); window.hideHoverCard(true); };
+        window.openDetailsFromHover = () => { if(window.currentHoveredItem.id) window.openDetails(window.currentHoveredItem.id); window.hideHoverCard(true); };
 
         window.toggleMyList = () => {
             if (!window.currentHoveredItem.id) return; const index = window.myList.findIndex(item => item.id == window.currentHoveredItem.id);
-            if (index >= 0) window.myList.splice(index, 1); else { const movieToSave = window.moviesMap[window.currentHoveredItem.id]; if(movieToSave) { movieToSave.media_type = window.currentHoveredItem.type; window.myList.push(movieToSave); } }
+            if (index >= 0) window.myList.splice(index, 1); else { const movieToSave = window.moviesMap[window.currentHoveredItem.id]; if(movieToSave) { window.myList.push({ id: movieToSave.id }); } }
             syncProfileDataToFirebase(); document.getElementById('hc-icon-list').className = index < 0 ? "fa-solid fa-check text-sm text-green-400" : "fa-solid fa-plus text-sm"; document.getElementById('hc-text-list').textContent = index < 0 ? "Na lista" : "Salvar";
             if (!document.getElementById('mylist-view').classList.contains('hidden')) { renderMyList(); if (index >= 0) window.hideHoverCard(true); }
         };
 
         window.toggleDetailsList = () => {
              if(!window.currentDetailsItem.id) return; const index = window.myList.findIndex(item => item.id == window.currentDetailsItem.id);
-             if(index >= 0) window.myList.splice(index, 1); else { const itemToSave = window.currentDetailsItem.data; itemToSave.media_type = window.currentDetailsItem.type; window.myList.push(itemToSave); }
+             if(index >= 0) window.myList.splice(index, 1); else { window.myList.push({ id: window.currentDetailsItem.id }); }
              syncProfileDataToFirebase(); document.getElementById('det-icon-list').className = window.myList.some(item => item.id == window.currentDetailsItem.id) ? "fa-solid fa-check text-green-400" : "fa-solid fa-plus";
         };
 
         async function initAppWithProfile() {
             try {
-                const genresData = await fetchAPI(ENDPOINTS.genres); if (genresData && genresData.genres) genresData.genres.forEach(g => window.genreMap[g.id] = g.name);
-                window.myList.forEach(item => window.moviesMap[item.id] = item); window.recentHistory.forEach(item => window.moviesMap[item.id] = item);
-                const [trending, popular, toprated] = await Promise.all([ fetchAPI(ENDPOINTS.trendingMovies), fetchAPI(ENDPOINTS.popularMovies), fetchAPI(ENDPOINTS.topRatedTV) ]);
-                if (trending && trending.results) { updateHeroSection(trending.results[0]); populateCarousel('trending-carousel', trending.results); }
-                if (popular && popular.results) populateCarousel('popular-carousel', popular.results); if (toprated && toprated.results) populateCarousel('toprated-carousel', toprated.results, true);
+                await loadFirestoreContent();
+                
+                // Ordenar os mais recentes (simulação baseada na posição no array ou data, usaremos ordem inversa do array salvo)
+                const recentContent = [...window.firestoreContent].sort((a,b) => b.updatedAt?.seconds - a.updatedAt?.seconds);
+                const movies = recentContent.filter(c => c.type === 'movie');
+                const series = recentContent.filter(c => c.type === 'tv');
+
+                if (recentContent.length > 0) { 
+                    // Pega algum item aleatório de sucesso ou o mais novo pra botar no Hero
+                    updateHeroSection(recentContent[0]); 
+                }
+                
+                populateCarousel('trending-carousel', recentContent.slice(0, 15));
+                populateCarousel('popular-carousel', movies.slice(0, 15));
+                populateCarousel('toprated-carousel', series.slice(0, 15));
+                
                 window.handleInitialRoute();
-            } catch (error) {}
+            } catch (error) {
+                console.error("Erro no InitApp:", error);
+            }
         }
 
-        async function updateHeroSection(movie) {
-            const mediaType = movie.name ? 'tv' : 'movie';
-            document.getElementById('hero-bg').src = `${IMG_BASE_URL}original${movie.backdrop_path}`; document.getElementById('hero-bg').onload = () => { document.getElementById('hero-bg').classList.remove('skeleton', 'opacity-0'); document.getElementById('hero-content').style.opacity = '1'; };
-            const logoUrl = await fetchLogo(movie.id, mediaType);
-            if (logoUrl) { document.getElementById('hero-logo').src = logoUrl; document.getElementById('hero-logo').classList.remove('hidden'); document.getElementById('hero-title').classList.add('hidden'); } 
-            else { document.getElementById('hero-title').innerHTML = `"${movie.title || movie.original_title}"`; document.getElementById('hero-title').classList.remove('hidden'); document.getElementById('hero-logo').classList.add('hidden'); }
-
-            const movieGenres = movie.genre_ids ? movie.genre_ids.slice(0, 2).map(id => window.genreMap[id]).filter(Boolean) : [];
-            let metaHtml = `<span class="bg-yellow-500 text-black px-1.5 py-0.5 rounded text-xs font-bold mr-2">TMDb</span><span class="font-bold text-white">${movie.vote_average ? movie.vote_average.toFixed(1) : ''}</span><span class="w-1 h-1 rounded-full bg-gray-500 mx-1"></span><span class="font-semibold">${(movie.release_date || movie.first_air_date || '').substring(0, 4)}</span>`;
-            movieGenres.forEach(genre => metaHtml += `<span class="w-1 h-1 rounded-full bg-gray-500 mx-1"></span><span class="px-3 py-1 bg-white/5 rounded-full text-xs border border-white/10">${genre}</span>`);
-            document.getElementById('hero-meta').innerHTML = metaHtml; document.getElementById('hero-overview').textContent = movie.overview || "Nenhuma sinopse disponível.";
+        function updateHeroSection(item) {
+            document.getElementById('hero-bg').src = item.backdrop || item.poster || 'https://placehold.co/1280x720/050505/333333?text=Cover'; 
+            document.getElementById('hero-bg').onload = () => { document.getElementById('hero-bg').classList.remove('skeleton', 'opacity-0'); document.getElementById('hero-content').style.opacity = '1'; };
             
-            const safeTitle = (movie.title || movie.name || movie.original_title).replace(/'/g, "\\'");
-            document.getElementById('hero-actions').innerHTML = `<button onclick="window.openPlayer('${safeTitle}', '${DUMMY_DUB}', '${DUMMY_SUB}')" class="bg-white text-black px-8 py-3.5 rounded-lg font-bold flex items-center gap-2 hover:bg-gray-200 transition shadow-lg hover:scale-105 active:scale-95"><i class="fa-solid fa-play"></i> Assistir</button><button onclick="window.openDetailsTMDB(${movie.id}, '${mediaType}')" class="bg-[#1a1a1a]/80 backdrop-blur-md text-white px-8 py-3.5 rounded-lg font-bold flex items-center gap-2 hover:bg-[#2a2a2a] transition border border-white/10 hover:scale-105 active:scale-95"><i class="fa-solid fa-plus"></i> Mais Informações</button>`;
+            if (item.logo) { document.getElementById('hero-logo').src = item.logo; document.getElementById('hero-logo').classList.remove('hidden'); document.getElementById('hero-title').classList.add('hidden'); } 
+            else { document.getElementById('hero-title').innerHTML = `"${item.title}"`; document.getElementById('hero-title').classList.remove('hidden'); document.getElementById('hero-logo').classList.add('hidden'); }
+
+            const movieGenres = (item.genres || []).slice(0, 2);
+            let metaHtml = `<span class="bg-yellow-500 text-black px-1.5 py-0.5 rounded text-xs font-bold mr-2">StarlightMax</span><span class="font-bold text-white">${item.ageRating === 'L' ? 'Livre' : item.ageRating}</span><span class="w-1 h-1 rounded-full bg-gray-500 mx-1"></span><span class="font-semibold">${item.year}</span>`;
+            movieGenres.forEach(genre => metaHtml += `<span class="w-1 h-1 rounded-full bg-gray-500 mx-1"></span><span class="px-3 py-1 bg-white/5 rounded-full text-xs border border-white/10">${genre}</span>`);
+            
+            document.getElementById('hero-meta').innerHTML = metaHtml; document.getElementById('hero-overview').textContent = item.synopsis || "Nenhuma sinopse disponível.";
+            
+            const safeTitle = item.title.replace(/'/g, "\\'");
+            const urlD = item.url ? item.url : 'none';
+            const urlS = item.altUrl ? item.altUrl : 'none';
+
+            if(item.type === 'movie') {
+                document.getElementById('hero-actions').innerHTML = `<button onclick="window.openPlayer('${safeTitle}', '${urlD}', '${urlS}')" class="bg-white text-black px-8 py-3.5 rounded-lg font-bold flex items-center gap-2 hover:bg-gray-200 transition shadow-lg hover:scale-105 active:scale-95"><i class="fa-solid fa-play"></i> Assistir</button><button onclick="window.openDetails('${item.id}')" class="bg-[#1a1a1a]/80 backdrop-blur-md text-white px-8 py-3.5 rounded-lg font-bold flex items-center gap-2 hover:bg-[#2a2a2a] transition border border-white/10 hover:scale-105 active:scale-95"><i class="fa-solid fa-plus"></i> Mais Informações</button>`;
+            } else {
+                document.getElementById('hero-actions').innerHTML = `<button onclick="window.openDetails('${item.id}')" class="bg-white text-black px-8 py-3.5 rounded-lg font-bold flex items-center gap-2 hover:bg-gray-200 transition shadow-lg hover:scale-105 active:scale-95"><i class="fa-solid fa-play"></i> Episódios</button><button onclick="window.openDetails('${item.id}')" class="bg-[#1a1a1a]/80 backdrop-blur-md text-white px-8 py-3.5 rounded-lg font-bold flex items-center gap-2 hover:bg-[#2a2a2a] transition border border-white/10 hover:scale-105 active:scale-95"><i class="fa-solid fa-plus"></i> Mais Informações</button>`;
+            }
         }
 
-        function populateCarousel(containerId, items, isTV = false) { const container = document.getElementById(containerId); container.innerHTML = ''; items.forEach(item => { if (!item.poster_path) return; item.media_type = isTV ? 'tv' : 'movie'; window.moviesMap[item.id] = item; container.insertAdjacentHTML('beforeend', `<div class="flex-none w-36 md:w-48">${createCardHtml(item, isTV)}</div>`); }); }
+        function populateCarousel(containerId, items) { 
+            const container = document.getElementById(containerId); container.innerHTML = ''; 
+            items.forEach(item => { container.insertAdjacentHTML('beforeend', `<div class="flex-none w-36 md:w-48">${createCardHtml(item)}</div>`); }); 
+        }
 
         window.addEventListener('popstate', (event) => {
             if (event.state) {
-                if (event.state.view === 'details') window.openDetailsTMDB(event.state.params.id, event.state.params.type, false);
+                if (event.state.view === 'details') window.openDetails(event.state.params.id, false);
                 else if (event.state.view === 'search') { document.getElementById('search-input').value = event.state.query || ''; performSearch(event.state.query || '', false); }
                 else window.showView(event.state.view, false);
             } else window.handleInitialRoute();
@@ -1442,8 +1458,8 @@
 
         window.handleInitialRoute = () => {
             const hash = window.location.hash;
-            if (hash.startsWith('#/detalhes/')) { const parts = hash.split('/'); if (parts.length >= 4) { window.openDetailsTMDB(parts[3], parts[2], false); history.replaceState({ view: 'details', params: { id: parts[3], type: parts[2] } }, "", hash); return; } } 
-            else if (hash.startsWith('#/busca')) { const query = new URLSearchParams(hash.split('?')[1]).get('q'); if (query) { document.getElementById('search-input').value = query; performSearch(query, false); history.replaceState({ view: 'search', query: query }, "", hash); return; } } 
+            if (hash.startsWith('#/detalhes/')) { const parts = hash.split('/'); if (parts.length >= 3) { window.openDetails(parts[2], false); history.replaceState({ view: 'details', params: { id: parts[2] } }, "", hash); return; } } 
+            else if (hash.startsWith('#/busca')) { const queryStr = new URLSearchParams(hash.split('?')[1]).get('q'); if (queryStr) { document.getElementById('search-input').value = queryStr; performSearch(queryStr, false); history.replaceState({ view: 'search', query: queryStr }, "", hash); return; } } 
             else if (hash === '#/catalogo') { window.showView('catalog', false); history.replaceState({ view: 'catalog' }, "", hash); return; }
             else if (hash === '#/minha-lista') { window.showView('list', false); history.replaceState({ view: 'list' }, "", hash); return; }
             else if (hash === '#/perfil') { window.showView('profile', false); history.replaceState({ view: 'profile' }, "", hash); return; }
